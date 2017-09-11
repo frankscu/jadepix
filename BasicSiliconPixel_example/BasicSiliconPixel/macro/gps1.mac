@@ -1,0 +1,27 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/gps/verbose 2
+
+/gps/particle gamma  
+ 
+/gps/pos/type Plane   #面源
+/gps/pos/shape Square  #方形
+/gps/pos/centre 0 -1.5 0 cm 
+/gps/pos/halfx 1 cm
+/gps/pos/halfz 1 cm
+
+/gps/ang/type		cos
+
+/gps/direction 0 1 0
+
+/gps/ene/type Lin
+/gps/ene/min 1 keV
+/gps/ene/max 50 keV
+/gps/ene/gradient 1
+/gps/ene/intercept 1
+
+/run/beamOn 500
+
+
+
