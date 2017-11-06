@@ -70,6 +70,15 @@ Once the Cmake environnement is set, to compile, simply execute :
 	make -jX install 
 
 X is a number of processor 
+
+
+### Add by Jing Maoqiang
+
+Or you can just enter directory BasicSiliconPixel and execute : 
+
+        make -jX install
+
+X is a number of processor
 	
 ### Running:
 
@@ -77,7 +86,7 @@ Setup your Geant4 and ROOT environments and run the following
 way, from the source folder
 
 Interactive run:
-    basicSiliconPixel macros/Fe55.mac
+    basicSiliconPixel macro/Fe55.mac
 
 Batch run : 
-    basicSilionPixel macros/Fe55.mac batch
+    basicSilionPixel macro/Fe55.mac batch
