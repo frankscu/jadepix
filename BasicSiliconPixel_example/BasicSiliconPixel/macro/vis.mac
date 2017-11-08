@@ -5,9 +5,9 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 600x600-0+0
-/vis/open OIX 1024x768-100+100
-/vis/open OGLSQt
+/vis/open OGL 600x600-0+0
+#/vis/open OIX 1024x768-100+100
+#/vis/open OGLSQt
 #
 # Use this open statement to create an OpenInventor view:
 #/vis/open OI
