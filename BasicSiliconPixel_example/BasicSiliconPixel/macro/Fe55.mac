@@ -7,8 +7,8 @@
  
 /gps/pos/type Beam		#点源
 /gps/pos/shape Circle
-/gps/pos/radius 3. mm
-/gps/pos/centre 0 0.1 0 cm 
+/gps/pos/radius 0.03 mm
+/gps/pos/centre 0 0.1 0 mm 
 
 
 /gps/ang/type iso 		#各向同性

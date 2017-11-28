@@ -34,10 +34,18 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "tls.hh"
+#include "G4RotationMatrix.hh"
+#include "G4FieldManager.hh"
+
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class B1SensitiveDetector;
+class G4Material;
+class G4VSensitiveDetector;
+class G4VisAttributes;
+class G4GenericMessenger;
 
 /// Detector construction class to define materials and geometry.
 
@@ -52,10 +60,13 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
     
     G4int fNbofShapes;
 
-
   protected:
     G4LogicalVolume** fLogicShape;
     B1SensitiveDetector* SD;
+
+  private:
+    std::vector<G4VisAttributes*> fVisAttributes;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
