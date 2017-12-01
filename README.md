@@ -1,2 +1,0 @@
-# jadepix
-Jade Pixel 
