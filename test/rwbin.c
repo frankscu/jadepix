@@ -1,5 +1,5 @@
-{
-  string fileout="test.bin";
+int rwbin(){
+  string fileout="../data/sampleTest.bin";
   fout = new fstream(fileout.c_str(),ios::out | ios::binary);
 
   if(!fout){
@@ -18,9 +18,12 @@
     //string adcstrB = "\\x" + ssB.str();
     std::cout << "ADC string:  " << adcstr << std::endl;
     (*fout)<<std::hex<<adcstr;
+    (*fout)<<TString(adcstr);
     (*fout)<<std::hex<<std::setfill('\x00')<<std::setw(2)<<'\x00';
   }
   fout->close();
+
+  return 0;
 
 }
 

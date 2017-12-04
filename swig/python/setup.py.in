@@ -22,9 +22,9 @@ class CompiledLibInstall(setuptools.command.install.install):
 
 if __name__ == '__main__':
     setuptools.setup(
-        name='jadipix',
+        name='jadepix',
         version='0.1.dev0',
-        packages=['jadipix'],
+        packages=['jadepix'],
         license='Apache License 2.0',
         author='Liejian Chen',
         author_email='chenlj@ihep.com',
