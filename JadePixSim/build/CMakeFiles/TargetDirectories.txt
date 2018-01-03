@@ -1,7 +1,0 @@
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/install/strip.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/install/local.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/edit_cache.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/rebuild_cache.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/install.dir
-/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/list_install_components.dir
