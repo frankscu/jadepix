@@ -5,7 +5,7 @@
 JadePixEvent::JadePixEvent(int nChip)
 {
   for(int i=0;i<nChip;i++){
-    MChip* _chip = new MChip(i);
+    JadePixChip* _chip = new JadePixChip(i);
     m_chipVec.push_back(_chip);
   }
 }
@@ -81,7 +81,7 @@ void JadePixEvent::Print(){
 
 
 void JadePixEvent::AddTruth(int trackId,int chipId,double edep,double time,double posX,double posY,double posZ,double enterAngle){
-  MHit* _trHit  = new MHit(trackId,chipId,edep,time,posX,posY,posZ,enterAngle);
+  JadePixHit* _trHit  = new JadePixHit(trackId,chipId,edep,time,posX,posY,posZ,enterAngle);
   m_trHitVec.push_back(_trHit);
 }
 

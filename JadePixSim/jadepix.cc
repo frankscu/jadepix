@@ -102,7 +102,7 @@ int main(int argc,char** argv)
   UImanager->SetCoutDestination(LoggedSession);
   LoggedSession->SessionStart();
 
-  UImanager->ApplyCommand("/control/macroPath /Users/chenliejian/Documents/Code/jadepix/JadePixSim/macros");
+  UImanager->ApplyCommand("/control/macroPath /home/liejian/jadepix/JadePixSim/macros");
   
   if (argc!=1)   // batch mode
     {

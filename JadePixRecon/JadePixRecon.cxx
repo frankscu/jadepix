@@ -1,18 +1,19 @@
-// MimosaRecon.cpp
+// JadePixRecon.cpp
 //
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <map>
+#include <cstring>
 #include <time.h>
 
-#include "MIO.h"
-#include "MEvent.h"
-#include "MDigi.h"
-#include "MHit.h"
-#include "MChip.h"
-#include "MSuppress.h"
+#include "JadePixIO.h"
+#include "JadePixEvent.h"
+#include "JadePixDigi.h"
+#include "JadePixHit.h"
+#include "JadePixChip.h"
+#include "JadePixSuppress.h"
 
 using namespace std;
 
@@ -21,8 +22,8 @@ int main(int argc, char* argv[])
 {
   if(argc < 4) {
     cerr << "Usage: \n"
-         << "   MimosaRecon -s: Suppress \n" 
-         << "   MimosaRecon -r: Reconstruct" << endl;
+         << "   JadePixRecon -s: Suppress \n" 
+         << "   JadePixRecon -r: Reconstruct" << endl;
     return -1;
   }
 
@@ -34,31 +35,29 @@ int main(int argc, char* argv[])
     string infile = argv[2];
     string outfile = argv[3];
 
-    MSuppress* mimosaSup = MSuppress::Instance();
-    //mimosaSup->OpenInputFile("../../Mimosa/work/Mimosa.rawdat");
-    //mimosaSup->OpenOutputFile("./data/Mimosa.supdat");
-    mimosaSup->OpenInputFile(infile);
-    mimosaSup->OpenOutputFile(outfile);
+    JadePixSuppress* jadepixSup = JadePixSuppress::Instance();
+    jadepixSup->OpenInputFile(infile);
+    jadepixSup->OpenOutputFile(outfile);
 
     double thr=0;
     if(argc==6){
       if (strcmp(argv[4],"-THR")==0){
         thr=atof(argv[5]);
-        mimosaSup->SetTHR(thr);
+        jadepixSup->SetTHR(thr);
       }else{
-        mimosaSup->SetTHR(thr);
+        jadepixSup->SetTHR(thr);
       }
     }else{
-      mimosaSup->SetTHR(50);
+      jadepixSup->SetTHR(50);
     }
 
     int nChipSup=1;
-    MEvent* evtSup = new MEvent(nChipSup);
+    JadePixEvent* evtSup = new JadePixEvent(nChipSup);
 
     int nEvtSup=0;
-    while(mimosaSup->ReadEvent(evtSup)>-1){
+    while(jadepixSup->ReadEvent(evtSup)>-1){
 
-      mimosaSup->WriteEvent(evtSup);
+      jadepixSup->WriteEvent(evtSup);
 
       nEvtSup++;
       if(nEvtSup%1000==0) cout<<nEvtSup<<" events are processed!"<<endl;
@@ -67,7 +66,7 @@ int main(int argc, char* argv[])
     }
 
     delete evtSup;
-    delete mimosaSup;
+    delete jadepixSup;
 
     time(&endSup);
 
@@ -84,13 +83,10 @@ int main(int argc, char* argv[])
     string infile = argv[2];
     string outfile = argv[3];
 
-    MIO* mimosaIO = MIO::Instance();
+    JadePixIO* jadepixIO = JadePixIO::Instance();
 
-    //mimosaIO->OpenInputFile("../../Mimosa/work/Mimosa.rawdat");
-    //mimosaIO->OpenInputFile("./data/Mimosa.supdat");
-    //mimosaIO->OpenOutputFile("./data/Mimosa.recdat");
-    mimosaIO->OpenInputFile(infile);
-    mimosaIO->OpenOutputFile(outfile);
+    jadepixIO->OpenInputFile(infile);
+    jadepixIO->OpenOutputFile(outfile);
 
     if(argc>4) {
       cerr << "Usage: " << endl;
@@ -98,13 +94,13 @@ int main(int argc, char* argv[])
     }
 
     int nChip=1;
-    MEvent* evt = new MEvent(nChip);
+    JadePixEvent* evt = new JadePixEvent(nChip);
 
     int nEvt=0;
-    while(mimosaIO->ReadEvent(evt)>-1){
+    while(jadepixIO->ReadEvent(evt)>-1){
 
       evt->Reconstruct();
-      mimosaIO->WriteEvent(evt);
+      jadepixIO->WriteEvent(evt);
 
       nEvt++;
       if(nEvt%1000==0) cout<<nEvt<<" events are processed!"<<endl;
@@ -113,7 +109,7 @@ int main(int argc, char* argv[])
     }
 
     delete evt;
-    delete mimosaIO;
+    delete jadepixIO;
 
     time(&end);
     double t = difftime(end,start);
@@ -130,10 +126,10 @@ int main(int argc, char* argv[])
     string infile = argv[2];
     string outfile = argv[3];
 
-    MIO* mimosaIO = MIO::Instance();
+    JadePixIO* jadepixIO = JadePixIO::Instance();
 
-    mimosaIO->OpenInputFile(infile);
-    mimosaIO->OpenBinaryFile(outfile);
+    jadepixIO->OpenInputFile(infile);
+    jadepixIO->OpenBinaryFile(outfile);
 
     if(argc>4) {
       cerr << "Usage: " << endl;
@@ -141,13 +137,12 @@ int main(int argc, char* argv[])
     }
 
     int nChip=1;
-    MEvent* evt = new MEvent(nChip);
+    JadePixEvent* evt = new JadePixEvent(nChip);
 
     int nEvt=0;
-    while(mimosaIO->ReadEvent(evt)>-1){
+    while(jadepixIO->ReadEvent(evt)>-1){
 
-      //mimosaIO->WriteEmptyBinary(evt);
-      mimosaIO->WriteBinary(evt);
+      jadepixIO->WriteBinary(evt);
 
       nEvt++;
       if(nEvt%1000==0) cout<<nEvt<<" events are processed!"<<endl;
@@ -156,7 +151,7 @@ int main(int argc, char* argv[])
     }
 
     delete evt;
-    delete mimosaIO;
+    delete jadepixIO;
 
     time(&end);
     double t = difftime(end,start);

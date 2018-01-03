@@ -88,9 +88,9 @@ void JadePixIO::OpenOutputFile(string fileout){
 int JadePixIO::WriteEvent(JadePixEvent* evt){
   int nHit=evt->NofHit();
   for(int iHit=0;iHit<nHit;iHit++){
-    MHit* _hit = evt->GetHit(iHit);
+    JadePixHit* _hit = evt->GetHit(iHit);
     Hep3Vector pos = _hit->GetPos();
-    MHit* _trHit = _hit->GetTruth(0);
+    JadePixHit* _trHit = _hit->GetTruth(0);
     Hep3Vector trpos = _trHit->GetPos();
 
     (*m_fout)<<m_evtId<<"\t\t"<<_hit->GetId()<<"\t"<<_hit->GetChipId()<<"\t"<<pos.x()<<"\t"<<pos.y()<<"\t"<<int(_hit->GetADC())<<"\t"<<_hit->GetNofDigi()<<"\t"<<trpos.x()<<"\t"<<trpos.y()<<"\t"<<_trHit->GetADC()<<"\t"<<_trHit->GetNofDigi()<<endl;

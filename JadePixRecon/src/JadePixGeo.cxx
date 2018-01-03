@@ -18,11 +18,11 @@
 #include <math.h>
 #include <cstdlib>
 
-JadePixGeo * JadePixGeo::fMimosaGeo=0;
+JadePixGeo * JadePixGeo::fJadePixGeo=0;
 
 JadePixGeo * JadePixGeo::GetGeo(void){
-      if (! fMimosaGeo) fMimosaGeo = new JadePixGeo();
-           return fMimosaGeo;
+      if (! fJadePixGeo) fJadePixGeo = new JadePixGeo();
+           return fJadePixGeo;
 	   }
 
 void JadePixGeo::Initialize(void){
@@ -31,7 +31,7 @@ void JadePixGeo::Initialize(void){
 
 void JadePixGeo::InitFromFile(){
 
-  std::string geometryFilePath = "/Users/chenliejian/Documents/Code/MimosaDigitizer/Mimosa";
+  std::string geometryFilePath = "/home/chenlj/jadepix/JadePixSim";
   geometryFilePath += "/model/Spt.txt";
   std::ifstream fin(geometryFilePath.c_str());
 
@@ -124,29 +124,29 @@ void JadePixGeo::InitFromFile(){
   fin.seekg(1,ios::cur);
   getline(fin, line);
   getline(fin, line);
-  fin>>fMimosaSegmentNo;
-  cout<<"MimosaSegment Number: "<<fMimosaSegmentNo<<endl;
+  fin>>fJadePixSegmentNo;
+  cout<<"JadePixSegment Number: "<<fJadePixSegmentNo<<endl;
 
   fin.seekg(1,ios::cur);
   getline(fin, line);
   getline(fin, line);
 
-  for(int j=0; j<fMimosaSegmentNo; j++){
+  for(int j=0; j<fJadePixSegmentNo; j++){
     fin>>name>>segInnR>>segOutR>>segL>>segZ;
     cout<<name<<"\t"<<segInnR<<"\t"<<segOutR<<"\t"<<segL<<"\t"<<segZ<<endl;
     getline(fin, line);
 
-    fMimosaSegment[j].InnerR(segInnR);
-    fMimosaSegment[j].OutR(segOutR);
-    fMimosaSegment[j].Length(segL);
-    fMimosaSegment[j].Z(segZ);
+    fJadePixSegment[j].InnerR(segInnR);
+    fJadePixSegment[j].OutR(segOutR);
+    fJadePixSegment[j].Length(segL);
+    fJadePixSegment[j].Z(segZ);
   }
 
   fin.close();
 
 }
 
-const MimosaLayer& JadePixGeo::Layer(int layerId) const {
+const JadePixLayer& JadePixGeo::Layer(int layerId) const {
   if(layerId<0 || layerId>=layerNo){
   cout<<"JadePixGeo::Error: Wrong layer No"<<endl;
   }

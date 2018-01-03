@@ -4,24 +4,24 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/jadepix.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/jadepix.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixDetectorConstruction.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDetectorConstruction.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixDetectorMessenger.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDetectorMessenger.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixDigi.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDigi.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixDigitizer.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDigitizer.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixEventAction.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixEventAction.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixEventActionMessenger.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixEventActionMessenger.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixGeoParameter.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixGeoParameter.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixHit.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixHit.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixIdentifier.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixIdentifier.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixPhysicsList.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPhysicsList.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixPrimaryGeneratorAction.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPrimaryGeneratorAction.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixPrimaryGeneratorActionMessenger.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPrimaryGeneratorActionMessenger.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixRunAction.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixRunAction.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixSD.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixSD.cc.o"
-  "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/src/JadePixWriter.cc" "/Users/chenliejian/Documents/Code/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixWriter.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/jadepix.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/jadepix.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixDetectorConstruction.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDetectorConstruction.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixDetectorMessenger.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDetectorMessenger.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixDigi.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDigi.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixDigitizer.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixDigitizer.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixEventAction.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixEventAction.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixEventActionMessenger.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixEventActionMessenger.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixGeoParameter.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixGeoParameter.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixHit.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixHit.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixIdentifier.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixIdentifier.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixPhysicsList.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPhysicsList.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixPrimaryGeneratorAction.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPrimaryGeneratorAction.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixPrimaryGeneratorActionMessenger.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixPrimaryGeneratorActionMessenger.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixRunAction.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixRunAction.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixSD.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixSD.cc.o"
+  "/home/chenlj/jadepix/JadePixSim/src/JadePixWriter.cc" "/home/chenlj/jadepix/JadePixSim/build/CMakeFiles/jadepix.dir/src/JadePixWriter.cc.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Clang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
@@ -31,12 +31,13 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "G4UI_USE"
   "G4UI_USE_QT"
   "G4UI_USE_TCSH"
+  "G4UI_USE_XM"
   "G4VERBOSE"
   "G4VIS_USE"
   "G4VIS_USE_OPENGL"
   "G4VIS_USE_OPENGLQT"
   "G4VIS_USE_OPENGLX"
-  "G4VIS_USE_RAYTRACERX"
+  "G4VIS_USE_OPENGLXM"
   "G4_STORE_TRAJECTORY"
   "QT_CORE_LIB"
   "QT_GUI_LIB"
@@ -48,21 +49,15 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/Cellar/geant4/10.3.1/include/Geant4"
-  "/usr/local/include"
+  "/opt/allpix/geant4.10.04/install/include/Geant4"
   "../include"
-  "/usr/local/opt/qt/lib/QtWidgets.framework"
-  "/usr/local/opt/qt/lib/QtWidgets.framework/Headers"
-  "/usr/local/opt/qt/lib/QtGui.framework"
-  "/usr/local/opt/qt/lib/QtGui.framework/Headers"
-  "/System/Library/Frameworks/OpenGL.framework/Headers"
-  "/usr/local/opt/qt/lib/QtCore.framework"
-  "/usr/local/opt/qt/lib/QtCore.framework/Headers"
-  "/usr/local/opt/qt/./mkspecs/macx-clang"
-  "/usr/local/opt/qt/lib/QtPrintSupport.framework"
-  "/usr/local/opt/qt/lib/QtPrintSupport.framework/Headers"
-  "/usr/local/opt/qt/lib/QtOpenGL.framework"
-  "/usr/local/opt/qt/lib/QtOpenGL.framework/Headers"
+  "/usr/include/x86_64-linux-gnu/qt5"
+  "/usr/include/x86_64-linux-gnu/qt5/QtWidgets"
+  "/usr/include/x86_64-linux-gnu/qt5/QtGui"
+  "/usr/include/x86_64-linux-gnu/qt5/QtCore"
+  "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64"
+  "/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport"
+  "/usr/include/x86_64-linux-gnu/qt5/QtOpenGL"
   )
 
 # Targets to which this target links.

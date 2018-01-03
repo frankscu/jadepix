@@ -2,7 +2,7 @@
 #define JadePixDigi_H
 
 #include "JadePixHit.h"
-#include "MGeo.h"
+#include "JadePixGeo.h"
 
 class JadePixHit;
 class JadePixDigi

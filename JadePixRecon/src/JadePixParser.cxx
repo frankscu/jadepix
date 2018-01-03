@@ -1,31 +1,31 @@
-#include "Parser.h"
+#include "JadePixParser.h"
 //#include "AnalysisManager.h"
 #include "time.h"
 #include "float.h"
 
-Parser* Parser::m_parser = NULL;
+JadePixParser* JadePixParser::m_JadePixParser = NULL;
 
-Parser* Parser::Instance(){
-  if(m_parser == NULL){
-    m_parser = new Parser();
+JadePixParser* JadePixParser::Instance(){
+  if(m_JadePixParser == NULL){
+    m_JadePixParser = new JadePixParser();
   }
-  return m_parser;
+  return m_JadePixParser;
 }
 
-Parser::Parser(){
-  if(m_parser) cout<<"ERROR::The parser has been created twice!!!"<<endl;
+JadePixParser::JadePixParser(){
+  if(m_JadePixParser) cout<<"ERROR::The JadePixParser has been created twice!!!"<<endl;
   else m_initFlag = false;
 }
 
-Parser::~Parser(){
-  m_parserMap.clear();
-  if(m_parser) delete m_parser;
+JadePixParser::~JadePixParser(){
+  m_JadePixParserMap.clear();
+  if(m_JadePixParser) delete m_JadePixParser;
 }
 
-void Parser::Initialize(string confile){
+void JadePixParser::Initialize(string confile){
 
   if(m_initFlag){
-    cout<<"WARNING::The Parser has been initialized!!!"<<endl;
+    cout<<"WARNING::The JadePixParser has been initialized!!!"<<endl;
     return;
   }
   m_initFlag = true;
@@ -77,31 +77,31 @@ void Parser::Initialize(string confile){
 
 
     cout<<par<<" = "<<val<<endl;
-    m_parserMap.insert(ParserPair(par,val));
+    m_JadePixParserMap.insert(JadePixParserPair(par,val));
     _nItem++;
 
     line.clear();
   }
  
   cout<<""<<endl;
-  cout<<"Parser:: "<<_nItem<<" parameters are initialized!!!"<<endl;
+  cout<<"JadePixParser:: "<<_nItem<<" parameters are initialized!!!"<<endl;
   cout<<"#####################################"<<endl;
   cout<<""<<endl;
 
   delete m_finConf;
 }
 
-bool Parser::ParExist(string parName){
-  ParserMap::iterator it_par = m_parserMap.find(parName);
-  if(it_par != m_parserMap.end()){
+bool JadePixParser::ParExist(string parName){
+  JadePixParserMap::iterator it_par = m_JadePixParserMap.find(parName);
+  if(it_par != m_JadePixParserMap.end()){
     m_par=parName;
-    m_val=m_parserMap[parName];
+    m_val=m_JadePixParserMap[parName];
     return true;
   }
   return false;
 }
 
-int Parser::GetIntPar(string parName){
+int JadePixParser::GetIntPar(string parName){
   if(m_par != parName){
     if(!ParExist(parName)){
       cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -111,7 +111,7 @@ int Parser::GetIntPar(string parName){
   return atoi(m_val.c_str());
 }
 
-double Parser::GetDoublePar(string parName){
+double JadePixParser::GetDoublePar(string parName){
   if(m_par != parName){
     if(!ParExist(parName)){
       cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -121,7 +121,7 @@ double Parser::GetDoublePar(string parName){
   return atof(m_val.c_str());
 }
 
-string Parser::GetStringPar(string parName){
+string JadePixParser::GetStringPar(string parName){
   if(m_par != parName){
     if(!ParExist(parName)){
       cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -131,7 +131,7 @@ string Parser::GetStringPar(string parName){
   return m_val;
 }
 
-bool Parser::GetIntVector(string parName, int vecSize, vector<int>& dbParVec){
+bool JadePixParser::GetIntVector(string parName, int vecSize, vector<int>& dbParVec){
   dbParVec.clear();
   if(!ParExist(parName)){
     cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -150,7 +150,7 @@ bool Parser::GetIntVector(string parName, int vecSize, vector<int>& dbParVec){
   return true;
 }
 
-bool Parser::GetDoubleVector(string parName, int vecSize, vector<double>& dbParVec){
+bool JadePixParser::GetDoubleVector(string parName, int vecSize, vector<double>& dbParVec){
   dbParVec.clear();
   if(!ParExist(parName)){
     cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -169,7 +169,7 @@ bool Parser::GetDoubleVector(string parName, int vecSize, vector<double>& dbParV
   return true;
 }
 
-bool Parser::GetStringVector(string parName, int vecSize, vector<string>& dbParVec){
+bool JadePixParser::GetStringVector(string parName, int vecSize, vector<string>& dbParVec){
   dbParVec.clear();
   if(!ParExist(parName)){
     cout<<"WARNING::Parameter "<<parName<<" doesn't exist!!!"<<endl;
@@ -196,7 +196,7 @@ bool Parser::GetStringVector(string parName, int vecSize, vector<string>& dbParV
 }
 
 
-bool Parser::GetVectorCore(int vecSize, vector<string>& arrayStrVec){
+bool JadePixParser::GetVectorCore(int vecSize, vector<string>& arrayStrVec){
 
   string arrayRawStr = m_val.substr(m_val.find_first_not_of("{"),m_val.find_last_of("}")-1);
   //cout<<arrayRawStr<<endl;
@@ -214,7 +214,7 @@ bool Parser::GetVectorCore(int vecSize, vector<string>& arrayStrVec){
   return true;
 }
 
-void Parser::SplitString(std::string& str,std::string pattern,std::vector<std::string>& result)
+void JadePixParser::SplitString(std::string& str,std::string pattern,std::vector<std::string>& result)
 {
   result.clear();
   std::string::size_type pos;
@@ -234,7 +234,7 @@ void Parser::SplitString(std::string& str,std::string pattern,std::vector<std::s
 }
 
 
-void Parser::SaveConfig(){
+void JadePixParser::SaveConfig(){
   char fName[200];
   string outputPath = GetStringPar("OutputPath");
   string fileNamePattern = GetStringPar("OutputFileNamePattern");
@@ -252,8 +252,8 @@ void Parser::SaveConfig(){
   //AnalysisManager::Instance()->SaveConfig(foutConf);
 
   foutConf<<"*********** Config Information ************ "<<endl;
-  ParserMap::iterator itPar;
-  for(itPar=m_parserMap.begin();itPar!=m_parserMap.end();itPar++){
+  JadePixParserMap::iterator itPar;
+  for(itPar=m_JadePixParserMap.begin();itPar!=m_JadePixParserMap.end();itPar++){
     foutConf<<itPar->first<<" = "<<itPar->second<<endl;
   }
   foutConf.close();

@@ -24,11 +24,10 @@
 using namespace std;
 using namespace CLHEP;
 
-class JadePixChip{
+class JChip{
 public:
-  JadePixChip(void){};
-//  JadePixChip();
-  ~JadePixChip(void){};
+  JChip(void){};
+  ~JChip(void){};
 
 //get method
   int RowNo() const {return nPixelR;};
@@ -77,7 +76,7 @@ private:
   string layerName;
 };
 
-class JadePixLadder : public JadePixChip{
+class JadePixLadder : public JChip{
 public:
   JadePixLadder(void){};
   ~JadePixLadder(void){};

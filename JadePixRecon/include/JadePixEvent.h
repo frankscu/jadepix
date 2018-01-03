@@ -6,7 +6,7 @@
 #include <map>
 
 #include "JadePixChip.h"
-#include "MCluster.h"
+#include "JadePixCluster.h"
 #include "JadePixHit.h"
 
 class JadePixChip;

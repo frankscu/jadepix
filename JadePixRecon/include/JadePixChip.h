@@ -12,8 +12,8 @@
 class JadePixDigi;
 class JadePixCluster;
 class JadePixHit;
-class JadePixChip
-{
+
+class JadePixChip {
 public:
 	JadePixChip(int id);
 	~JadePixChip(void);

@@ -1,1 +1,1 @@
-/usr/local/bin/jadepix
+/home/chenlj/jadepix/JadePixSim/install/bin/jadepix

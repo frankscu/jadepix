@@ -13,7 +13,7 @@ void JadePixHit::Reconstruct(){
   double pixPitchY = _JadePixGeo->Layer(0).PitchY() *um;
   double _tmpX=0;
   double _tmpY=0;
-  vector<MDigi*>::iterator m_itDigi;
+  vector<JadePixDigi*>::iterator m_itDigi;
   m_edep=0;
   for(m_itDigi=m_digiVec.begin();m_itDigi<m_digiVec.end();m_itDigi++){
     m_edep += (*m_itDigi)->GetADC();

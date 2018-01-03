@@ -5,7 +5,7 @@
 
 /gps/particle gamma  
  
-/gps/pos/type Plane	#点源
+/gps/pos/type Plane	#Source shape
 /gps/pos/shape Circle
 /gps/pos/radius 5. mm
 /gps/pos/centre 0 0 22 cm 
@@ -18,8 +18,8 @@
 /gps/hist/point  0.00589  16.20   	
 /gps/hist/point  0.00649  1.89 	
 
-/gps/ang/type iso 		#各向同性
-#/gps/ang/rot1 1 0 0     #旋转矩阵
+/gps/ang/type iso 		
+#/gps/ang/rot1 1 0 0    
 #/gps/ang/rot2 0 0 -1
 
 /gps/ang/mintheta  0

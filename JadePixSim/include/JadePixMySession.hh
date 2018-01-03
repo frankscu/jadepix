@@ -5,7 +5,7 @@
 #include "fstream"
 #include "iostream"
 
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
+//#pragma clang diagnostic ignored "-Woverloaded-virtual"
 
 class JadePixMySession : public G4UIsession
 {

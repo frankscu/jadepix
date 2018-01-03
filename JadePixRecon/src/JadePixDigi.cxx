@@ -3,7 +3,7 @@
 
 
 JadePixDigi::JadePixDigi(int trackId,int chipId,int rowId,int colId,double ADC, double TDC):m_trackId(trackId),m_globalChipId(chipId),m_rowId(rowId),m_colId(colId),m_adc(ADC),m_tdc(TDC),m_IsInHit(false){
-  MGeo* _mGeo = MGeo::GetGeo();
+  JadePixGeo* _mGeo = JadePixGeo::GetGeo();
   int nofCol = _mGeo->Layer(0).ColNo();
   int nofRow = _mGeo->Layer(0).RowNo();
   m_id = m_globalChipId*nofCol*nofRow+nofCol*m_rowId+m_colId;

@@ -38,7 +38,7 @@ void JadePixGeoParameter::Initialize(void){
 
 void JadePixGeoParameter::InitFromFile(){
 
-    std::string geometryFilePath = "/Users/chenliejian/Documents/Code/jadepix/JadePixSim";
+    std::string geometryFilePath = "/home/chenlj/jadepix/JadePixSim";
     geometryFilePath += "/model/Spt.txt";
     std::ifstream fin(geometryFilePath.c_str(),ios::in);
 

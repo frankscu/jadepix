@@ -1,18 +1,16 @@
-export CXX=/usr/local/bin/g++
-export CC=/usr/local/bin/gcc
-alias gcc=/usr/local/bin/gcc
-alias g++=/usr/local/bin/g++
+export CXX=/usr/bin/g++
+export CC=/usr/bin/gcc
 
-Geant4Bin=/usr/local/geant4/10.01.p03/bin
+
+Geant4Bin=/opt/allpix/geant4.10.04/install/bin
 source ${Geant4Bin}/geant4.sh
 
-Geant4Make=/usr/local/geant4/10.01.p03/share/Geant4-10.1.3/geant4make
+Geant4Make=/opt/allpix/geant4.10.04/install/share/Geant4-10.4.0/geant4make
 source ${Geant4Make}/geant4make.sh
 
-source /usr/local/root/root-6.10.08/build/bin/thisroot.sh
+source /opt/allpix/root/install/bin/thisroot.sh
 export PATH=$ROOTSYS/bin:$PATH
 
-export MIMOSADIR="$HOME/jadepix/Mimosa"
-export G4WORKDIR="$HOME/jadepix/Mimosa/install"
+export JADEPIXDIR="${HOME}/jadepix/JadePixSim/"
+export G4WORKDIR="${HOME}/jadepix/JadePixSim/install"
 export PATH=$PATH:$G4WORKDIR/bin
-

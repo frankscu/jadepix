@@ -1,3 +1,3 @@
 # source localSim_setup.sh
 
-jadepix testFe55.mac  -b
+jadepix ../JadePixSim/macros/Fe55.mac  -b
