@@ -13,24 +13,26 @@ void chargeDistribution(){
   string line;
   int evtId,hitId,chipId,HitNofDigi,TrNofDigi;
   double posX,posY,hitADC,trPosX,trPosY,edep;
-  int nlines;
+  int nlines=0;
   double THR=0;
   double pedestal=4000;
   double distance[20044],hADC[20044];
   fstream fin("./JadePix.recdat",ios::in);
   std::getline(fin,line);
   cout<<line<<endl;
-  
+
   while(fin.good()){
     fin>>evtId>>hitId>>chipId>>posX>>posY>>hitADC>>HitNofDigi>>trPosX>>trPosY>>edep>>TrNofDigi;
     fin.seekg(1,ios::cur);
     if(!fin.good()) break;
 
     //cout<<" posX: "<<posX<<" trPosX: "<<trPosX<<endl;
+    //cout<<" posY: "<<posX<<" trPosY: "<<trPosY<<endl;
     double dx = posX-trPosX;
     double dy = posY-trPosY;
 
     nlines++;
+
     distance[nlines] = 1e3*sqrt(dx*dx+dy*dy);
     hADC[nlines] = hitADC;
     hdx->Fill(dx);
