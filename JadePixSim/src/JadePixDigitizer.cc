@@ -88,7 +88,8 @@ void JadePixDigitizer::Digitize(){
         newDigi->SetCol(_realHit->GetCol());
         newDigi->SetEdep(pixEdep);
         newDigi->SetGlobalT(_realHit->GetGlobalT());
-        int adc = GetADC(pixEdep);
+        //int adc = GetADC(pixEdep);
+        int adc = GetVolADC(pixEdep); //Change ADC method
         int tdc = GetTDC(_realHit->GetGlobalT());
         newDigi->SetADC(adc);
         newDigi->SetTDC(tdc);
@@ -107,7 +108,7 @@ void JadePixDigitizer::Digitize(){
     realizedHitMap.clear();
 
     //G4cout<<"MyMessage::Primary Hit No: "<<NHits<<" Realized Hit No: "<<nrHit<<G4endl;
-    if(fakeHitFlag==1) AddNoise();
+    if(fakeHitFlag==1) AddFake();
 
     if (verboseLevel>0) {
       G4cout << "\n-------->digis Collection: in this event they are "
@@ -139,10 +140,19 @@ void JadePixDigitizer::HitRealizition(JadePixHit* rawHit){
   G4double postEdep=edep*(0.23+0.2*G4UniformRand());
   G4double midEdep=edep-preEdep-postEdep;
   //G4cout<<"MyMessage::Edep: "<<edep<<" PreEdep: "<<preEdep<<" PostEdep: "<<postEdep<<" MidEdep: "<<midEdep<<G4endl;
+  G4int digiMethod = JadePixGeo->Layer(0).DigiMethod();
 
-  DiffuseE(preEdep,locInPos,JadePixId,rawHit);
-  DiffuseE(midEdep,locMidPos,JadePixId,rawHit);
-  DiffuseE(postEdep,locOutPos,JadePixId,rawHit);
+  if(digiMethod == 0){
+    if (verboseLevel>0){ G4cout<<"Two Gauss is in use!" << G4endl;}
+    DiffuseE(preEdep,locInPos,JadePixId,rawHit);
+    DiffuseE(midEdep,locMidPos,JadePixId,rawHit);
+    DiffuseE(postEdep,locOutPos,JadePixId,rawHit);
+  }else if(digiMethod == 1){
+    if(verboseLevel>0){G4cout<<"Gauss is in use!" << G4endl;}
+    DiffuseGaussE(preEdep,locInPos,JadePixId,rawHit);
+    DiffuseGaussE(midEdep,locMidPos,JadePixId,rawHit);
+    DiffuseGaussE(postEdep,locOutPos,JadePixId,rawHit);
+  }
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,6 +199,38 @@ void JadePixDigitizer::DiffuseE(G4double edep,G4ThreeVector hitPoint,JadePixIden
   //G4cout<<"MyMessage::Total E Collect: "<<eT<<" Total Percent: "<<100*eT/edep<<"%"<<G4endl;
 }
 
+
+void JadePixDigitizer::DiffuseGaussE(G4double edep,G4ThreeVector hitPoint,JadePixIdentifier& JadePixId,JadePixHit* rawHit){
+
+  //G4cout<<"MyMessage::locHitPosX: "<<hitPoint.x()<<" locHitPosY: "<<hitPoint.y()<<" locHitPosZ: "<<hitPoint.z()<<G4endl;
+  G4double sigma = 9.59*um;
+  G4double frac=0.6807;
+  G4double diffuseSize = 5*sigma;
+  G4double d0=1.406*um;
+  G4double base = 0.2988;
+  G4int nSector=10;
+  G4double secPitch = diffuseSize/(2*nSector+1);
+  G4double secEdep;
+  G4double eT=0;
+  for(G4int iSC=-nSector;iSC<nSector+1;++iSC){
+    for(G4int iSR=-nSector;iSR<nSector+1;++iSR){
+      G4double dx=secPitch*iSC;
+      G4double dy=secPitch*iSR;
+      G4double iPosX=hitPoint.x()+dx;
+      G4double iPosY=hitPoint.y()+dy;
+      //gauss pdf
+      G4double pdf = frac*exp(-(pow(dx,2)+pow(dy,2)-d0)/(2*sigma*sigma))+base;
+
+      secEdep = edep*pdf*secPitch*secPitch;
+      //G4cout<<"MyMessage::locCol: "<<iSC<<" locRow: "<<iSR<<" Edep: "<<secEdep<<G4endl;
+      JadePixId.WhichPixel(iPosX,iPosY);
+      PixelIntegration(secEdep,JadePixId,rawHit);
+      eT += secEdep;
+    }
+  }
+
+  //G4cout<<"MyMessage::Total E Collect: "<<eT<<" Total Percent: "<<100*eT/edep<<"%"<<G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -247,11 +289,15 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
           }else if(digiMethod == 1){
             if(verboseLevel>0){G4cout<<"Gauss lorentz with four diode is in use!" << G4endl;}
             ePix = SegEdep*OverMOSDiffuseGaussLorentzElectrode(iJadePixId,locSegPos);
+          }else if (digiMethod == 2){
+            if(verboseLevel>0){G4cout<<"Gauss with center is in use!" << G4endl;}
+            ePix = SegEdep*DiffuseGaussElectrode(iJadePixId,locSegPos);
           }
           if(verboseLevel>0){G4cout<<"SegEdep: "<<SegEdep<<", "<<ePix<<G4endl;}
 
         }
         ePixArray[nAdjacentPix+iC][nAdjacentPix+iR]=ePix;
+        //cout<<"Previous ePix: "<<ePix<<endl;
         eT += ePix;
       }
     }
@@ -266,6 +312,7 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
         JadePixIdentifier iJadePixId(layerId,ladderId,chipId,subColID,subRowID);
 
         ePix = ePixArray[nAdjacentPix+iC][nAdjacentPix+iR]*ratio;
+        //cout<<"ePix: "<<ePix<<endl;
         PixelIntegration(ePix,iJadePixId,rawHit);
 
       }
@@ -309,7 +356,7 @@ double JadePixDigitizer::DiffuseGaussLorentzElectrode(JadePixIdentifier& JadePix
   //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
   //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
 
-  G4double pixEdgeCut=16*um;
+  G4double pixEdgeCut=30*um;
   //G4double nominalPixPitch=22.5*um;
   G4double nominalPixPitch=pixEdgeCut-0.05*(pixPitchX-10*um);
   G4double dx = dxRaw*nominalPixPitch/pixPitchX;
@@ -347,6 +394,51 @@ double JadePixDigitizer::DiffuseGaussLorentzElectrode(JadePixIdentifier& JadePix
 
   return pdf*factor;
 }
+
+double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint)
+{
+  G4double pixPitchX=JadePixGeo->Layer(0).PitchX()*um;
+  G4double pixPitchY=JadePixGeo->Layer(0).PitchY()*um;
+
+  //segment impact pixel
+  G4double sigma = 9.59*um;
+  G4double N0=0.6807;
+  G4double d0=1.406*um;
+  G4double base=0.2988;
+
+  G4ThreeVector iPixPos = JadePixId.PixelPos();
+  G4double iX=iPixPos.x(); //Diode in the center
+  G4double iY=iPixPos.y();
+  G4double dxRaw=hitPoint.x()-iX;
+  G4double dyRaw=hitPoint.y()-iY;
+
+  //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
+  //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
+
+  G4double pixEdgeCut=32*um;
+  //G4double nominalPixPitch=22.5*um;
+  G4double nominalPixPitch=pixEdgeCut-0.05*(pixPitchX-4*um);
+  G4double dx = dxRaw*nominalPixPitch/pixPitchX;
+  G4double dy = dyRaw*nominalPixPitch/pixPitchY;
+  //G4double dx = dxRaw;
+  //G4double dy = dyRaw;
+
+  //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
+  //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
+
+  // The distance between the reconstructed position of the cluster and the diode in collection of pixel in the XY sensor
+  G4double d = sqrt(pow(dx,2)+pow(dy,2));
+  
+  //cout<<"d-d0: "<<d-d0<<endl;
+  // Charge Collection
+  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma))+base;
+  //cout<<"pdf: "<<pdf<<endl;
+
+  G4double factor=1;
+
+  return pdf*factor;
+}
+
 
 double JadePixDigitizer::OverMOSDiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint)
 {
@@ -481,7 +573,7 @@ void JadePixDigitizer::PixelIntegration(G4double ePix,JadePixIdentifier& JadePix
 
 }
 
-void JadePixDigitizer::AddNoise(){
+void JadePixDigitizer::AddFake(){
 
   //G4double fakeRate = 10e-4;
 
@@ -490,13 +582,13 @@ void JadePixDigitizer::AddNoise(){
   G4int nRow=JadePixGeo->Layer(0).RowNo();
   G4int nCol=JadePixGeo->Layer(0).ColNo();
   //G4int nPix=JadePixGeo->Layer(0).PixNo();
-  //  G4int nNoisePix = nPix*frPerEvt+G4RandGauss::shoot(0,0.5);
-  G4int nNoisePix = G4RandGauss::shoot(0,0.7);
-  if(nNoisePix<0) nNoisePix = 0;
+  //  G4int nfakePix = nPix*frPerEvt+G4RandGauss::shoot(0,0.5);
+  G4int nfakePix = G4RandGauss::shoot(0,0.7);
+  if(nfakePix<0) nfakePix = 0;
 
-  //G4cout<<"MyMessage::nNoisePix: "<<nNoisePix<<G4endl;
+  //G4cout<<"MyMessage::nfakePix: "<<nfakePix<<G4endl;
 
-  for(G4int i=0;i<nNoisePix;++i){
+  for(G4int i=0;i<nfakePix;++i){
 
     G4int rowId=nRow*G4UniformRand();
     G4int colId=nCol*G4UniformRand();
@@ -504,8 +596,8 @@ void JadePixDigitizer::AddNoise(){
     G4long key=rowId*nCol+colId;
     itDigiMap=digiMap.find(key);
     if(itDigiMap==digiMap.end()){
-      G4double noiseE=energyThreshold*G4RandGauss::shoot();
-      if(noiseE<energyThreshold) noiseE += 2*(energyThreshold-noiseE);
+      G4double fakeE=energyThreshold*G4RandGauss::shoot();
+      if(fakeE<energyThreshold) fakeE += 2*(energyThreshold-fakeE);
 
       JadePixDigi* newDigi = new JadePixDigi();
       newDigi->SetTrackID(-1);
@@ -515,7 +607,7 @@ void JadePixDigitizer::AddNoise(){
       newDigi->SetGlobalChipID(0);
       newDigi->SetRow(rowId);
       newDigi->SetCol(colId);
-      newDigi->SetEdep(noiseE);
+      newDigi->SetEdep(fakeE);
       newDigi->SetGlobalT(0);
       digisCollection->insert(newDigi);
     }
@@ -530,6 +622,22 @@ int JadePixDigitizer::GetADC(double eDep){
   int dAdc = int(eDepEff/dE);
   if(dAdc >= adcRange) dAdc = adcRange-1;
   int adc = int((energyThreshold+dAdc*dE)/ehpEnergy);
+  return adc;
+}
+
+int JadePixDigitizer::GetVolADC(double eDep){
+  int adcRange = pow(2,nAdcBit);
+  G4double gain = 0.02*1e-3;
+  int Vref = 0.5;
+  double dE = (adcEnergyRange-energyThreshold)/adcRange;
+  double eDepEff=eDep-energyThreshold;
+  if(eDepEff<0)eDepEff=0;
+  int dAdc = int(eDepEff/dE);
+  if(dAdc >= adcRange) dAdc = adcRange-1;
+  //cout<<"dAdc: "<<dAdc<<endl;
+  //cout<<"adcRange: "<<adcRange<<endl;
+  int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*adcRange);
+  //int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*adcRange);
   return adc;
 }
 

@@ -14,7 +14,7 @@ void chargeDistribution(){
   string line;
   int evtId,hitId,chipId,HitNofDigi,TrNofDigi;
   double posX,posY,hitADC,trPosX,trPosY,edep;
-  int nlines;
+  int nlines=0;
   double THR=0;
   double pedestal=4000;
   double distance[20044],hADC[20044];

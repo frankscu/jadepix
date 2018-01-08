@@ -37,15 +37,18 @@ public:
   //necessary digi collection object must be constructed and set to 
   //G4DCofThisEvent by StoreDigiCollection protected method.
   virtual void Digitize();
-  void AddNoise(void);
+  void AddFake(void);
 
   int GetADC(double edep);
+  int GetVolADC(double edep);
   int GetTDC(double time);
 
   void HitRealizition(JadePixHit* rawHit);
   void DiffuseE(G4double edep,G4ThreeVector hitPoint,JadePixIdentifier& JadePixId,JadePixHit* rawHit);
+  void DiffuseGaussE(G4double edep,G4ThreeVector hitPoint,JadePixIdentifier& JadePixId,JadePixHit* rawHit);
 
   void HitRealizitionEelectrode(JadePixHit* rawHit);
+  double DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double DiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double OverMOSDiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
 
