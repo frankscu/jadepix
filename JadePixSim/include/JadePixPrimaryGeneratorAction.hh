@@ -50,18 +50,24 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4GeneralParticleSource.hh"
+#include <vector>
 
 class JadePixPrimaryGeneratorActionMessenger;
+
+enum SourceType {
+    _ParticleGun = 0,
+    _GeneralParticleSource
+};
 
 class JadePixPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
     public:
-        JadePixPrimaryGeneratorAction();
+        JadePixPrimaryGeneratorAction(SourceType);
         ~JadePixPrimaryGeneratorAction();
         void GeneratePrimaries(G4Event* anEvent);
 
-        void SetParticleType(G4String ptype) {m_particleType = ptype;};
-        G4String GetParticleType() {return m_particleType;};
+        //void SetParticleType(G4String ptype) {m_particleType = ptype;};
+        //G4String GetParticleType() {return m_particleType;};
 
         void SetGunEnergy(G4double energy) {m_gunEnergy = energy;};
         G4double GetGunEnergy() {return m_gunEnergy;};
@@ -77,7 +83,8 @@ class JadePixPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         G4ParticleGun* fParticleGun;
         G4GeneralParticleSource* fParticleSource;
         JadePixPrimaryGeneratorActionMessenger* m_PrimaryGeneratorActionMessenger;
-        G4String m_particleType;
+        SourceType m_particleType;
+        std::vector<G4ThreeVector> m_primaryParticlePos;
         G4double m_gunPosXYSpread;
         G4double m_gunPosZ;
         G4double m_gunEnergy;

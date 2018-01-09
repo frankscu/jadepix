@@ -77,7 +77,8 @@ int main(int argc,char** argv)
     
   // Set user action classes
   //
-  runManager->SetUserAction(new JadePixPrimaryGeneratorAction());
+  SourceType st = _GeneralParticleSource;
+  runManager->SetUserAction(new JadePixPrimaryGeneratorAction(st));
   //
   runManager->SetUserAction(new JadePixRunAction());
   //
@@ -102,7 +103,7 @@ int main(int argc,char** argv)
   UImanager->SetCoutDestination(LoggedSession);
   LoggedSession->SessionStart();
 
-  UImanager->ApplyCommand("/control/macroPath /home/liejian/jadepix/JadePixSim/macros");
+  UImanager->ApplyCommand("/control/macroPath /home/chenlj/jadepix/JadePixSim/macros");
   
   if (argc!=1)   // batch mode
     {

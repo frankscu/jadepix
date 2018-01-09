@@ -34,6 +34,7 @@
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
+#include "G4UserLimits.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4Box.hh"
@@ -43,7 +44,6 @@
 #include "G4UniformMagField.hh"
 
 #include "G4SDManager.hh"
-
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
@@ -53,7 +53,6 @@
 
 #include <stdio.h>
 
-#pragma clang diagnostic ignored "-Wunused-variable" //FIX ME
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,6 +60,7 @@ JadePixDetectorConstruction::JadePixDetectorConstruction()
  : G4VUserDetectorConstruction(),
    fMessenger(0),
    fMagField(0),
+   fStepLimit(NULL),
    fCheckOverlaps(true)
 {
    fMessenger = new JadePixDetectorMessenger(this);
@@ -268,6 +268,12 @@ G4VPhysicalVolume* JadePixDetectorConstruction::DefineVolumes()
   G4SDManager::GetSDMpointer()->AddNewDetector(sensorSD );
   sensorLV->SetSensitiveDetector(sensorSD);
 
+/*  
+  G4double maxStep = 0.5*pixelSizeX;
+  fStepLimit = new G4UserLimits(maxStep);
+  sensorLV->SetUserLimits(fStepLimit);
+*/
+
 /*
   // Column
   //
@@ -372,6 +378,11 @@ G4VPhysicalVolume* JadePixDetectorConstruction::DefineVolumes()
   // Always return the physical World
   //
   return worldPV;
+}
+
+void JadePixDetectorConstruction::SetMaxStep(G4double maxStep)
+{
+    if((fStepLimit)&&(maxStep>0.)) fStepLimit->SetMaxAllowedStep(maxStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

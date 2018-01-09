@@ -57,6 +57,7 @@ class JadePixDetectorMessenger: public G4UImessenger
     G4UIdirectory*             fJadePixDirectory;
     G4UIdirectory*             fDetDirectory;
     G4UIcmdWithADoubleAndUnit* fSetMagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

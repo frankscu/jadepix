@@ -13,6 +13,7 @@
 #include "JadePixHit.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 #include "G4DigiManager.hh"
 #include "Randomize.hh"
@@ -36,7 +37,7 @@ JadePixDigitizer::JadePixDigitizer(G4String modName):G4VDigitizerModule(modName)
 
   pedestal = 0;
   ehpEnergy = 3.6 *eV;
-  energyThreshold = (pedestal+10*enc)*ehpEnergy;
+  //energyThreshold = (pedestal+10*enc)*ehpEnergy;
   //energyThreshold = 0;
   adcEnergyRange = JadePixGeo->Layer(0).ADCRange()*ehpEnergy;
 }
@@ -260,7 +261,8 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
   G4int nSegments = 10; //Step segment
   G4double SegEdep=edep/nSegments; //Uniform distribution of energy in step --> Should change to Landau distribution
 
-  G4double eT =0;
+  G4double eT;
+  G4double eTotal=0;
   G4double ratio;
   G4int nAdjacentPix=2; //Neighbouring pixel hitting
 
@@ -273,6 +275,7 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
     G4int localRowID = JadePixId.RowID();
 
     G4double ePix=0;
+    eT=0; // Segment tot edep
 
     for(G4int iC=-nAdjacentPix; iC<nAdjacentPix+1; iC++){
       for(G4int iR=-nAdjacentPix; iR<nAdjacentPix+1; iR++){
@@ -297,13 +300,16 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
 
         }
         ePixArray[nAdjacentPix+iC][nAdjacentPix+iR]=ePix;
-        //cout<<"Previous ePix: "<<ePix<<endl;
         eT += ePix;
       }
     }
 
-    ratio = cce*edep/eT;
+    if(verboseLevel>0) {
+        std::cout<<"SegEdep: "<<G4BestUnit(SegEdep,"Energy")<<", eSegCollected: "<<G4BestUnit(eT,"Energy")<<endl;
+    }
 
+    ratio = cce*SegEdep/eT;
+    G4double eTpost = 0;
     for(G4int iC=-nAdjacentPix; iC<nAdjacentPix+1; iC++){
       for(G4int iR=-nAdjacentPix; iR<nAdjacentPix+1; iR++){
 
@@ -314,11 +320,17 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
         ePix = ePixArray[nAdjacentPix+iC][nAdjacentPix+iR]*ratio;
         //cout<<"ePix: "<<ePix<<endl;
         PixelIntegration(ePix,iJadePixId,rawHit);
-
+        eTpost += ePix;
       }
     }
+    //if(verboseLevel>0) {
+        std::cout<<"SegEdep: "<<G4BestUnit(SegEdep,"Energy")<<", eTpost: "<<G4BestUnit(eTpost,"Energy")<<endl;
+    //}
+    eTotal += eTpost;
   }
-  //std::cout<<"edep: "<<edep<<", eCollected: "<<eT*ratio<<endl;
+  //if(verboseLevel>0) {
+    std::cout<<"edep: "<<G4BestUnit(edep,"Energy")<<", eCollected: "<<G4BestUnit(eTotal,"Energy")<<endl;
+  //}
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -401,10 +413,14 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   G4double pixPitchY=JadePixGeo->Layer(0).PitchY()*um;
 
   //segment impact pixel
-  G4double sigma = 9.59*um;
-  G4double N0=0.6807;
-  G4double d0=1.406*um;
-  G4double base=0.2988;
+  //G4double sigma = 9.59*um;
+  //G4double N0=0.6807;
+  //G4double d0=1.406*um;
+  //G4double base=0.2988;
+
+  G4double sigma = 10.72*um;
+  G4double N0=0.99;
+  G4double d0=2.94*um;
 
   G4ThreeVector iPixPos = JadePixId.PixelPos();
   G4double iX=iPixPos.x(); //Diode in the center
@@ -415,7 +431,7 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
   //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
 
-  G4double pixEdgeCut=32*um;
+  G4double pixEdgeCut=33*um;
   //G4double nominalPixPitch=22.5*um;
   G4double nominalPixPitch=pixEdgeCut-0.05*(pixPitchX-4*um);
   G4double dx = dxRaw*nominalPixPitch/pixPitchX;
@@ -431,10 +447,10 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   
   //cout<<"d-d0: "<<d-d0<<endl;
   // Charge Collection
-  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma))+base;
+  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma));
   //cout<<"pdf: "<<pdf<<endl;
 
-  G4double factor=1;
+  G4double factor=1.0;
 
   return pdf*factor;
 }
@@ -615,28 +631,28 @@ void JadePixDigitizer::AddFake(){
 }
 
 int JadePixDigitizer::GetADC(double eDep){
-  int adcRange = pow(2,nAdcBit);
-  double dE = (adcEnergyRange-energyThreshold)/adcRange;
+  int locAdcRange = pow(2,nAdcBit);
+  double dE = (adcEnergyRange-energyThreshold)/locAdcRange;
   double eDepEff=eDep-energyThreshold;
   if(eDepEff<0)eDepEff=0;
   int dAdc = int(eDepEff/dE);
-  if(dAdc >= adcRange) dAdc = adcRange-1;
+  if(dAdc >= locAdcRange) dAdc = locAdcRange-1;
   int adc = int((energyThreshold+dAdc*dE)/ehpEnergy);
   return adc;
 }
 
 int JadePixDigitizer::GetVolADC(double eDep){
-  int adcRange = pow(2,nAdcBit);
+  int locAdcRange = pow(2,nAdcBit);
   G4double gain = 0.02*1e-3;
   int Vref = 0.5;
-  double dE = (adcEnergyRange-energyThreshold)/adcRange;
+  double dE = (adcEnergyRange-energyThreshold)/locAdcRange;
   double eDepEff=eDep-energyThreshold;
   if(eDepEff<0)eDepEff=0;
   int dAdc = int(eDepEff/dE);
-  if(dAdc >= adcRange) dAdc = adcRange-1;
+  if(dAdc >= locAdcRange) dAdc = locAdcRange-1;
   //cout<<"dAdc: "<<dAdc<<endl;
   //cout<<"adcRange: "<<adcRange<<endl;
-  int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*adcRange);
+  int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*locAdcRange);
   //int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*adcRange);
   return adc;
 }

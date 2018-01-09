@@ -75,8 +75,8 @@ void JadePixRunAction::EndOfRunAction(const G4Run* aRun)
   JadePixWriter* mWriter = JadePixWriter::Instance();
   mWriter->CloseFile();
 
-  // complete cleanup
-  //
+  //complete cleanup
+  
   delete mWriter;  
 }
 

@@ -42,22 +42,32 @@
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 
-#pragma clang diagnostic ignored "-Wunused-variable"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-JadePixPrimaryGeneratorAction::JadePixPrimaryGeneratorAction()
-    : G4VUserPrimaryGeneratorAction(),
-    fParticleGun(0),fParticleSource(0),
-    m_particleType("mu-"),m_gunPosXYSpread(0.5),m_gunPosZ(1.),m_gunEnergy(20*GeV)
+JadePixPrimaryGeneratorAction::JadePixPrimaryGeneratorAction(SourceType st)
 {
+    fParticleGun = 0x0,
+    fParticleSource = 0x0,
+    m_PrimaryGeneratorActionMessenger = 0X0;
+    m_particleType = st,
+    m_gunPosXYSpread = 0.5,
+    m_gunPosZ = 1.,
+    m_gunEnergy = 20*GeV;
+    
+    if(m_particleType == _ParticleGun)
+    {
+        G4int nofParticles = 1;
+        fParticleGun = new G4ParticleGun(nofParticles);
 
-    m_PrimaryGeneratorActionMessenger=new JadePixPrimaryGeneratorActionMessenger(this);
+        m_PrimaryGeneratorActionMessenger=new JadePixPrimaryGeneratorActionMessenger(this);
 
+    }else if(m_particleType == _GeneralParticleSource){ 
 
-    G4int nofParticles = 1;
-    fParticleGun = new G4ParticleGun(nofParticles);
-    fParticleSource = new G4GeneralParticleSource();
+        m_PrimaryGeneratorActionMessenger=new JadePixPrimaryGeneratorActionMessenger(this);
+        fParticleSource = new G4GeneralParticleSource();
+    }
+
+    m_primaryParticlePos.clear();
 
 }
 
@@ -65,8 +75,9 @@ JadePixPrimaryGeneratorAction::JadePixPrimaryGeneratorAction()
 
 JadePixPrimaryGeneratorAction::~JadePixPrimaryGeneratorAction()
 {
-    delete fParticleGun;
-    delete fParticleSource;
+    if(fParticleGun) delete fParticleGun;
+    if(fParticleSource) delete fParticleSource;
+    if(m_PrimaryGeneratorActionMessenger) delete m_PrimaryGeneratorActionMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,47 +90,54 @@ void JadePixPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // on DetectorConstruction class we get world volume
     // from G4LogicalVolumeStore
     //
-    G4ParticleDefinition* particleDefinition 
-        = G4ParticleTable::GetParticleTable()->FindParticle(m_particleType);
-    fParticleGun->SetParticleDefinition(particleDefinition);
+    if(fParticleGun) {
+        G4ParticleDefinition* particleDefinition 
+            = G4ParticleTable::GetParticleTable()->FindParticle(m_particleType);
+        fParticleGun->SetParticleDefinition(particleDefinition);
 
-    G4double worldZHalfLength = 0;
-    G4LogicalVolume* worldLV
-        = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-    G4Box* worldBox = 0;
-    if ( worldLV) worldBox = dynamic_cast< G4Box*>(worldLV->GetSolid()); 
-    if ( worldBox ) {
-        worldZHalfLength = worldBox->GetZHalfLength();  
+        G4double worldZHalfLength = 0;
+        G4LogicalVolume* worldLV
+            = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
+        G4Box* worldBox = 0;
+        if ( worldLV) worldBox = dynamic_cast< G4Box*>(worldLV->GetSolid()); 
+        if ( worldBox ) {
+            worldZHalfLength = worldBox->GetZHalfLength();  
+        }
+        else  {
+            G4cerr << "World volume of box not found." << G4endl;
+            G4cerr << "Perhaps you have changed geometry." << G4endl;
+            G4cerr << "The gun will be place in the center." << G4endl;
+        } 
+
+
+        G4double pPosX= m_gunPosXYSpread*2*(0.5-G4UniformRand());
+        G4double pPosY= m_gunPosXYSpread*2*(0.5-G4UniformRand());
+        //G4double pPosX= 0;
+        //G4double pPosY= 0;
+        //G4double pPosX= 10+2*m_gunPosXYSpread*(0.5-G4UniformRand());
+        //G4double pPosY= 10+2*m_gunPosXYSpread*(0.5-G4UniformRand());
+        // Set gun position
+        G4double pPosZ= -m_gunPosZ;
+        fParticleGun
+            ->SetParticlePosition(G4ThreeVector(pPosX, pPosY, pPosZ));
+
+        G4double mDirX = 5*(0.5-G4UniformRand()) *mm;
+        G4double mDirY = 5*(0.5-G4UniformRand()) *mm;
+        //fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,mDirY,fabs(pPosZ)));
+        fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,fabs(pPosZ)));
+
+        fParticleGun->SetParticleEnergy(m_gunEnergy);
+
+        fParticleGun->GeneratePrimaryVertex(anEvent);
     }
-    else  {
-        G4cerr << "World volume of box not found." << G4endl;
-        G4cerr << "Perhaps you have changed geometry." << G4endl;
-        G4cerr << "The gun will be place in the center." << G4endl;
-    } 
-
-
-    G4double pPosX= m_gunPosXYSpread*2*(0.5-G4UniformRand());
-    G4double pPosY= m_gunPosXYSpread*2*(0.5-G4UniformRand());
-    //G4double pPosX= 0;
-    //G4double pPosY= 0;
-    //G4double pPosX= 10+2*m_gunPosXYSpread*(0.5-G4UniformRand());
-    //G4double pPosY= 10+2*m_gunPosXYSpread*(0.5-G4UniformRand());
-    // Set gun position
-    G4double pPosZ= -m_gunPosZ;
-    fParticleGun
-        ->SetParticlePosition(G4ThreeVector(pPosX, pPosY, pPosZ));
-
-    G4double mDirX = 5*(0.5-G4UniformRand()) *mm;
-    G4double mDirY = 5*(0.5-G4UniformRand()) *mm;
-    //fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,mDirY,fabs(pPosZ)));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,fabs(pPosZ)));
-
-    fParticleGun->SetParticleEnergy(m_gunEnergy);
-
-    fParticleGun->GeneratePrimaryVertex(anEvent);
 
     //Particle Source
-    fParticleSource->GeneratePrimaryVertex(anEvent);
+    if(fParticleSource) {
+        fParticleSource->GeneratePrimaryVertex(anEvent);
+        if(anEvent->GetEventID()==0){m_primaryParticlePos.clear();}
+        G4ThreeVector pos = fParticleSource->GetParticlePosition();
+        m_primaryParticlePos.push_back(pos);
+    }
 
 }
 

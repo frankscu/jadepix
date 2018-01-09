@@ -35,10 +35,12 @@
 #include "JadePixGeoParameter.hh"
 #include "globals.hh"
 
+
 class JadePixDetectorMessenger;
 class G4Box;
 class G4VPhysicalVolume;
 class G4UniformMagField;
+class G4UserLimits;
 
 /// Detector construction class to define materials and geometry.
 /// The calorimeter is a box made of a given number of layers. A layer consists
@@ -70,7 +72,9 @@ class JadePixDetectorConstruction : public G4VUserDetectorConstruction
     // set methods
     //
     void SetMagField(G4double fieldValue);
-     
+
+    void SetMaxStep (G4double );
+
   private:
     // methods
     //
@@ -83,6 +87,8 @@ class JadePixDetectorConstruction : public G4VUserDetectorConstruction
     //
     JadePixDetectorMessenger*  fMessenger; // messenger 
     G4UniformMagField*     fMagField;  // magnetic field
+    
+    G4UserLimits* fStepLimit; //pointer to user step limits
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };

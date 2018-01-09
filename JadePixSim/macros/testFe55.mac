@@ -29,6 +29,10 @@
 
 /gps/source/list
 
-/JadePix/event/setPrintModulo 1
-/run/beamOn 10
+/jadepix/event/setPrintModulo 100
+/jadepix/beam/type gauss 50000 50
+/jadepix/beam/frames 1
+/jadepix/beam/on 
 
+#/jadepix/event/setPrintModulo 100
+#/run/beamOn 100

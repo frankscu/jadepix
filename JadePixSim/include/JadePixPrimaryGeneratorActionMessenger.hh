@@ -53,6 +53,8 @@ class G4UImessenger;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
+class G4UIcommand;
 
 class JadePixPrimaryGeneratorActionMessenger : public G4UImessenger 
 {
@@ -67,6 +69,15 @@ private:
 	G4UIcmdWithADoubleAndUnit *gunPosXYSpread, *gunPosZ;
 	G4UIcmdWithADoubleAndUnit *gunEnergy;
 	G4UIcmdWithAString  *particleType;
+    G4UIcmdWithAnInteger *beamNumberOfFramesCmd;
+    G4UIcommand    *beamTypeCmd;
+    G4UIcmdWithoutParameter * beamOnCmd;
+
+    G4int m_hits;
+    G4int m_frames;
+    G4String m_beamTypeHitFunc;
+    G4double m_beamTypePar1;
+    G4double m_beamTypePar2;
 };
 
 #endif

@@ -42,11 +42,11 @@ JadePixEventActionMessenger::JadePixEventActionMessenger(JadePixEventAction* eve
    fDirectory(0),
    fSetPrintModuloCmd(0)
 {
-  fDirectory = new G4UIdirectory("/JadePix/event/");
+  fDirectory = new G4UIdirectory("/jadepix/event/");
   fDirectory->SetGuidance("event control");
    
   fSetPrintModuloCmd 
-    = new G4UIcmdWithAnInteger("/JadePix/event/setPrintModulo",this);
+    = new G4UIcmdWithAnInteger("/jadepix/event/setPrintModulo",this);
   fSetPrintModuloCmd->SetGuidance("Print events modulo n");
   fSetPrintModuloCmd->SetParameterName("EventNb",false);
   fSetPrintModuloCmd->SetRange("EventNb>0");

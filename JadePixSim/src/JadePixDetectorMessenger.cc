@@ -55,6 +55,13 @@ JadePixDetectorMessenger::JadePixDetectorMessenger(JadePixDetectorConstruction* 
   fSetMagFieldCmd->SetParameterName("Bx",false);
   fSetMagFieldCmd->SetUnitCategory("Magnetic flux density");
   fSetMagFieldCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
+
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/JadePix/det/stepMax",this);
+  fStepMaxCmd->SetGuidance("Define a step max");
+  fStepMaxCmd->SetParameterName("stepMax",false);
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +71,7 @@ JadePixDetectorMessenger::~JadePixDetectorMessenger()
   delete fSetMagFieldCmd;
   delete fDetDirectory;
   delete fJadePixDirectory;  
+  delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +82,11 @@ void JadePixDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValu
     fDetectorConstruction
       ->SetMagField(fSetMagFieldCmd->GetNewDoubleValue(newValue));
   }
+
+  if( command == fStepMaxCmd ) {
+    fDetectorConstruction
+      ->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));
+  }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

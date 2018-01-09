@@ -38,7 +38,6 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 
-#pragma clang diagnostic ignored "-Wunused-variable"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 JadePixSD::JadePixSD(const G4String& name)
