@@ -1,0 +1,32 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/gps/verbose 2
+
+/gps/particle gamma  
+ 
+/gps/pos/type Beam		#点源
+/gps/pos/shape Circle
+/gps/pos/radius 3. mm
+/gps/pos/centre 0 0 1 mm
+
+
+/gps/ang/type iso 		#各向同性
+#/gps/ang/rot1 1 0 0     #旋转矩阵
+#/gps/ang/rot2 0 0 -1
+
+
+/gps/ang/mintheta  0
+/gps/ang/maxtheta  45. deg
+/gps/ang/minphi  0
+/gps/ang/maxphi  360. deg 
+
+
+
+/gps/ene/type Gauss		#能量分布
+/gps/ene/mono 5.9 keV
+/gps/ene/sigma 0.1 keV
+
+
+/run/beamOn 100
+
