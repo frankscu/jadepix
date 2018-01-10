@@ -38,7 +38,7 @@ JadePixDigitizer::JadePixDigitizer(G4String modName):G4VDigitizerModule(modName)
   pedestal = 0;
   ehpEnergy = 3.6 *eV;
   //energyThreshold = (pedestal+10*enc)*ehpEnergy;
-  //energyThreshold = 0;
+  energyThreshold = 0;
   adcEnergyRange = JadePixGeo->Layer(0).ADCRange()*ehpEnergy;
 }
 
@@ -323,14 +323,14 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
         eTpost += ePix;
       }
     }
-    //if(verboseLevel>0) {
+    if(verboseLevel>0) {
         std::cout<<"SegEdep: "<<G4BestUnit(SegEdep,"Energy")<<", eTpost: "<<G4BestUnit(eTpost,"Energy")<<endl;
-    //}
+    }
     eTotal += eTpost;
   }
-  //if(verboseLevel>0) {
+  if(verboseLevel>0) {
     std::cout<<"edep: "<<G4BestUnit(edep,"Energy")<<", eCollected: "<<G4BestUnit(eTotal,"Energy")<<endl;
-  //}
+  }
 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -643,7 +643,8 @@ int JadePixDigitizer::GetADC(double eDep){
 
 int JadePixDigitizer::GetVolADC(double eDep){
   int locAdcRange = pow(2,nAdcBit);
-  G4double gain = 0.02*1e-3;
+  //G4double gain = 0.02*1e-3;
+  G4double gain = 0.032*1e-3;
   int Vref = 0.5;
   double dE = (adcEnergyRange-energyThreshold)/locAdcRange;
   double eDepEff=eDep-energyThreshold;

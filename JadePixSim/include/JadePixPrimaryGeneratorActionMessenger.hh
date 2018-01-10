@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
+//  ^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
-//	with the contribute of Alessandro Occhigrossi*
+//  with the contribute of Alessandro Occhigrossi*
 //
 // ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
@@ -56,22 +56,23 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
 
-class JadePixPrimaryGeneratorActionMessenger : public G4UImessenger 
+class JadePixPrimaryGeneratorActionMessenger : public G4UImessenger
 {
-public:
-	JadePixPrimaryGeneratorActionMessenger(JadePixPrimaryGeneratorAction *PJadePixPrimaryGeneratorAction);
-	~JadePixPrimaryGeneratorActionMessenger(void);
-	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+  public:
+    JadePixPrimaryGeneratorActionMessenger(JadePixPrimaryGeneratorAction *PJadePixPrimaryGeneratorAction);
+    ~JadePixPrimaryGeneratorActionMessenger(void);
+    void SetNewValue(G4UIcommand* cmd, G4String newValue);
 
-private:
-	JadePixPrimaryGeneratorAction *pJadePixPrimaryGeneratorAction;
+  private:
+    JadePixPrimaryGeneratorAction *pJadePixPrimaryGeneratorAction;
 
-	G4UIcmdWithADoubleAndUnit *gunPosXYSpread, *gunPosZ;
-	G4UIcmdWithADoubleAndUnit *gunEnergy;
-	G4UIcmdWithAString  *particleType;
-    G4UIcmdWithAnInteger *beamNumberOfFramesCmd;
-    G4UIcommand    *beamTypeCmd;
-    G4UIcmdWithoutParameter * beamOnCmd;
+    G4UIcmdWithADoubleAndUnit     *gunPosXYSpread;
+    G4UIcmdWithADoubleAndUnit     *gunPosZ;
+    G4UIcmdWithADoubleAndUnit     *gunEnergy;
+    G4UIcmdWithAString            *particleType;
+    G4UIcmdWithAnInteger          *beamNumberOfFramesCmd;
+    G4UIcommand                   *beamTypeCmd;
+    G4UIcmdWithoutParameter       *beamOnCmd;
 
     G4int m_hits;
     G4int m_frames;

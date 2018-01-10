@@ -52,7 +52,7 @@ JadePixPrimaryGeneratorAction::JadePixPrimaryGeneratorAction(SourceType st)
     m_particleType = st,
     m_gunPosXYSpread = 0.5,
     m_gunPosZ = 1.,
-    m_gunEnergy = 20*GeV;
+    m_gunEnergy = 20*keV;
     
     if(m_particleType == _ParticleGun)
     {
@@ -67,7 +67,7 @@ JadePixPrimaryGeneratorAction::JadePixPrimaryGeneratorAction(SourceType st)
         fParticleSource = new G4GeneralParticleSource();
     }
 
-    m_primaryParticlePos.clear();
+    //m_primaryParticlePos.clear();
 
 }
 
@@ -134,9 +134,9 @@ void JadePixPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //Particle Source
     if(fParticleSource) {
         fParticleSource->GeneratePrimaryVertex(anEvent);
-        if(anEvent->GetEventID()==0){m_primaryParticlePos.clear();}
-        G4ThreeVector pos = fParticleSource->GetParticlePosition();
-        m_primaryParticlePos.push_back(pos);
+        //if(anEvent->GetEventID()==0){m_primaryParticlePos.clear();}
+        //G4ThreeVector pos = fParticleSource->GetParticlePosition();
+        //m_primaryParticlePos.push_back(pos);
     }
 
 }

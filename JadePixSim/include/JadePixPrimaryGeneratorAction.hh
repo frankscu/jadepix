@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
+//  ^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
-//	with the contribute of Alessandro Occhigrossi*
+//  with the contribute of Alessandro Occhigrossi*
 //
 // ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
@@ -55,39 +55,40 @@
 class JadePixPrimaryGeneratorActionMessenger;
 
 enum SourceType {
-    _ParticleGun = 0,
-    _GeneralParticleSource
+  _ParticleGun = 0,
+  _GeneralParticleSource
 };
 
 class JadePixPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-    public:
-        JadePixPrimaryGeneratorAction(SourceType);
-        ~JadePixPrimaryGeneratorAction();
-        void GeneratePrimaries(G4Event* anEvent);
+  public:
+    JadePixPrimaryGeneratorAction(SourceType);
+    ~JadePixPrimaryGeneratorAction();
+    
+    void GeneratePrimaries(G4Event* anEvent);
 
-        //void SetParticleType(G4String ptype) {m_particleType = ptype;};
-        //G4String GetParticleType() {return m_particleType;};
+    //void SetParticleType(G4String ptype) {m_particleType = ptype;};
+    //G4String GetParticleType() {return m_particleType;};
 
-        void SetGunEnergy(G4double energy) {m_gunEnergy = energy;};
-        G4double GetGunEnergy() {return m_gunEnergy;};
+    void SetGunEnergy(G4double energy) {m_gunEnergy = energy;};
+    G4double GetGunEnergy() {return m_gunEnergy;};
 
-        void SetGunPosXYSpread(G4double xyspread) {m_gunPosXYSpread = xyspread;};
-        G4double GetGunPosXYSpread() {return m_gunPosXYSpread;};
+    void SetGunPosXYSpread(G4double xyspread) {m_gunPosXYSpread = xyspread;};
+    G4double GetGunPosXYSpread() {return m_gunPosXYSpread;};
 
-        void SetGunPosZ(G4double posz) {m_gunPosZ = posz;};
-        G4double GetGunPosZ() {return m_gunPosZ;};
+    void SetGunPosZ(G4double posz) {m_gunPosZ = posz;};
+    G4double GetGunPosZ() {return m_gunPosZ;};
 
 
-    private:
-        G4ParticleGun* fParticleGun;
-        G4GeneralParticleSource* fParticleSource;
-        JadePixPrimaryGeneratorActionMessenger* m_PrimaryGeneratorActionMessenger;
-        SourceType m_particleType;
-        std::vector<G4ThreeVector> m_primaryParticlePos;
-        G4double m_gunPosXYSpread;
-        G4double m_gunPosZ;
-        G4double m_gunEnergy;
+  private:
+    G4ParticleGun* fParticleGun;
+    G4GeneralParticleSource* fParticleSource;
+    JadePixPrimaryGeneratorActionMessenger* m_PrimaryGeneratorActionMessenger;
+    SourceType m_particleType;
+    std::vector<G4ThreeVector> m_primaryParticlePos;
+    G4double m_gunPosXYSpread;
+    G4double m_gunPosZ;
+    G4double m_gunEnergy;
 };
 
 #endif

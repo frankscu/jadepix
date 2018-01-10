@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id$
-// 
+//
 /// \file JadePixEventAction.cc
 /// \brief Implementation of the JadePixEventAction class
 
@@ -47,12 +47,13 @@
 #include "JadePixWriter.hh"
 
 #include "Randomize.hh"
+#include "G4ios.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  JadePixEventAction::JadePixEventAction()
-: G4UserEventAction(),
+JadePixEventAction::JadePixEventAction()
+  : G4UserEventAction(),
   fMessenger(0),
   fPrintModulo(1)
 {
@@ -70,14 +71,14 @@ JadePixEventAction::~JadePixEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-JadePixHitsCollection* 
+JadePixHitsCollection*
 JadePixEventAction::GetHitsCollection(const G4String& hcName,
     const G4Event* event) const
 {
-  G4int HCID 
+  G4int HCID
     = G4SDManager::GetSDMpointer()->GetCollectionID(hcName);
 
-  JadePixHitsCollection* hitsCollection 
+  JadePixHitsCollection* hitsCollection
     = static_cast<JadePixHitsCollection*>(
         event->GetHCofThisEvent()->GetHC(HCID));
 
@@ -85,10 +86,10 @@ JadePixEventAction::GetHitsCollection(const G4String& hcName,
   if ( ! hitsCollection ) {
     G4cerr << "JadePixEventAction :: Cannot access hitsCollection " << hcName << G4endl;
     exit(1);
-  }         
+  }
 
   return hitsCollection;
-}    
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,10 +97,10 @@ void JadePixEventAction::PrintEventStatistics(G4double hitEdep, G4double truthEd
 {
   // print event statistics
   G4cout
-    << "   Hit: total energy: " 
+    << "   Hit: total energy: "
     << std::setw(7) << G4BestUnit(hitEdep, "Energy")
     << G4endl
-    << "   Truth: total energy: " 
+    << "   Truth: total energy: "
     << std::setw(7) << G4BestUnit(truthEdep, "Energy")
     << G4endl;
 }
@@ -107,10 +108,10 @@ void JadePixEventAction::PrintEventStatistics(G4double hitEdep, G4double truthEd
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void JadePixEventAction::BeginOfEventAction(const G4Event* event)
-{  
+{
 
   G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
+  if ( eventID % fPrintModulo == 0 )  {
     G4cout << "\n---> Begin of event: " << eventID << G4endl;
     //CLHEP::HepRandom::showEngineStatus();
   }
@@ -119,7 +120,7 @@ void JadePixEventAction::BeginOfEventAction(const G4Event* event)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void JadePixEventAction::EndOfEventAction(const G4Event* event)
-{ 
+{
   //Digitize
   G4DigiManager * fDM = G4DigiManager::GetDMpointer();
   JadePixDigitizer * JadePixDTZ = (JadePixDigitizer*)fDM->FindDigitizerModule( "JadePixDigitizer" );
@@ -132,8 +133,10 @@ void JadePixEventAction::EndOfEventAction(const G4Event* event)
     = GetHitsCollection("JadePixTruthCollection", event);
 
   if(truthC->entries()==0){
-    G4cerr << "JadePixEventAction :: There is no hits in JadePixHitsCollections!!! " << G4endl;
-    //exit(1);
+    if ( event->GetEventID() % fPrintModulo == 0 )  {
+      G4cerr << "JadePixEventAction :: There is no hits in JadePixHitsCollections!!! " << G4endl;
+    }
+      //exit(1);
     return;
   }
 
@@ -143,28 +146,28 @@ void JadePixEventAction::EndOfEventAction(const G4Event* event)
 
   //Write McTruth
   G4int nofMc=truthC->entries();
-  mWriter->WriteMcTag(nofMc); 
+  mWriter->WriteMcTag(nofMc);
   for(G4int iMc=0;iMc<nofMc;iMc++){
     JadePixHit* truthHit = (*truthC)[iMc];
-    mWriter->WriteMc(truthHit);          
+    mWriter->WriteMc(truthHit);
   }
 
   G4int nofDigi = digiC->entries();
-  mWriter->WriteDigiTag(nofDigi);          
+  mWriter->WriteDigiTag(nofDigi);
   for(G4int iDigi=0;iDigi<nofDigi;iDigi++){
     JadePixDigi* digiHit = (*digiC)[iDigi];
-    mWriter->WriteDigi(digiHit);          
+    mWriter->WriteDigi(digiHit);
   }
 
 
-  // Print per event (modulo n)   
+  // Print per event (modulo n)
   G4int eventID = event->GetEventID();
   if ( eventID % fPrintModulo == 0) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
+    G4cout << "---> End of event: " << eventID << G4endl;
     //      PrintEventStatistics(newHit->GetEdep(),truthHit->GetEdep());
-  }    
+  }
 
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

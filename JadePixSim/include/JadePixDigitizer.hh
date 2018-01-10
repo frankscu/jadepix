@@ -12,8 +12,8 @@
 #define JadePixDigitizer_h 1
 
 class JadePixDigitizerMessenger;
-class TFile;
-class TH1F;
+//class TFile;
+//class TH1F;
 class G4Svc;
 
 #include "G4VDigitizerModule.hh"

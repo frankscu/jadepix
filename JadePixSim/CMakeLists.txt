@@ -23,6 +23,12 @@ endif()
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+option(WITH_ROOT_BUILD "Build example with ROOT" ON)
+if(WITH_ROOT_BUILD)
+  find_package(ROOT)
+  include_directories(${ROOT_INCLUDE_DIRS})
+endif()
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -36,6 +42,9 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(jadepix jadepix.cc ${sources} ${headers})
 target_link_libraries(jadepix ${Geant4_LIBRARIES})
 
+if(WITH_ROOT_BUILD)
+  target_link_libraries(jadepix ${ROOT_LIBRARIES})
+endif()
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build JadePix. This is so that we can run the executable directly because it
@@ -43,10 +52,10 @@ target_link_libraries(jadepix ${Geant4_LIBRARIES})
 #
 file(GLOB MACROLIST RELATIVE ${PROJECT_SOURCE_DIR} "macros/*.mac")
 set(EXAMPLEJadePixC_SCRIPTS
-    ${MACROLIST}
-    macros/jadepix.out
-    macros/jadepix.in
-    )
+  ${MACROLIST}
+  macros/jadepix.out
+  macros/jadepix.in
+  )
 
 foreach(_script ${EXAMPLEJadePixC_SCRIPTS})
   configure_file(

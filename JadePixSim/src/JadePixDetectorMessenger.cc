@@ -43,20 +43,20 @@ JadePixDetectorMessenger::JadePixDetectorMessenger(JadePixDetectorConstruction* 
  : G4UImessenger(),
    fDetectorConstruction(Det)
 { 
-  fJadePixDirectory = new G4UIdirectory("/JadePix/");
+  fJadePixDirectory = new G4UIdirectory("/jadepix/");
   fJadePixDirectory->SetGuidance("UI commands of this example");
   
-  fDetDirectory = new G4UIdirectory("/JadePix/det/");
+  fDetDirectory = new G4UIdirectory("/jadepix/det/");
   fDetDirectory->SetGuidance("Detector construction control");
 
-  fSetMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/JadePix/det/setMagField",this);  
+  fSetMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/jadepix/det/setMagField",this);  
   fSetMagFieldCmd->SetGuidance("Define magnetic field.");
   fSetMagFieldCmd->SetGuidance("Magnetic field will be in X direction.");
   fSetMagFieldCmd->SetParameterName("Bx",false);
   fSetMagFieldCmd->SetUnitCategory("Magnetic flux density");
   fSetMagFieldCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
 
-  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/JadePix/det/stepMax",this);
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/jadepix/det/stepMax",this);
   fStepMaxCmd->SetGuidance("Define a step max");
   fStepMaxCmd->SetParameterName("stepMax",false);
   fStepMaxCmd->SetUnitCategory("Length");
