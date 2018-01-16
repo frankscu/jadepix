@@ -13,6 +13,7 @@
 /gps/pos/centre 0 0 0.1 mm 
 /gps/direction 0 0 -1
 /gps/ene/type User
+#/gps/ene/type Gauss
 /gps/hist/type energy
 
 # spectra
@@ -40,5 +41,5 @@
 #/jadepix/beam/frames 1
 #/jadepix/beam/on 
 
-/jadepix/event/setPrintModulo 1000
-/run/beamOn 100000
+/jadepix/event/setPrintModulo 10000
+/run/beamOn 500000

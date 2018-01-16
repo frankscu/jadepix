@@ -9,14 +9,14 @@ void chargeDistribution(){
   TH1F* hdx = new TH1F("hdx","hdx",100,-0.05,0.05);
   TH1F* hdy = new TH1F("hdy","hdy",100,-0.05,0.05);
 
-  TH1F* hisADC = new TH1F("hisADC","hisADC",3000,0,28000);
+  TH1F* hisADC = new TH1F("hisADC","hisADC",100000,0,5000);
   string line;
   int evtId,hitId,chipId,HitNofDigi,TrNofDigi;
   double posX,posY,hitADC,trPosX,trPosY,edep;
   int nlines=0;
   double THR=0;
   double pedestal=0;
-  double distance[60044],hADC[60044];
+  double distance[200044],hADC[200044];
   fstream fin("./JadePix.recdat",ios::in);
   std::getline(fin,line);
   cout<<line<<endl;
@@ -59,7 +59,7 @@ void chargeDistribution(){
   hisADC->SetFillColor(kYellow);
   hisADC->SetLineColor(kYellow);
   //TGaxis::SetMaxDigits(3);
-  //hisADC->DrawNormalized("HIST,same");
+  hisADC->DrawNormalized("HIST,same");
 
   TLegend* lg= new TLegend(0.5,0.7,0.9,0.9);
   lg->AddEntry(hisADC,"Simulation","F2");

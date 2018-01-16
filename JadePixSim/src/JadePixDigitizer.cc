@@ -37,8 +37,7 @@ JadePixDigitizer::JadePixDigitizer(G4String modName):G4VDigitizerModule(modName)
 
   pedestal = 0;
   ehpEnergy = 3.6 *eV;
-  //energyThreshold = (pedestal+10*enc)*ehpEnergy;
-  energyThreshold = 0;
+  energyThreshold = (pedestal+1*enc)*ehpEnergy;
   adcEnergyRange = JadePixGeo->Layer(0).ADCRange()*ehpEnergy;
 }
 
@@ -413,14 +412,14 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   G4double pixPitchY=JadePixGeo->Layer(0).PitchY()*um;
 
   //segment impact pixel
-  //G4double sigma = 9.59*um;
-  //G4double N0=0.6807;
-  //G4double d0=1.406*um;
-  //G4double base=0.2988;
+  G4double sigma = 9.59*um;
+  G4double N0=0.6807;
+  G4double d0=1.406*um;
+  G4double base=0.2988;
 
-  G4double sigma = 10.72*um;
-  G4double N0=0.99;
-  G4double d0=2.94*um;
+  //G4double sigma = 10.72*um;
+  //G4double N0=0.99;
+  //G4double d0=2.94*um;
 
   G4ThreeVector iPixPos = JadePixId.PixelPos();
   G4double iX=iPixPos.x(); //Diode in the center
@@ -447,7 +446,8 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   
   //cout<<"d-d0: "<<d-d0<<endl;
   // Charge Collection
-  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma));
+  //G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma));
+  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma))+base;
   //cout<<"pdf: "<<pdf<<endl;
 
   G4double factor=1.0;
@@ -645,16 +645,13 @@ int JadePixDigitizer::GetVolADC(double eDep){
   int locAdcRange = pow(2,nAdcBit);
   //G4double gain = 0.02*1e-3;
   G4double gain = 0.032*1e-3;
-  int Vref = 0.5;
+  //int Vref = 0.5;
   double dE = (adcEnergyRange-energyThreshold)/locAdcRange;
   double eDepEff=eDep-energyThreshold;
   if(eDepEff<0)eDepEff=0;
   int dAdc = int(eDepEff/dE);
   if(dAdc >= locAdcRange) dAdc = locAdcRange-1;
-  //cout<<"dAdc: "<<dAdc<<endl;
-  //cout<<"adcRange: "<<adcRange<<endl;
   int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*locAdcRange);
-  //int adc = int(((energyThreshold+dAdc*dE)/ehpEnergy*gain)*adcRange);
   return adc;
 }
 
