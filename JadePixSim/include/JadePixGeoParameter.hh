@@ -42,6 +42,7 @@ public:
   double PitchY() const {return pixPitchY;};
   double DiodeOffsetX() const{return diodeOffsetX;};
   double DiodeOffsetY() const{return diodeOffsetY;};
+  double DiodeSize() const{return diodeSize;};
   double SensorThick() const {return sensorTh;};
   double SubstrateThick() const {return substrTh;};
   double AsicThick() const {return asicTh;};
@@ -63,6 +64,7 @@ public:
   void PitchY(double py) { pixPitchY=py;};
   void DiodeOffsetX(double offsetX) { diodeOffsetX=offsetX;};
   void DiodeOffsetY(double offsetY) { diodeOffsetX=offsetY;};
+  void DiodeSize(double diodesize) { diodeSize=diodesize;};
   void SensorThick(double th) { sensorTh=th;};
   void SubstrateThick(double th) { substrTh=th;};
   void AsicThick(double th) { asicTh=th;};
@@ -87,6 +89,9 @@ private:
 
   //Diode offset
   double diodeOffsetX, diodeOffsetY;
+
+  //Diode size
+  double diodeSize;
 
   //Thickness of sensor layer
   double sensorTh, substrTh, asicTh;

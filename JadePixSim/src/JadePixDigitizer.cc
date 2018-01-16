@@ -65,6 +65,7 @@ void JadePixDigitizer::Digitize(){
   if(THC){
     digisCollection=new JadePixDigisCollection(moduleName, collectionName[0]);
     NHits=THC->entries();
+
     //G4cout<<"BesSimDigitizer::Primary Hits No: "<<NHits<<endl;
     for(G4int i=0;i<NHits;i++){
       //HitRealizition((*THC)[i]);
@@ -264,7 +265,7 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
   G4double eT;
   G4double eTotal=0;
   G4double ratio;
-  G4int nAdjacentPix=2; //Neighbouring pixel hitting
+  G4int nAdjacentPix=5; //Neighbouring pixel hitting
 
   std::vector<std::vector <G4double>> ePixArray(2*nAdjacentPix+1,std::vector<G4double>(2*nAdjacentPix+1,0));
 
@@ -294,7 +295,8 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
             ePix = SegEdep*OverMOSDiffuseGaussLorentzElectrode(iJadePixId,locSegPos);
           }else if (digiMethod == 2){
             if(verboseLevel>0){G4cout<<"Gauss with center is in use!" << G4endl;}
-            ePix = SegEdep*DiffuseGaussElectrode(iJadePixId,locSegPos);
+            //ePix = SegEdep*DiffuseGaussElectrode(iJadePixId,locSegPos);
+            ePix = SegEdep*DiffuseGaussElectrodeDivided(iJadePixId,locSegPos);
           }
           if(verboseLevel>0){G4cout<<"SegEdep: "<<SegEdep<<", "<<ePix<<G4endl;}
 
@@ -413,14 +415,14 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   G4double pixPitchY=JadePixGeo->Layer(0).PitchY()*um;
 
   //segment impact pixel
-  //G4double sigma = 9.59*um;
-  //G4double N0=0.6807;
-  //G4double d0=1.406*um;
-  //G4double base=0.2988;
+  G4double sigma = 9.59*um;
+  G4double N0=0.6807;
+  G4double d0=1.406*um;
+  G4double base=0.2988;
 
-  G4double sigma = 10.72*um;
-  G4double N0=0.99;
-  G4double d0=2.94*um;
+  //G4double sigma = 10.72*um;
+  //G4double N0=0.99;
+  //G4double d0=2.94*um;
 
   G4ThreeVector iPixPos = JadePixId.PixelPos();
   G4double iX=iPixPos.x(); //Diode in the center
@@ -444,10 +446,11 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
 
   // The distance between the reconstructed position of the cluster and the diode in collection of pixel in the XY sensor
   G4double d = sqrt(pow(dx,2)+pow(dy,2));
-  
-  //cout<<"d-d0: "<<d-d0<<endl;
+
+  //cout<<"d-d0: "<<d-d0<<endl;  
   // Charge Collection
-  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma));
+  //G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma));
+  G4double pdf=N0*exp(-pow((d-d0),2)/(2*sigma*sigma))+base;
   //cout<<"pdf: "<<pdf<<endl;
 
   G4double factor=1.0;
@@ -455,6 +458,80 @@ double JadePixDigitizer::DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4T
   return pdf*factor;
 }
 
+double JadePixDigitizer::DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint)
+{
+  G4double pixPitchX=JadePixGeo->Layer(0).PitchX()*um;
+  G4double pixPitchY=JadePixGeo->Layer(0).PitchY()*um;
+  G4double diodesize=JadePixGeo->Layer(0).DiodeSize()*um;
+
+  //segment impact pixel
+  //G4double sigma = 9.59*um;
+  //G4double N0=0.6807;
+  //G4double d0=1.406*um;
+  //G4double base=0.2988;
+
+  G4double mean1 = 1.5*um;
+  G4double mean2 = 1.5*um;
+  G4double mean3 = 4.*um;
+  G4double sigma1 = 2.*um;
+  G4double sigma2 = 10.*um;
+  G4double sigma3 = 15.*um;
+  G4double N0=0.7;
+  G4double d0=0*um;
+  G4double base=0.3;
+
+  G4ThreeVector iPixPos = JadePixId.PixelPos();
+  G4double iX=iPixPos.x(); //Diode in the center
+  G4double iY=iPixPos.y();
+  G4double dxRaw=hitPoint.x()-iX;
+  G4double dyRaw=hitPoint.y()-iY;
+ 
+  const int poly_sides = 8;
+  G4double L1 = diodesize/2;
+  G4double innerangle = 360/poly_sides;
+  G4double alpha = 3.1415926*innerangle/2/180;
+  G4double L2 = L1/tan(alpha);
+  G4double poly_x[poly_sides] = {iX+L1,iX+L2,iX+L2,iX+L1,-(iX+L1),-(iX+L2),-(iX+L2),-(iX+L1)}; 
+  G4double poly_y[poly_sides] = {iY+L2,iY+L1,-(iY+L1),-(iY+L2),-(iY+L2),-(iY+L1),iY+L1,iY+L2};
+  G4double x = hitPoint.x();
+  G4double y = hitPoint.y();
+  G4int ret;
+  ret = InOrNot(poly_sides, poly_x, poly_y, x, y);
+  //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
+  //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
+
+  //G4double pixEdgeCut=33*um;
+  //G4double nominalPixPitch=22.5*um;
+  //G4double nominalPixPitch=pixEdgeCut-0.05*(pixPitchX-4*um);
+  //G4double dx = dxRaw*nominalPixPitch/pixPitchX;
+  //G4double dy = dyRaw*nominalPixPitch/pixPitchY;
+  G4double dx = dxRaw;
+  G4double dy = dyRaw;
+
+  //cout<<"pixPitchX: "<<pixPitchX<<", pixPitchY: "<<pixPitchY<<endl;
+  //cout<<"iX: "<<iX<<", dx: "<<dx<<", iY: "<<iY<<", dy: "<<dy<<endl;
+
+  // The distance between the reconstructed position of the cluster and the diode in collection of pixel in the XY sensor
+  G4double d = sqrt(pow(dx,2)+pow(dy,2));
+
+  //cout<<"d-d0: "<<d-d0<<endl;  
+  // Charge Collection
+
+  G4double pdf;
+  if(ret == 1){
+    pdf=N0*exp(-pow((d-d0),mean1)/(2*sigma1*sigma1))+base;
+  } else if(fabs(dxRaw)<=pixPitchX && fabs(dyRaw)<=pixPitchY){
+    pdf=N0*exp(-pow((d-d0),mean2)/(2*sigma2*sigma2))+base;
+  }else{ pdf=N0*exp(-pow((d-d0),mean3)/(2*sigma3*sigma3))+base;
+  }
+
+  //cout<<"d-d0: "<<d-d0<<endl;
+  //cout<<"pdf: "<<pdf<<endl;
+
+  G4double factor=1.0;
+
+  return pdf*factor;
+}
 
 double JadePixDigitizer::OverMOSDiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint)
 {
@@ -642,10 +719,10 @@ int JadePixDigitizer::GetADC(double eDep){
 }
 
 int JadePixDigitizer::GetVolADC(double eDep){
-  int locAdcRange = pow(2,nAdcBit);
+  int locAdcRange = pow(2,nAdcBit)-1;
   //G4double gain = 0.02*1e-3;
-  G4double gain = 0.032*1e-3;
-  int Vref = 0.5;
+  G4double gain = 0.032*1e-3; // v/e
+  //int Vref = 0.5;
   double dE = (adcEnergyRange-energyThreshold)/locAdcRange;
   double eDepEff=eDep-energyThreshold;
   if(eDepEff<0)eDepEff=0;
@@ -666,4 +743,18 @@ int JadePixDigitizer::GetTDC(double time){
   int tdc = int(time/dT);
   if(tdc > tdcRange) tdc = tdcRange;
   return tdc;
+}
+
+int JadePixDigitizer::InOrNot(int poly_sides, double *poly_x, double *poly_y, double x, double y){
+  int i, j;  
+  j = poly_sides-1;  
+  int res = 0;  
+  for (i = 0; i<poly_sides; i++)   
+  {  
+    if((poly_y[i]<y && poly_y[j]>=y || poly_y[j]<y && poly_y[i]>=y) && (poly_x[i]<=x || poly_x[j]<=x)){  
+      res ^= ((poly_x[i] + (y-poly_y[i])/(poly_y[j]-poly_y[i])*(poly_x[j]-poly_x[i])) < x);
+    }
+    j=i;  
+  }
+  return res;   
 }

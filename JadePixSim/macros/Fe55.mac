@@ -41,4 +41,4 @@
 #/jadepix/beam/on 
 
 /jadepix/event/setPrintModulo 1000
-/run/beamOn 100000
+/run/beamOn 10000

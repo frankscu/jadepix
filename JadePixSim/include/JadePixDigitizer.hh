@@ -42,6 +42,7 @@ public:
   int GetADC(double edep);
   int GetVolADC(double edep);
   int GetTDC(double time);
+  int InOrNot(int poly_sides, double *poly_x, double *poly_y, double x, double y);
 
   void HitRealizition(JadePixHit* rawHit);
   void DiffuseE(G4double edep,G4ThreeVector hitPoint,JadePixIdentifier& JadePixId,JadePixHit* rawHit);
@@ -49,6 +50,7 @@ public:
 
   void HitRealizitionEelectrode(JadePixHit* rawHit);
   double DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
+  double DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double DiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double OverMOSDiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
 
