@@ -9,15 +9,20 @@ void chargeDistribution(){
   TH1F* hdx = new TH1F("hdx","hdx",100,-0.05,0.05);
   TH1F* hdy = new TH1F("hdy","hdy",100,-0.05,0.05);
 
-  TH1F* hisADC = new TH1F("hisADC","hisADC",3000,0,28000);
+  TH1F* hisADC = new TH1F("hisADC","hisADC",1000,0,5000);
   string line;
   int evtId,hitId,chipId,HitNofDigi,TrNofDigi;
   double posX,posY,hitADC,trPosX,trPosY,edep;
   int nlines=0;
   double THR=0;
   double pedestal=0;
-  double distance[60044],hADC[60044];
-  fstream fin("./JadePix.recdat",ios::in);
+  double distance[50000],hADC[50000];
+  TString recfile;
+  for (int i; i<50;i++){
+  stringstream ss;
+  ss << i;
+  recfile = "JadePix_" + ss.str() + ".recdat";
+  fstream fin(recfile,ios::in);
   std::getline(fin,line);
   cout<<line<<endl;
 
@@ -41,6 +46,7 @@ void chargeDistribution(){
     cout << nlines << "  " << distance[nlines] << "  " << hADC[nlines] << endl;
   }
   fin.close();
+  }
 
   TCanvas* c1 = new TCanvas("c1","c1",1440,720);
   c1->Divide(2,1);

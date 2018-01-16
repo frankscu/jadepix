@@ -59,8 +59,11 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+  //CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  G4int seed = time(NULL);
+  CLHEP::HepRandom::setTheSeed(seed);
+
   // Construct the default run manager
   //
   G4RunManager * runManager = new G4RunManager;
@@ -103,7 +106,7 @@ int main(int argc,char** argv)
   UImanager->SetCoutDestination(LoggedSession);
   LoggedSession->SessionStart();
 
-  UImanager->ApplyCommand("/control/macroPath /Users/chenliejian/Documents/Code/jadepix/JadePixSim/macros");
+  UImanager->ApplyCommand("/control/macroPath /home/jingmq/jadepix/JadePixSim/macros");
   
   if (argc!=1)   // batch mode
     {
