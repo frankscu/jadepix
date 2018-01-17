@@ -31,7 +31,7 @@ void JadePixGeo::Initialize(void){
 
 void JadePixGeo::InitFromFile(){
 
-  std::string geometryFilePath = "/home/chenlj/jadepix/JadePixSim";
+  std::string geometryFilePath = "/home/jingmq/jadepix/JadePixSim";
   geometryFilePath += "/model/Spt.txt";
   std::ifstream fin(geometryFilePath.c_str());
 
@@ -41,7 +41,7 @@ void JadePixGeo::InitFromFile(){
   }
 
   int rowNo, colNo;
-  double chipL,chipW,asicTh,sensorTh,substrTh,pitchR,pitchC,diodeOffsetX,diodeOffsetY;
+  double chipL,chipW,asicTh,sensorTh,substrTh,pitchR,pitchC,diodeOffsetX,diodeOffsetY,diodeSize;
   int ladderNo,chipNo;
   double ssL,ssW,epoxyT,kptT,mfT,cfT,_R,_Phi,_PhaseAngle;
   double segInnR,segOutR,segL,segZ;
@@ -61,7 +61,7 @@ void JadePixGeo::InitFromFile(){
   fin.seekg(1,ios::cur);
   std::getline(fin, line);
 
-  fin>>chipL>>chipW>>asicTh>>sensorTh>>substrTh>>pitchR>>pitchC>>diodeOffsetX>>diodeOffsetY>>rowNo>>colNo;
+  fin>>chipL>>chipW>>asicTh>>sensorTh>>substrTh>>pitchR>>pitchC>>diodeOffsetX>>diodeOffsetY>>diodeSize>>rowNo>>colNo;
   cout<<"L: "<<chipL<<" W: "<<chipW<<" asTh: "<<asicTh<<" senTh: "<<sensorTh<<" subTh: "<<substrTh<<" pitchR: "<<pitchR<<" pitchC: "<<pitchC<<" rowNo: "<<rowNo<<" colNo: "<<colNo<<endl;
 
   fin.seekg(1,ios::cur);
