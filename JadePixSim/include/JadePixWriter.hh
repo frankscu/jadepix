@@ -47,6 +47,7 @@ class JadePixWriter{
     void WriteDigiTag(int n);
 
     void WriteMc(JadePixHit* truthHit);
+    void WriteMcDebug(JadePixHit* truthHit, G4double edep);
     void WriteDigi(JadePixDigi* digiHit);
 
     void CloseFile(){m_fout->close();};

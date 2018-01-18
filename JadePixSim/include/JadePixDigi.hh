@@ -46,6 +46,7 @@ public:
   void SetRow(G4int row){rowID = row;};
   void SetCol(G4int column){columnID = column;};
   void SetEdep     (G4double de)      { edep = de;};
+  void AddEdep(G4double de) {edep += de;};
   void SetGlobalT   (G4double time)    { globalT = time;};
   void SetADC (G4int a) {adc=a;};
   void SetTDC (G4int t) {tdc=t;};

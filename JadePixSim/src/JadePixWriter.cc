@@ -51,6 +51,13 @@ void JadePixWriter::WriteMc(JadePixHit* truthHit){
   (*m_fout)<<truthHit->GetTrackID()<<"\t"<<truthHit->GetGlobalChipID()<<"\t"<<truthHit->GetEdep()<<"\t"<<truthHit->GetGlobalT()<<"\t"<<trPos.x()<<"\t"<<trPos.y()<<"\t"<<trPos.z()<<"\t"<<truthHit->GetEnterAngle()<<endl;
 }
 
+void JadePixWriter::WriteMcDebug(JadePixHit* truthHit, G4double edep){
+  G4ThreeVector trPos = truthHit->GetPos();
+  (*m_fout)<<truthHit->GetTrackID()<<"\t"<<truthHit->GetGlobalChipID()<<"\t"<<edep<<"\t"<<truthHit->GetGlobalT()<<"\t"<<trPos.x()<<"\t"<<trPos.y()<<"\t"<<trPos.z()<<"\t"<<truthHit->GetEnterAngle()<<endl;
+}
+
+
+
 void JadePixWriter::WriteDigiTag(int n){
   (*m_fout)<<"Digi Hit No: "<<n<<endl;    
 }

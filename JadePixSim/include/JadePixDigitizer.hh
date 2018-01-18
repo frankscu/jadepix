@@ -49,6 +49,7 @@ public:
   void DiffuseGaussE(G4double edep,G4ThreeVector hitPoint,JadePixIdentifier& JadePixId,JadePixHit* rawHit);
 
   void HitRealizitionEelectrode(JadePixHit* rawHit);
+  //void HitRealizitionEelectrodeTest(JadePixHit* rawHit);
   double DiffuseGaussElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
   double DiffuseGaussLorentzElectrode(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);

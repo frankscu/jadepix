@@ -145,20 +145,37 @@ void JadePixEventAction::EndOfEventAction(const G4Event* event)
   mWriter->WriteEventTag(event->GetEventID());
 
   //Write McTruth
+  //G4int nofMc=truthC->entries();
+  //mWriter->WriteMcTag(nofMc);
+  //for(G4int iMc=0;iMc<nofMc;iMc++){
+  //  JadePixHit* truthHit = (*truthC)[iMc];
+  //  mWriter->WriteMc(truthHit);
+  //}
+
+  G4double eT = 0;
+  G4int nofDigi = digiC->entries();
+  //mWriter->WriteDigiTag(nofDigi);
+  for(G4int iDigi=0;iDigi<nofDigi;iDigi++){
+    JadePixDigi* digiHit = (*digiC)[iDigi];
+    //mWriter->WriteDigi(digiHit);
+    eT += digiHit->GetEdep();
+  }
+  //std::cout<<" Edep: "<<G4BestUnit(eT,"Energy")<<endl;
+
+  //Write McTruth
   G4int nofMc=truthC->entries();
   mWriter->WriteMcTag(nofMc);
   for(G4int iMc=0;iMc<nofMc;iMc++){
     JadePixHit* truthHit = (*truthC)[iMc];
-    mWriter->WriteMc(truthHit);
+    mWriter->WriteMcDebug(truthHit, eT);
   }
 
-  G4int nofDigi = digiC->entries();
   mWriter->WriteDigiTag(nofDigi);
   for(G4int iDigi=0;iDigi<nofDigi;iDigi++){
     JadePixDigi* digiHit = (*digiC)[iDigi];
     mWriter->WriteDigi(digiHit);
+    //eT += digiHit->GetEdep();
   }
-
 
   // Print per event (modulo n)
   G4int eventID = event->GetEventID();
