@@ -17,12 +17,12 @@
 /gps/hist/type energy
 
 # spectra
-#/gps/hist/point  0.00588  8.2   	
-#/gps/hist/point  0.00589  16.20   	
-#/gps/hist/point  0.00649  1.89 	
-
-/gps/hist/point  0.00590  24.40  	
+/gps/hist/point  0.00588  8.2   	
+/gps/hist/point  0.00589  16.20   	
 /gps/hist/point  0.00649  1.89 	
+
+#/gps/hist/point  0.00590  24.40  	
+#/gps/hist/point  0.00649  1.89 	
 
 
 /gps/ang/type iso 	
@@ -41,5 +41,5 @@
 #/jadepix/beam/frames 1
 #/jadepix/beam/on 
 
-/jadepix/event/setPrintModulo 10000
-/run/beamOn 500000
+/jadepix/event/setPrintModulo 100000
+/run/beamOn 200000
