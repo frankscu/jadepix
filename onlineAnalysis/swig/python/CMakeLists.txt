@@ -16,6 +16,11 @@ if(UNIX)
 set(PYTHON_INSTALL_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/jadepix.py
         ${CMAKE_CURRENT_BINARY_DIR}/_jadepix.so)
+        
+elseif(WIN32)
+set(PYTHON_INSTALL_FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/jadepix.py
+        ${CMAKE_CURRENT_BINARY_DIR}/Release/_jadepix.pyd)
 endif()
 
 # Configure setup.py and copy to output directory
@@ -31,4 +36,4 @@ configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
 # Install target to call setup.py
 add_custom_target(install-python
         DEPENDS _jadepix
-        COMMAND python3 ${SETUP_PY_OUT} install)
+        COMMAND python ${SETUP_PY_OUT} install)
