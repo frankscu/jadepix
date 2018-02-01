@@ -13,51 +13,57 @@ class JadePixChip;
 class JadePixHit;
 class JadePixDigi;
 class JadePixEvent{
-public:
-	JadePixEvent(int nChip);
-	~JadePixEvent(void);
+    public:
+        JadePixEvent(int nChip);
+        ~JadePixEvent(void);
 
-	void Reset();
-	
-  void Reconstruct();
+        void Reset();
 
-	int GetID() const {return m_id;};
-	void SetID(int id){m_id=id;};
+        void Reconstruct();
 
-	int NofHit(){return m_hitVec.size();}
-  JadePixHit* GetHit(int i) const {return m_hitVec[i];};
+        int GetID() const {return m_id;};
+        void SetID(int id){m_id=id;};
 
-	int NofTruth(){return m_trHitVec.size();}
-  JadePixHit* GetTruthHit(int i) const {return m_trHitVec[i];};
+        int NofHit(){return m_hitVec.size();}
+        JadePixHit* GetHit(int i) const {return m_hitVec[i];};
 
-	int NofDigi(){return m_digiVec.size();}
-  JadePixDigi* GetDigi(int i) const {return m_digiVec[i];};
+        int NofCluster(){return m_clusterVec.size();}
+        JadePixCluster* GetCluster(int i) const {return m_clusterVec[i];};
 
-	int NofChip(){return m_chipVec.size();}
-  JadePixChip* GetChip(int i) const {return m_chipVec[i];};
+        int NofTruth(){return m_trHitVec.size();}
+        JadePixHit* GetTruthHit(int i) const {return m_trHitVec[i];};
 
-  void AddTruth(int trackId,int chipId,double edep,double time,double posX,double posY,double posZ,double enterAngle);
-  void AddDigi(int trackId,int chipId,int rowId,int colId,double ADC,double TDC);
+        int NofDigi(){return m_digiVec.size();}
+        JadePixDigi* GetDigi(int i) const {return m_digiVec[i];};
 
-	void Print();
+        int NofChip(){return m_chipVec.size();}
+        JadePixChip* GetChip(int i) const {return m_chipVec[i];};
 
-private:
+        void AddTruth(int trackId,int chipId,double edep,double time,double posX,double posY,double posZ,double enterAngle);
+        void AddDigi(int trackId,int chipId,int rowId,int colId,double ADC,double TDC);
 
-	vector<JadePixHit*> m_hitVec;	
-	vector<JadePixHit*>::iterator m_itHit;
+        void Print();
 
-	vector<JadePixHit*> m_trHitVec;	
-	vector<JadePixHit*>::iterator m_itTrHit;
-  int m_trSeed;
-  double m_maxEdep;
+    private:
 
-	vector<JadePixChip*> m_chipVec;	
-	vector<JadePixChip*>::iterator m_itChip;	
+        vector<JadePixHit*> m_hitVec;
+        vector<JadePixHit*>::iterator m_itHit;
 
-	vector<JadePixDigi*> m_digiVec;	
-	vector<JadePixDigi*>::iterator m_itDigi;	
+        vector<JadePixCluster*> m_clusterVec;
+        vector<JadePixCluster*>::iterator m_itCluster;
 
-	int m_id;
+        vector<JadePixHit*> m_trHitVec;
+        vector<JadePixHit*>::iterator m_itTrHit;
+        int m_trSeed;
+        double m_maxEdep;
+
+        vector<JadePixChip*> m_chipVec;
+        vector<JadePixChip*>::iterator m_itChip;
+
+        vector<JadePixDigi*> m_digiVec;
+        vector<JadePixDigi*>::iterator m_itDigi;
+
+        int m_id;
 };
 
 

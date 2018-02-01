@@ -1,96 +1,66 @@
+#pragma once
+
 #ifndef JadePixCluster_H
 #define JadePixCluster_H
 
+#include <vector>
+
+#include <iostream>
+#include "CLHEP/Vector/ThreeVector.h"
+
+#include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Units/SystemOfUnits.h"
+
 #include "JadePixDigi.h"
-#include "JadePixHit.h"
 #include "JadePixGeo.h"
+typedef CLHEP::Hep3Vector Hep3Vector;
 
+using namespace std;
+using namespace CLHEP;
+
+class JadePixCluster;
 class JadePixDigi;
-class JadePixHit;
-class JadePixCluster
-{
-public:
-	JadePixCluster(void){};
-  JadePixCluster(JadePixDigi* m_digi);
-	JadePixCluster(int trackId,int chipId,int rowId,int colId,double ADC, double TDC);
-  ~JadePixCluster(void);
 
-	inline int GetColId();
-	inline int GetRowId();
-	inline int Overflow();
-	inline int Frame();
-	inline int GetId();
-  void SetId(int id) {m_id=id;};
-  
-  int GetGlobalChipId() const{return m_globalChipId;};
-  int GetTrackId() const{return m_trackId;};
+class JadePixCluster{
+    public:
+        JadePixCluster(int trackId,int chipId, double edep, double time, double posX, double posY, double posZ, double angle):m_trackId(trackId),m_chipId(chipId),m_edep(edep),m_time(time),m_pos(Hep3Vector(posX,posY,posZ)),m_enterAngle(angle){};
+        JadePixCluster(){};
+        ~JadePixCluster(void);
 
-	inline JadePixHit* Hit();
-	inline void Hit(JadePixHit *hit);
+        void AddDigi(JadePixDigi *digi){m_digiVec.push_back(digi);};
+        int GetNofDigi() const {return m_digiVec.size();};
+        void Reconstruct();
+        Hep3Vector GetPos() const {return m_pos;};
+        int GetId() const {return m_id;};
+        void SetId(int id) {m_id=id;};
+        void Print();
 
-  void SetADC(double adc){m_adc=adc;};
-  void SetTDC(double tdc){m_tdc=tdc;};
-  
-  void SetGlobalChipId(int chipId){m_globalChipId=chipId;};
-  void SetTrackId(int trkId){m_trackId=trkId;};
+        double GetADC() const {return m_edep;};
+        double GetTDC() const {return m_time;};
 
-  double GetADC() const {return m_adc;};
-  double GetTDC() const {return m_tdc;};
 
-	inline bool IsInHit();
-	inline void IsInHit(bool isInHit);
+        void AddTruth(JadePixCluster* tr) {m_trHitVec.push_back(tr);};
+        int NofTrHit() const {return m_trHitVec.size();};
+        JadePixCluster* GetTruth(int i) const {return m_trHitVec[i];};
 
-	bool IsAdjacentTo(JadePixCluster* digi);
 
-private:
-  int m_trackId;
-	int m_globalChipId;
-	int m_rowId;
-	int m_colId;
-	int m_overflow;
-	int m_frame;
-	int m_id;
-  double m_adc;
-  double m_tdc;
-	bool m_IsInHit;
-	JadePixHit *m_hit;
+        void SetChipId(int chip){m_chipId=chip;};
+        int GetChipId() const {return m_chipId;};
+
+        void SetTrackId(int track){m_trackId=track;};
+        int GetTrackId() const {return m_trackId;};
+
+        double GetEnterAngle() const{return m_enterAngle;};
+    private:
+        int m_trackId;
+        int m_chipId;
+        double m_edep;
+        double m_time;
+        Hep3Vector m_pos;
+        int m_id;
+        vector<JadePixDigi*> m_digiVec;
+        vector<JadePixCluster*> m_trHitVec;
+        double m_enterAngle;
 };
-
-inline int JadePixCluster::GetColId(){
-	return m_colId;
-}
-
-inline int JadePixCluster::GetRowId(){
-	return m_rowId;
-}
-
-inline int JadePixCluster::Overflow(){
-	return m_overflow;
-}
-
-inline int JadePixCluster::Frame(){
-	return m_frame;
-}
-
-inline int JadePixCluster::GetId(){
-	return m_id;
-}
-
-inline JadePixHit* JadePixCluster::Hit(){
-	return m_hit;
-}
-
-inline void JadePixCluster::Hit(JadePixHit* hit){
-	m_hit=hit;
-}
-
-inline void  JadePixCluster::IsInHit(bool isInHit){
-	m_IsInHit=isInHit;
-}
-
-inline bool  JadePixCluster::IsInHit(){
-	return m_IsInHit;
-}
-
 
 #endif

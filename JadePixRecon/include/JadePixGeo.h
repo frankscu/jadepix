@@ -18,8 +18,8 @@
 #include <string>
 #include <vector>
 
-#include "Units/PhysicalConstants.h"
-#include "Units/SystemOfUnits.h"
+#include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 using namespace std;
 using namespace CLHEP;

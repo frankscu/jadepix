@@ -23,6 +23,8 @@ public:
 
 	//void FindHit( int (*reconTable)[1152],map<int,JadePixDigi*> &digiVec);
 	int FindHit(vector<JadePixHit*> &hitVec);
+	
+    int FindCluster(vector<JadePixCluster*> &clusterVec, int size);
 
 	void Reset();
 

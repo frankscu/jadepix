@@ -37,7 +37,7 @@ JadePixDigitizer::JadePixDigitizer(G4String modName):G4VDigitizerModule(modName)
 
   pedestal = 0;
   ehpEnergy = 3.6 *eV;
-  energyThreshold = (pedestal+10*enc)*ehpEnergy;
+  energyThreshold = (pedestal+0*enc)*ehpEnergy;
   adcEnergyRange = JadePixGeo->Layer(0).ADCRange()*ehpEnergy;
 }
 
@@ -263,7 +263,7 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
   G4double eT;
   G4double eTotal=0;
   G4double ratio;
-  G4int nAdjacentPix=5; //Neighbouring pixel hitting
+  G4int nAdjacentPix=1; //Neighbouring pixel hitting
 
   std::vector<std::vector <G4double>> ePixArray(2*nAdjacentPix+1,std::vector<G4double>(2*nAdjacentPix+1,0));
 
@@ -518,7 +518,8 @@ double JadePixDigitizer::DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePix
 
   G4double pdf;
   if(ret == 1){
-    pdf=N0*exp(-pow((d-d0),mean1)/(2*sigma1*sigma1))+base;
+    //pdf=N0*exp(-pow((d-d0),mean1)/(2*sigma1*sigma1))+base;
+    pdf=1;
   } else if(fabs(dxRaw)<=pixPitchX && fabs(dyRaw)<=pixPitchY){
     pdf=N0*exp(-pow((d-d0),mean2)/(2*sigma2*sigma2))+base;
   }else{ pdf=N0*exp(-pow((d-d0),mean3)/(2*sigma3*sigma3))+base;

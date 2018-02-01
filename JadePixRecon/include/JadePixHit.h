@@ -6,10 +6,10 @@
 #include <vector>
 
 #include <iostream>
-#include "Vector/ThreeVector.h"
+#include "CLHEP/Vector/ThreeVector.h"
 
-#include "Units/PhysicalConstants.h"
-#include "Units/SystemOfUnits.h"
+#include "CLHEP/Units/PhysicalConstants.h"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "JadePixDigi.h"
 #include "JadePixGeo.h"

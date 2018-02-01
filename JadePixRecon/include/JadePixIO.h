@@ -16,38 +16,43 @@ using namespace std;
 typedef unsigned char Byte;
 
 class JadePixIO{
-  public:
-    JadePixIO():m_fin(NULL){
-      if(m_io){ cout<<"Warning::JadePixIO is constructed twice."<<endl;; }
-      m_io=this;
-    };
-    ~JadePixIO(){if(m_fin) delete m_fin;};
+    public:
+        JadePixIO():m_fin(NULL){
+            if(m_io){ cout<<"Warning::JadePixIO is constructed twice."<<endl;; }
+            m_io=this;
+        };
+        ~JadePixIO();
 
-    void OpenInputFile(string filein);
-    void CloseInputFile(){m_fin->close();};
-    int ReadEvent(JadePixEvent* evt);
+        void OpenInputFile(string filein);
+        void CloseInputFile(){m_fin->close();};
+        int ReadEvent(JadePixEvent* evt);
 
-    void OpenOutputFile(string fileout);
-    void OpenBinaryFile(string fileout);
-    void CloseOutputFile(){m_fout->close();};
-    void CloseBinaryFile(){m_bfout->close();};
-    int WriteEvent(JadePixEvent* evt);
-    void WriteEmptyBinary(JadePixEvent* evt);
-    void WriteBinary(JadePixEvent* evt);
+        void OpenOutputFile(string fileout);
+        void OpenBinaryFile(string fileout);
+        void CloseOutputFile(){m_fout->close();};
+        void CloseBinaryFile(){m_bfout->close();};
+        int WriteEvent(JadePixEvent* evt);
+        void WriteEmptyBinary(JadePixEvent* evt);
+        void WriteBinary(JadePixEvent* evt);
 
-    static JadePixIO* Instance();
+        void OpenOutputFileCluster(string fileout);
+        int WriteCluster(JadePixEvent* evt);
 
-  private:
 
-    fstream* m_fin;
-    fstream* m_fout;
-    fstream* m_bfout; 
+        static JadePixIO* Instance();
 
-    int m_evtId;
-    int m_nTruth;
-    int m_nDigi;
+    private:
 
-    static  JadePixIO * m_io;
+        fstream* m_fin;
+        fstream* m_fout;
+        fstream* m_foutCluster;
+        fstream* m_bfout;
+
+        int m_evtId;
+        int m_nTruth;
+        int m_nDigi;
+
+        static  JadePixIO * m_io;
 };
 
 #endif
