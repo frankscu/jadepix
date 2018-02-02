@@ -43,7 +43,7 @@ void JadePixGeoParameter::InitFromFile(){
     std::ifstream fin(geometryFilePath.c_str(),ios::in);
 
     if(!fin.good()){
-        cout<<"Error::spt parameters file not exist"<<endl;
+        cerr<<"Error::spt parameters file not exist"<<endl;
         return;
     }
 

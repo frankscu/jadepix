@@ -36,6 +36,18 @@ JadePixWriter* JadePixWriter::Instance(){
   return m_JadePixWriter;
 }
 
+void JadePixWriter::OpenFile(string fileout){
+    m_fout = new fstream(fileout.c_str(),ios::out);
+    if(m_fout == NULL){
+        std::cerr << "Failed to open out file: "<< fileout << std::endl;
+    }
+    m_fout->precision(9);
+    //m_fout->setf(ios::scientific);
+    m_fout->setf(ios::left);
+    (*m_fout)<<"TrkId \t ChId \t Edep \t\t time \t\t posX \t\t posY \t\t posZ \t enterAngle"<<endl;
+    (*m_fout)<<"TrkId \t ChId \t RowId \t ColId \t ADC \t TDC"<<endl;
+    (*m_fout)<<"***********************************************************************"<<endl;
+}
 
 void JadePixWriter::WriteEventTag(int id){
   (*m_fout)<<""<<endl;  

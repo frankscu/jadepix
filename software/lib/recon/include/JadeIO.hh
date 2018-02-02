@@ -8,9 +8,11 @@
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <cstdio>
+#include <exception>
+
 #include "JadeEvent.hh"
 #include "JadeHit.hh"
-#include <cstdio>
 
 using namespace std;
 typedef unsigned char Byte;
@@ -23,7 +25,7 @@ class JadeIO{
         };
         ~JadeIO();
 
-        void OpenInputFile(string filein);
+        int OpenInputFile(string filein);
         void CloseInputFile(){m_fin->close();};
         int ReadEvent(JadeEvent* evt);
 

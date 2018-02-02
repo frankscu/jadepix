@@ -41,6 +41,7 @@
 JadePixRunAction::JadePixRunAction()
  : G4UserRunAction()
 { 
+    m_filename = "JadePix.rawdat";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,9 +60,7 @@ void JadePixRunAction::BeginOfRunAction(const G4Run* run)
   // Create JadePix Writer
   JadePixWriter* mWriter = JadePixWriter::Instance();
 
-  char fileName[200] = "./JadePix.rawdat";
-  std::string fileout = fileName;
-  mWriter->OpenFile(fileout);
+  mWriter->OpenFile(m_filename);
 
 }
 

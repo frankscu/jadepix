@@ -44,13 +44,18 @@ void JadeRecon::runRecon(std::string infile, std::string outfile){
     time_t start,end;
     time(&start);
 
-    string outfileCluster = outfile + "Cluster";
+    //string outfileCluster = outfile + "Cluster";
 
     JadeIO* jadeIO = new JadeIO();
 
-    jadeIO->OpenInputFile(infile);
+    int fdin = jadeIO->OpenInputFile(infile);
+    if(!fdin){
+        std::cerr << "Please check the input raw data file!!!" << std::endl;
+        return;
+    }
+
     jadeIO->OpenOutputFile(outfile);
-    jadeIO->OpenOutputFileCluster(outfileCluster);
+    //jadeIO->OpenOutputFileCluster(outfileCluster);
 
     int nChip=1;
     JadeEvent* evt = new JadeEvent(nChip);
@@ -60,13 +65,14 @@ void JadeRecon::runRecon(std::string infile, std::string outfile){
 
         evt->Reconstruct();
         jadeIO->WriteEvent(evt);
-        jadeIO->WriteCluster(evt);
+        //jadeIO->WriteCluster(evt);
 
         nEvt++;
         if(nEvt%1000==0) cout<<nEvt<<" events are processed!"<<endl;
 
         evt->Reset();
     }
+    jadeIO->CloseOutputFile();
 
     delete evt;
     delete jadeIO;

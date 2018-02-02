@@ -29,7 +29,15 @@ JadePixSim::JadePixSim(int argc, char** argv)
     SourceType st = _GeneralParticleSource;
     runManager->SetUserAction(new JadePixPrimaryGeneratorAction(st));
     //
-    runManager->SetUserAction(new JadePixRunAction());
+    JadePixRunAction* jRun = new JadePixRunAction();
+    if(argc >= 2){
+        if( strcmp(argv[2],"-b")!=0){
+        jRun->SetOutFileName(argv[2]);
+        }else{
+            jRun->SetOutFileName(argv[3]);
+        }
+    }
+    runManager->SetUserAction(jRun);
     //
     runManager->SetUserAction(new JadePixEventAction());
 
@@ -52,7 +60,7 @@ JadePixSim::JadePixSim(int argc, char** argv)
     UImanager->SetCoutDestination(LoggedSession);
     LoggedSession->SessionStart();
 
-    UImanager->ApplyCommand("/control/macroPath /home/chenlj/jadepix/macros");
+    UImanager->ApplyCommand("/control/macroPath /home/chenlj/jadepix/macros/geant4");
 
     if (argc != 1)   // batch mode
     {

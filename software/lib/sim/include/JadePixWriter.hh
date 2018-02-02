@@ -32,15 +32,7 @@ class JadePixWriter{
     };
     ~JadePixWriter(){if(m_fout) delete m_fout;};
 
-    void OpenFile(string fileout){
-      m_fout = new fstream(fileout.c_str(),ios::out);
-      m_fout->precision(9);
-      //m_fout->setf(ios::scientific);
-      m_fout->setf(ios::left);
-      (*m_fout)<<"TrkId \t ChId \t Edep \t\t time \t\t posX \t\t posY \t\t posZ \t enterAngle"<<endl;
-      (*m_fout)<<"TrkId \t ChId \t RowId \t ColId \t ADC \t TDC"<<endl;
-      (*m_fout)<<"***********************************************************************"<<endl;
-    };
+    void OpenFile(string fileout);
 
     void WriteEventTag(int id);
     void WriteMcTag(int n);

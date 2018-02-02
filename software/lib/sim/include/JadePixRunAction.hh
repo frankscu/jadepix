@@ -38,6 +38,7 @@
 #include <fstream>
 #include <math.h>
 #include <cstdlib>
+#include <string>
 
 class G4Run;
 
@@ -61,12 +62,18 @@ class G4Run;
 
 class JadePixRunAction : public G4UserRunAction
 {
-  public:
-    JadePixRunAction();
-    virtual ~JadePixRunAction();
+    public:
+        JadePixRunAction();
+        virtual ~JadePixRunAction();
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+        virtual void BeginOfRunAction(const G4Run*);
+        virtual void EndOfRunAction(const G4Run*);
+
+        void SetOutFileName(std::string fname){m_filename = fname;};
+        std::string GetOutFileName(){return m_filename;};
+
+    private:
+        std::string m_filename; 
 
 };
 

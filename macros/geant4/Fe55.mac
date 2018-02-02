@@ -41,5 +41,5 @@
 #/jadepix/beam/frames 1
 #/jadepix/beam/on 
 
-/jadepix/event/setPrintModulo 100000
+/jadepix/event/setPrintModulo 1000
 /run/beamOn 200000

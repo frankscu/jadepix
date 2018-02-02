@@ -14,12 +14,13 @@ JadeIO* JadeIO::Instance(){
     return m_io;
 }
 
-void JadeIO::OpenInputFile(string filein){
+int JadeIO::OpenInputFile(string filein){
     m_fin = new fstream(filein.c_str(),ios::in);
-    if(!m_fin){
-        cout<<""<<endl;
-        cout<<"Error::"<<filein<<" can NOT be opened!!!"<<endl;
+    if(!m_fin->is_open()) {
+        cerr<<"Error:: Raw data file can NOT be opened!!!"<<endl;
+        return 0;
     }
+    return 1;
 }
 
 int JadeIO::ReadEvent(JadeEvent* evt){
@@ -79,13 +80,14 @@ int JadeIO::ReadEvent(JadeEvent* evt){
 
 
 void JadeIO::OpenOutputFile(string fileout){
-    m_fout = new fstream(fileout.c_str(),ios::out);
+    m_fout = new fstream(fileout.c_str(),ios::out | ios::trunc);
     m_fout->precision(6);
     m_fout->setf(ios::scientific);
     m_fout->setf(ios::right, ios::adjustfield);
-    if(!m_fout){
+    if(!m_fout->is_open()){
         cout<<""<<endl;
         cout<<"Error::"<<fileout<<" can NOT be opened!!!"<<endl;
+        return;
     }
     (*m_fout)<<"EvtId\t\tHitId\tChId\tHPosX\t\tHPosY\t\tHADC\tHDigiN\tTPosX\t\tTPosY\t\tTEdep\t\tTDigiN"<<endl;
 }
@@ -106,13 +108,14 @@ int JadeIO::WriteEvent(JadeEvent* evt){
 
 
 void JadeIO::OpenOutputFileCluster(string fileout){
-    m_foutCluster = new fstream(fileout.c_str(),ios::out);
+    m_foutCluster = new fstream(fileout.c_str(),ios::out | ios::trunc);
     m_foutCluster->precision(6);
     m_foutCluster->setf(ios::scientific);
     m_foutCluster->setf(ios::right, ios::adjustfield);
-    if(!m_foutCluster){
+    if(!m_foutCluster->is_open()){
         cout<<""<<endl;
         cout<<"Error::"<<fileout<<" can NOT be opened!!!"<<endl;
+        return;
     }
     (*m_foutCluster)<<"EvtId\t\tHitId\tChId\tHPosX\t\tHPosY\t\tHADC\tHDigiN"<<endl;
 }
@@ -195,16 +198,6 @@ void JadeIO::WriteBinary(JadeEvent* evt){
                 int colId = _digi->GetColId();
                 int adc = _digi->GetADC();
                 if(rowId==row && colId==col){
-                    //cout << "rowId: "<<rowId<<"  colId:  "<<colId<<"  adc: "<<std::setfill('0')<<std::setw(2)<<std::hex<<adc<< endl;
-                    //std::stringstream ssA, ssB;
-                    //ssA << std::hex<<setfill('0')<<setw(1)<<int(adc/16);
-                    //ssB << std::hex<<setfill('0')<<setw(1)<<int(adc%16);
-                    //string adcstr = ssA.str() + ssB.str();
-                    //string adcstrA = "\\x" + ssA.str();
-                    //string adcstrB = "\\x" + ssB.str();
-                    //std::cout << "ADC string:  " << adcstr<< std::endl;
-                    //std::cout << "ADC Hex string:  " << std::hex << adcstr<< std::endl;
-                    //(*m_bfout) <<std::hex<<adcstr;
                     (*m_bfout) << std::setfill('\x00')<<std::setw(2)<<Byte(adc);
                     IsThereData=true;
                     counts1++;
@@ -216,8 +209,6 @@ void JadeIO::WriteBinary(JadeEvent* evt){
                 counts2++;
             }
         }
-        // std::cout << "Counts1: " << counts1 << std::endl;
-        // std::cout << "Counts2: " << counts2 << std::endl;
         (*m_bfout)<<RowTrilerFirst<<std::hex<<RowTrilerSecondA[int(row/16)]<<std::hex<<RowTrilerSecondB[row%16];
     }
     (*m_bfout)<<EventTrailer;
