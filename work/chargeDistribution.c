@@ -9,7 +9,7 @@ void chargeDistribution(){
   TH1F* hdx = new TH1F("hdx","hdx",100,-0.05,0.05);
   TH1F* hdy = new TH1F("hdy","hdy",100,-0.05,0.05);
 
-  TH1F* hisADC = new TH1F("hisADC","hisADC",10000,0,5000);
+  TH1F* hisADC = new TH1F("hisADC","hisADC",1000,0,5000);
 
   string line;
   int evtId,hitId,chipId,HitNofDigi,TrNofDigi;
