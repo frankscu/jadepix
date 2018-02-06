@@ -2,12 +2,6 @@
 
 To run the programs successfully, you may follow the following steps.
 
-## Reset program if you have to (not necessary)
-
-> cd $HOME/jadepix/jadepix1/run
-
-> ./reset.sh 
-
 ## Setup
 
 ROOT verion 6, Geant4 version 4.10.04, allpix-squared version 1.1.0
