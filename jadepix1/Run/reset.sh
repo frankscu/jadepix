@@ -12,7 +12,8 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
     printf "\n\t%-9s  %-40s"  "0.1.1"      "Clean ./../Simulation/output" 
-    printf "\n\t%-9s  %-40s"  "0.2"      "[Get CCE]"
+    printf "\n\t%-9s  %-40s"  "0.2"      "[Allpix-squared]"
+    printf "\n\t%-9s  %-40s"  "0.2"      "Clean ./../allpix-squared"
 }
 
 
@@ -30,12 +31,16 @@ case $option in
     #  0.1 allpix-squared(jadepix1)
     # --------------------------------------------------------------------------
 
-    0.1) echo "Simulating jadepix1..."
+    0.1) echo "Simulate jadepix1..."
          ;;
     0.1.1) echo "Cleaning ./../Simulation/output..."
            cd ../Simulation
            rm output -rf
            ;;
-    0.2) echo "Getting CCE..."
+    0.2) echo "Allpix-squared..."
+         ;;
+    0.2.1) echo "Cleaning ./../allpix-squared..."
+           cd ../
+           rm allpix-squared -rf
          ;;
 esac
