@@ -1,12 +1,6 @@
 # Simulation(Iron-55, using allpix-squared) and analysis(scripts written by python) for jadepix on CEPC
 
-To run the programs successfully, you must follow the following order.
-
-## Clean old programs 
-
-> cd $HOME/jadepix/jadepix1/run
-
-> ./cleanup.sh 
+To run the programs successfully, you may follow the following steps.
 
 ## Setup
 
@@ -16,9 +10,9 @@ This have to be done when you log in every time:
 
 > cd $HOME/jadepix/jadepix1/run
 
-> source setup.sh
+> ./setup.sh
 
-## Build code
+## Build softwares needed in simulation
 
 > cd $HOME/jadepix/jadepix1/run
 
