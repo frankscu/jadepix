@@ -12,7 +12,7 @@ This have to be done when you log in every time:
 
 > ./setup.sh
 
-## Build softwares needed in simulation
+## Build softwares needed in simulation (this step has to be done if you run the program for the first time)
 
 > cd $HOME/jadepix/jadepix1
 

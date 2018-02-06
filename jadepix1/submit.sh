@@ -33,7 +33,8 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-           ./~jingmq/allpix-squared/bin/allpix -c conf/jadepix1.conf
+           cd conf
+           ./../allpix-squared/bin/allpix -c jadepix1.conf
            ;;
     0.2) echo "Getting CCE..."
          ;;

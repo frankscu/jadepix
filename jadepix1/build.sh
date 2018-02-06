@@ -6,11 +6,11 @@
 
 
 usage() {
-    printf "NAME\n\tbuild.sh - Main driver to build programs \n"
+    printf "NAME\n\tbuild.sh - Main driver to build softwares \n"
     printf "\nSYNOPSIS\n"
     printf "\n\t%-5s\n"  "./build.sh [OPTION]"
     printf "\nOPTIONS\n"
-    printf "\n\t%-5s  %-40s\n"  "[0.1]"  "[Build allpix-squared]"
+    printf "\n\t%-5s  %-40s\n"  "0.1"  "[Build allpix-squared]"
 }
 
 if [[ $# -eq 0 ]]; then
