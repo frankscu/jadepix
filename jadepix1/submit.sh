@@ -11,7 +11,7 @@ usage() {
     printf "\n\t%-5s\n" "./run.sh [OPTION]"
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
-    printf "\n\t%-9s  %-40s"  "0.1.1"      "Run jadepix1 conf files" 
+    printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
     printf "\n\t%-9s  %-40s"  "0.2"      "[Get CCE]"
 }
 
@@ -33,8 +33,7 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-           cd Simulation
-           ./../allpix-squared/bin/allpix -c jadepix1.conf
+           ./~jingmq/allpix-squared/bin/allpix -c conf/jadepix1.conf
            ;;
     0.2) echo "Getting CCE..."
          ;;
