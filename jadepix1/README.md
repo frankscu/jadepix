@@ -8,19 +8,19 @@ ROOT verion 6, Geant4 version 4.10.04, allpix-squared version 1.1.0
 
 This have to be done when you log in every time: 
 
-> cd $HOME/jadepix/jadepix1/run
+> cd $HOME/jadepix/jadepix1
 
 > ./setup.sh
 
-## Build softwares needed in simulation
+## Build softwares needed in simulation (this step has to be done if you run the program for the first time)
 
-> cd $HOME/jadepix/jadepix1/run
+> cd $HOME/jadepix/jadepix1
 
 > ./build.sh 
 
 ## Submit jobs
 
-> cd $HOME/jadepix/jadepix1/run
+> cd $HOME/jadepix/jadepix1
 
 > ./submit.sh
 

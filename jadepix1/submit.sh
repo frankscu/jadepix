@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 
-# Main driver to reset
+# Main driver to submit 
 # Author Maoqiang Jing <jingmq@ihep.ac.cn>
-# Created [2018-02-06 Tue 9:28]
+# Created [2018-02-02 Fri 19:24]
 
 
 usage() {
-    printf "NAME\n\treset.sh - Main driver to reset\n"
+    printf "NAME\n\tsubmit.sh - Main driver to submit\n"
     printf "\nSYNOPSIS\n"
     printf "\n\t%-5s\n" "./run.sh [OPTION]"
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
-    printf "\n\t%-9s  %-40s"  "0.1.1"      "Clean ./../Simulation/output" 
-    printf "\n\t%-9s  %-40s"  "0.2"      "[Allpix-squared]"
-    printf "\n\t%-9s  %-40s"  "0.2"      "Clean ./../allpix-squared"
+    printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
+    printf "\n\t%-9s  %-40s"  "0.2"      "[Get CCE]"
 }
 
 
@@ -31,16 +30,12 @@ case $option in
     #  0.1 allpix-squared(jadepix1)
     # --------------------------------------------------------------------------
 
-    0.1) echo "Simulate jadepix1..."
+    0.1) echo "Simulating jadepix1..."
          ;;
-    0.1.1) echo "Cleaning ./../Simulation/output..."
-           cd ../Simulation
-           rm output -rf
+    0.1.1) echo "Running jadepix1 conf files..."
+           cd conf
+           ./../allpix-squared/bin/allpix -c jadepix1.conf
            ;;
-    0.2) echo "Allpix-squared..."
-         ;;
-    0.2.1) echo "Cleaning ./../allpix-squared..."
-           cd ../
-           rm allpix-squared -rf
+    0.2) echo "Getting CCE..."
          ;;
 esac
