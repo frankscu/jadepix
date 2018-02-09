@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # initial envirenment
 Geant4Bin=/opt/allpix/geant4.10.04/install/bin                                                                                                                                                                
 source ${Geant4Bin}/geant4.sh
