@@ -12,7 +12,8 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
     printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
-    printf "\n\t%-9s  %-40s"  "0.2"      "[Get CCE]"
+    printf "\n\t%-9s  %-40s"  "0.2"      "[Process Data]"
+    printf "\n\t%-9s  %-40s"  "0.2.1"      "[Process data by list]"
 }
 
 
@@ -36,6 +37,10 @@ case $option in
            cd conf
            ./../allpix-squared/bin/allpix -c jadepix1.conf
            ;;
-    0.2) echo "Getting CCE..."
+    0.2) echo "Process Data..."
          ;;
+    0.2.1) echo "Process data by list..."
+	    cd python
+	    python ProcessEvent_List.py
+	    ;;
 esac
