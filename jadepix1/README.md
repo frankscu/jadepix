@@ -1,4 +1,4 @@
-# Simulation(Iron-55, using allpix-squared) and analysis(scripts written by python) for jadepix on CEPC
+# Simulation(Iron-55, using allpix-squared) and analysis(scripts written by python) for jadepix1 on CEPC
 
 To run the programs successfully, you may follow the following steps.
 

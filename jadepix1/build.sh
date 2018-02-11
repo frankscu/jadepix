@@ -28,6 +28,7 @@ case $option in
         cd allpix-squared
         mkdir build
         cd build
+        source /opt/allpix/build_env.sh
         cmake ..
         make -j20
         make install

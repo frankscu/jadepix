@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Main driver to submit 
-# Author Maoqiang Jing <jingmq@ihep.ac.cn>
+# Author: 
+#      Maoqiang Jing <jingmq@ihep.ac.cn> 
+#      Tao Yang <yangtao@ihep.ac.cn> 
 # Created [2018-02-02 Fri 19:24]
 
 
@@ -12,8 +14,9 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
     printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
+
     printf "\n\t%-9s  %-40s"  "0.2"      "[Process Data]"
-    printf "\n\t%-9s  %-40s"  "0.2.1"      "[Process data by list]"
+    printf "\n\t%-9s  %-40s"  "0.2.1"    "Process data by list"
 }
 
 
@@ -28,19 +31,25 @@ fi
 case $option in
 
     # --------------------------------------------------------------------------
-    #  0.1 allpix-squared(jadepix1)
+    #  0.1 allpix-squared (v1.1.0)
     # --------------------------------------------------------------------------
 
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-           cd conf
-           ./../allpix-squared/bin/allpix -c jadepix1.conf
-           ;;
+        allpix -c conf/jadepix1.conf -o output_directory="../output" 
+        ;;
+   
+   
+    # --------------------------------------------------------------------------
+    #  0.2 Analyze data 
+    # --------------------------------------------------------------------------
+
+
     0.2) echo "Process Data..."
          ;;
     0.2.1) echo "Process data by list..."
-	    cd python
-	    python ProcessEvent_List.py
+	    ./python/ProcessEvent_List.py
 	    ;;
+
 esac
