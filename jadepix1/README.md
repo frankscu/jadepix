@@ -1,4 +1,4 @@
-# Simulation(Iron-55, using allpix-squared) and analysis(scripts written by python) for jadepix on CEPC
+# Simulation(Iron-55, using allpix-squared) and analysis(scripts written by python) for jadepix1 on CEPC
 
 To run the programs successfully, you may follow the following steps.
 
@@ -12,11 +12,6 @@ This have to be done when you log in every time:
 
 > source setup.sh
 
-## Build softwares needed in simulation (this step has to be done if you run the program for the first time)
-
-> cd $HOME/jadepix/jadepix1
-
-> ./build.sh 
 
 ## Submit jobs
 
@@ -26,9 +21,15 @@ This have to be done when you log in every time:
 
 ## For developers 
 
+### Build softwares needed in simulation (one for allpix-squared developers)
+
+> cd $HOME/jadepix/jadepix1
+
+> ./build.sh 
+
 - Fork the code with your personal github ID. See [details](https://help.github.com/articles/fork-a-repo/)
 
-> git clone git@github.com:frankscu/jadepix.git .
+> git clone git@github.com:yourname/jadepix.git .
 
 - Make your change, commit and push 
 
