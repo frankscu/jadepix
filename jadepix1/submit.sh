@@ -55,6 +55,7 @@ case $option in
 	    ./python/ProcessEvent_List.py
 	    ;;
 
+
 Å@Å@# --------------------------------------------------------------------------
     #  0.3 Analyze real data 
     # --------------------------------------------------------------------------
@@ -64,8 +65,8 @@ case $option in
          ;;
     0.3.1) echo "Analyze one example data (10000 frames)"
 	   cd  ./src/
-         make
-         ./pixelana /publicfs/atlas/atlasnew/higgs/tth/hbb/raw_pixel/20180208/File20180208-A1_001 ./test.root 10000
+           make
+           ./pixelana /publicfs/atlas/atlasnew/higgs/tth/hbb/raw_pixel/20180208/File20180208-A1_001 ./test.root 10000
 	    ;;
 
 esac
