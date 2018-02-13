@@ -61,7 +61,7 @@ case $option in
     # --------------------------------------------------------------------------
 
 
-　　0.3) echo "Analyze Real Data..."
+　　0.2) echo "Analyze Real Data..."
          ;;
     0.3.1) echo "Analyze one example data (10000 frames)"
 	   cd  ./src/
