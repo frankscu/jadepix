@@ -18,7 +18,7 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.2"      "[Process Data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Process data by list"
 
-　　printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
+    printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
 }
 
@@ -56,17 +56,17 @@ case $option in
 	    ;;
 
 
-　　# --------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     #  0.3 Analyze real data 
     # --------------------------------------------------------------------------
 
 
-　　0.2) echo "Analyze Real Data..."
+    0.3) echo "Analyze Real Data..."
          ;;
     0.3.1) echo "Analyze one example data (10000 frames)"
 	   cd  ./src/
            make
            ./pixelana /publicfs/atlas/atlasnew/higgs/tth/hbb/raw_pixel/20180208/File20180208-A1_001 ./test.root 10000
-	    ;;
+	   ;;
 
 esac
