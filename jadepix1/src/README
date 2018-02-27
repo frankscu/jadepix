@@ -1,0 +1,27 @@
+
+[ Component ]
+* pixelana.cc : main 
+CMOS.cc : Class
+CMOS.hh : Class header
+define.hh  :   Histogram registration
+conf_param.hh : Parameter settings
+
+# ROOT Library is used in this code. 
+
+[ Procedure ]
+1.  Compile 
+> make
+
+3.  run 
+> ./piexelana  [ data ] [ output rootfile ] [ max analysis frames ]
+
+for example, 
+
+> ./pixelana /publicfs/atlas/atlasnew/higgs/tth/hbb/raw_pixel/20180208/File20180208-A1_001 ./test.root 10000
+
+
+
+
+
+
+

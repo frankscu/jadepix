@@ -1,10 +1,9 @@
-#!/usr/bin/env bash
+# Running environment (not for develping allpix-squared)
 
-# initial envirenment
-Geant4Bin=/opt/allpix/geant4.10.04/install/bin                                                                                                                                                                
-source ${Geant4Bin}/geant4.sh
-
-Geant4Make=/opt/allpix/geant4.10.04/install/share/Geant4-10.4.0/geant4make
-source ${Geant4Make}/geant4make.sh
-source /opt/allpix/build_env.sh
+Geant4Bin=/opt/allpix/geant4.10.04/install/bin   
+source ${Geant4Bin}/geant4.sh 
 source /opt/allpix/root/install/bin/thisroot.sh
+
+# Add allpix-squared v1.1.0 
+export PATH=$PATH:/opt/allpix/v1.1.0/bin
+

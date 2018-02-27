@@ -66,7 +66,7 @@ def Process_Frame(data,tryprocessnumber,maxframenumber):
             if len(m.group(2)) == 1920:
                 Frame_Number += 1
                 Frame_Bytes = m.group(2)
-                if Frame_Number%1000 == 0:
+                if Frame_Number%1 == 0:
                     print('\nFind',Frame_Number,'frames !')
                     print('position: ','(%d %d)'%(Try_Position+m.start(),Try_Position+m.end()))
 
@@ -79,7 +79,7 @@ def Process_Frame(data,tryprocessnumber,maxframenumber):
 
             else:
                 Broken_Frame_Number += 1
-                print('\033[33;1m','\nFind',Broken_Frame_Number,'broken frames!')
+                print('\033[31;1m','\nFind',Broken_Frame_Number,'broken frames!')
                 print('position: ','(%d %d)'%(Try_Position+m.start(),Try_Position+m.end()),'\033[0m')
 
         #####################################################
@@ -94,8 +94,8 @@ def Process_Frame(data,tryprocessnumber,maxframenumber):
             # if flag == 5:
             #     break
         ######################################################
-    print('Find total frames :',Frame_Number)
-    print('Find total broken frames :',Broken_Frame_Number)
+    print('\033[32;1m','\nFind total frames :',Frame_Number,'\033[0m')
+    print('\033[33;1m','\nFind total broken frames :',Broken_Frame_Number,'\033[0m')
 
     return ADC
     
@@ -107,12 +107,19 @@ def Process_Data(filename='',tryprocessnumber=1928,maxframenumber=10):
 
     data.close()
 
-    print('ADC length :',len(ADC))
+    print('\033[36;1m','\nADC length :',len(ADC),'\033[0m')
     Draw_Hist(ADC)
 
 
 
 if __name__=="__main__":
-    Process_Data(filename='../data/TestFile20180105-000.dat',tryprocessnumber=10000,maxframenumber=100000)    #warning: tryprocessnumber should be grater than size of frame (for example 1928)
+
+    while True:
+        MaxF = int(input('\033[33;1m\nPlease input the max framenumber (for example 100) :   \033[0m'))
+
+        tmp = input('\033[33;1m \nProcess %d frames , y or n ?   \033[0m'%MaxF)
+        if tmp == 'y':
+            Process_Data(filename='../data/2017-12-23-1.dat',tryprocessnumber=10000,maxframenumber=MaxF)    #warning: tryprocessnumber should be grater than size of frame (for example 1928)
+            break
     sys.exit()
  
