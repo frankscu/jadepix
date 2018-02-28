@@ -1,10 +1,6 @@
 #include "JadeIO.hh"
 
 JadeIO::~JadeIO(){
-    if(m_fin) delete m_fin;
-    if(m_fout) delete m_fout;
-    if(m_foutCluster) delete m_foutCluster;
-    if(m_bfout) delete m_fout;
 }
 
 JadeIO * JadeIO::m_io=NULL;
@@ -14,12 +10,13 @@ JadeIO* JadeIO::Instance(){
     return m_io;
 }
 
-void JadeIO::OpenInputFile(string filein){
-    m_fin = new fstream(filein.c_str(),ios::in);
-    if(!m_fin){
-        cout<<""<<endl;
-        cout<<"Error::"<<filein<<" can NOT be opened!!!"<<endl;
+int JadeIO::OpenInputFile(string filein){
+    m_fin = new ifstream(filein.c_str(),ios::in);
+    if(!m_fin->is_open()) {
+        cerr<<"Error:: Raw data file can NOT be opened!!!"<<endl;
+        return 0;
     }
+    return 1;
 }
 
 int JadeIO::ReadEvent(JadeEvent* evt){
@@ -37,22 +34,17 @@ int JadeIO::ReadEvent(JadeEvent* evt){
 
 
         if(line.find("EventId") != std::string::npos){
-            //cout<<line<<endl;
             std::string valStr=line.substr(line.find_last_of(" ")+1);
             m_evtId=atoi(valStr.c_str());
-            //cout<<"EventId: "<<m_evtId<<endl;
         }
 
         if(line.find("McTruth") != std::string::npos){
-            //cout<<line<<endl;
             std::string valStr=line.substr(line.find_last_of(" ")+1);
-            //cout<<"TruthNo: "<<valStr<<endl;
             m_nTruth=atoi(valStr.c_str());
 
             for(int i=0;i<m_nTruth;i++){
                 (*m_fin)>>trackId>>chipId>>edep>>time>>posX>>posY>>posZ>>enterAngle;
                 m_fin->seekg(1,ios::cur);
-                //cout<<rowId<<" "<<colId<<" "<<edep<<" "<<posX<<" "<<enterAngle<<endl;
                 evt->AddTruth(trackId,chipId,edep,time,posX,posY,posZ,enterAngle);
             }
         }
@@ -79,17 +71,35 @@ int JadeIO::ReadEvent(JadeEvent* evt){
 
 
 void JadeIO::OpenOutputFile(string fileout){
-    m_fout = new fstream(fileout.c_str(),ios::out);
+    m_fout = new ofstream(fileout.c_str(),ios::out);
+    if(!m_fout->is_open()){
+        cout<<""<<endl;
+        cout<<"Error::"<<fileout<<" can NOT be opened!!!"<<endl;
+        return;
+    }
     m_fout->precision(6);
     m_fout->setf(ios::scientific);
     m_fout->setf(ios::right, ios::adjustfield);
-    if(!m_fout){
-        cout<<""<<endl;
-        cout<<"Error::"<<fileout<<" can NOT be opened!!!"<<endl;
-    }
     (*m_fout)<<"EvtId\t\tHitId\tChId\tHPosX\t\tHPosY\t\tHADC\tHDigiN\tTPosX\t\tTPosY\t\tTEdep\t\tTDigiN"<<endl;
 }
 
+void JadeIO::OpenROOTFile(string fileout){
+    m_tfout = TFile::Open(fileout.c_str(), "RECREATE");
+    if(!m_tfout->IsOpen()){
+        cerr<<"Error:: can NOT open output ROOT file!!!" <<endl;
+        return;
+    }
+    m_tree = new TTree("TDigi", "ROOT tree with a few branches"); 
+    m_tree->Branch("m_tpos",&m_tpos,"x/D:y/D:z/D");
+    m_tree->Branch("m_tADC",&m_tADC,"m_tADC/I");
+    m_tree->Branch("m_trpos",&m_trpos,"x/D:y/D:z/D");
+    m_tree->Branch("m_resX", &m_resX,"m_resX/D");
+    m_tree->Branch("m_resY", &m_resY,"m_resY/D");
+    
+    m_ttree = new TTree("TTruth", "ROOT tree with a few branches"); 
+    m_ttree->Branch("m_ttrpos",&m_ttrpos,"x/D:y/D:z/D");
+    m_ttree->Branch("m_eDep",&m_eDep,"m_eDep/D");
+}
 
 int JadeIO::WriteEvent(JadeEvent* evt){
     int nHit=evt->NofHit();
@@ -104,15 +114,42 @@ int JadeIO::WriteEvent(JadeEvent* evt){
     return 0;
 }
 
+int JadeIO::WriteROOTFile(JadeEvent* evt){
+    int nHit=evt->NofHit();
+    for(int iHit=0;iHit<nHit;iHit++){
+        auto _thit = evt->GetHit(iHit);
+        m_tpos = _thit->GetPos();
+        m_tADC = _thit->GetADC();
+        JadeHit* _trhit = _thit->GetTruth(0); 
+        m_trpos = _trhit->GetPos();
+
+        m_resX = m_tpos.x()-m_trpos.x(); 
+        m_resY = m_tpos.y()-m_trpos.y(); 
+
+        m_tree->Fill();
+    } 
+
+    int ntrHit=evt->NofTruth();
+    for(int itrHit=0;itrHit<ntrHit;itrHit++){
+        auto _ttrHit = evt->GetTruthHit(itrHit);
+
+        m_ttrpos = _ttrHit->GetPos();
+        m_eDep = _ttrHit->GetEdep();
+
+        m_ttree->Fill();
+    }
+    return 0;
+}
 
 void JadeIO::OpenOutputFileCluster(string fileout){
-    m_foutCluster = new fstream(fileout.c_str(),ios::out);
+    m_foutCluster = new fstream(fileout.c_str(),ios::out | ios::trunc);
     m_foutCluster->precision(6);
     m_foutCluster->setf(ios::scientific);
     m_foutCluster->setf(ios::right, ios::adjustfield);
-    if(!m_foutCluster){
+    if(!m_foutCluster->is_open()){
         cout<<""<<endl;
         cout<<"Error::"<<fileout<<" can NOT be opened!!!"<<endl;
+        return;
     }
     (*m_foutCluster)<<"EvtId\t\tHitId\tChId\tHPosX\t\tHPosY\t\tHADC\tHDigiN"<<endl;
 }
@@ -195,16 +232,6 @@ void JadeIO::WriteBinary(JadeEvent* evt){
                 int colId = _digi->GetColId();
                 int adc = _digi->GetADC();
                 if(rowId==row && colId==col){
-                    //cout << "rowId: "<<rowId<<"  colId:  "<<colId<<"  adc: "<<std::setfill('0')<<std::setw(2)<<std::hex<<adc<< endl;
-                    //std::stringstream ssA, ssB;
-                    //ssA << std::hex<<setfill('0')<<setw(1)<<int(adc/16);
-                    //ssB << std::hex<<setfill('0')<<setw(1)<<int(adc%16);
-                    //string adcstr = ssA.str() + ssB.str();
-                    //string adcstrA = "\\x" + ssA.str();
-                    //string adcstrB = "\\x" + ssB.str();
-                    //std::cout << "ADC string:  " << adcstr<< std::endl;
-                    //std::cout << "ADC Hex string:  " << std::hex << adcstr<< std::endl;
-                    //(*m_bfout) <<std::hex<<adcstr;
                     (*m_bfout) << std::setfill('\x00')<<std::setw(2)<<Byte(adc);
                     IsThereData=true;
                     counts1++;
@@ -216,10 +243,28 @@ void JadeIO::WriteBinary(JadeEvent* evt){
                 counts2++;
             }
         }
-        // std::cout << "Counts1: " << counts1 << std::endl;
-        // std::cout << "Counts2: " << counts2 << std::endl;
         (*m_bfout)<<RowTrilerFirst<<std::hex<<RowTrilerSecondA[int(row/16)]<<std::hex<<RowTrilerSecondB[row%16];
     }
     (*m_bfout)<<EventTrailer;
 
+}
+
+
+void JadeIO::CloseOutputFile(){
+    m_fout->close();
+}
+
+void JadeIO::CloseROOTFile(){
+    //m_tfout->Write();
+    m_tree->Write();
+    m_ttree->Write();
+    m_tfout->Close();
+}
+
+void JadeIO::CloseBinaryFile(){
+    m_bfout->close();
+}
+
+void JadeIO::CloseOutputFileCluster(){
+    m_foutCluster->close();
 }

@@ -31,17 +31,18 @@ void JadeGeo::Initialize(void){
 
 void JadeGeo::InitFromFile(){
 
-  std::string geometryFilePath = "/home/chenlj/Jade/JadeSim";
+  std::string geometryFilePath = "/home/chenlj/jadepix";
   geometryFilePath += "/model/Spt.txt";
+
   std::ifstream fin(geometryFilePath.c_str());
 
-  if(!fin.good()){
-    cout<<"Error::spt parameters file not exist"<<endl;
+  if(!fin.is_open()){
+    cerr<<"Error::spt parameters file not exist"<<endl;
     return;
   }
 
-  int rowNo, colNo;
-  double chipL,chipW,asicTh,sensorTh,substrTh,pitchR,pitchC,diodeOffsetX,diodeOffsetY;
+  int rowNo, colNo, nAdcBit, adcR, _digiMethod;
+  double chipL,chipW,asicTh,sensorTh,substrTh,pitchR,pitchC,diodeOffsetX,diodeOffsetY,diodeSize,_cce,_enc;
   int ladderNo,chipNo;
   double ssL,ssW,epoxyT,kptT,mfT,cfT,_R,_Phi,_PhaseAngle;
   double segInnR,segOutR,segL,segZ;
@@ -61,8 +62,9 @@ void JadeGeo::InitFromFile(){
   fin.seekg(1,ios::cur);
   std::getline(fin, line);
 
-  fin>>chipL>>chipW>>asicTh>>sensorTh>>substrTh>>pitchR>>pitchC>>diodeOffsetX>>diodeOffsetY>>rowNo>>colNo;
-  cout<<"L: "<<chipL<<" W: "<<chipW<<" asTh: "<<asicTh<<" senTh: "<<sensorTh<<" subTh: "<<substrTh<<" pitchR: "<<pitchR<<" pitchC: "<<pitchC<<" rowNo: "<<rowNo<<" colNo: "<<colNo<<endl;
+  fin>>chipL>>chipW>>asicTh>>sensorTh>>substrTh>>pitchR>>pitchC>>diodeOffsetX>>diodeOffsetY>>diodeSize>>rowNo>>colNo>>nAdcBit>>adcR>>_cce>>_enc>>_digiMethod;
+    cout<<"L: "<<chipL<<" W: "<<chipW<<" asTh: "<<asicTh<<" senTh: "<<sensorTh<<" subTh: "<<substrTh<<" pitchR: "<<pitchR<<" pitchC: "<<pitchC<<" diodeOffsetX: "<<diodeOffsetX<<" diodeOffsetY: "<<diodeOffsetY<<"diodeSize: "<< diodeSize <<" rowNo: "<<rowNo<<" colNo: "<<colNo<<" ADCBitNo: "<<nAdcBit<<" ADCRange: "<<adcR<<" CCE: "<<_cce<<" Noise: "<<_enc<<endl;
+
 
   fin.seekg(1,ios::cur);
   getline(fin, line);
@@ -143,7 +145,6 @@ void JadeGeo::InitFromFile(){
   }
 
   fin.close();
-
 }
 
 const JadeLayer& JadeGeo::Layer(int layerId) const {

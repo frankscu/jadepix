@@ -19,7 +19,6 @@ using namespace std;
 using namespace CLHEP;
 
 class JadeHit;
-//class MTruthHit;
 class JadeDigi;
 
 class JadeHit{
@@ -39,13 +38,10 @@ class JadeHit{
     double GetADC() const {return m_edep;};
     double GetTDC() const {return m_time;};
 
-    
+    double GetEdep() const {return m_edep;};
     void AddTruth(JadeHit* tr) {m_trHitVec.push_back(tr);};
     int NofTrHit() const {return m_trHitVec.size();};
     JadeHit* GetTruth(int i) const {return m_trHitVec[i];};
-    
-    //void SetTruth(JadeHit* tr) {m_trHit=tr;};
-    //JadeHit* GetTruth const {return m_trHit;};
 
     void SetChipId(int chip){m_chipId=chip;};
     int GetChipId() const {return m_chipId;};
@@ -63,18 +59,7 @@ class JadeHit{
     int m_id;
     vector<JadeDigi*> m_digiVec;
     vector<JadeHit*> m_trHitVec;
-    //JadeHit* m_trHit;
     double m_enterAngle;
 };
-
-/*
-class MTruthHit public: class JadeHit{
-  public:
-    MTruthHit(int id, int trackId, int chipId, double edep, double time, double posX, double posY, double posZ, double enterAngle):JadeHit(id,chipId,edep,time,posX,posY,posZ),m_trackId(trackId),m_enterAngle(enterAngle){};
-    ~MTruthHit();
-
-  private:
-};
-*/
 
 #endif

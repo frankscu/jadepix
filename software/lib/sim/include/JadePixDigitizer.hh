@@ -56,7 +56,7 @@ class JadePixDigitizer : public G4VDigitizerModule
         G4double pedestal ;  // e-
         G4double enc ;  // e- ENC
         G4double cce ;  // charge collection efficiency
-        G4double adcRange;
+        //G4double adcRange;
         G4double ehpEnergy;
         G4double energyThreshold;
 
