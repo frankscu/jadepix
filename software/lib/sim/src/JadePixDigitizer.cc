@@ -251,7 +251,7 @@ void JadePixDigitizer::HitRealizitionEelectrode(JadePixHit* rawHit){
     G4double eT;
     G4double eTotal=0;
     G4double ratio;
-    G4int nAdjacentPix=1; //Neighbouring pixel hitting
+    G4int nAdjacentPix=0; //Neighbouring pixel hitting
 
     std::vector<std::vector <G4double>> ePixArray(2*nAdjacentPix+1,std::vector<G4double>(2*nAdjacentPix+1,0));
 
@@ -510,7 +510,8 @@ double JadePixDigitizer::DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePix
         pdf=1;
     } else if(fabs(dxRaw)<=pixPitchX && fabs(dyRaw)<=pixPitchY){
         pdf=N0*exp(-pow((d-d0),mean2)/(2*sigma2*sigma2))+base;
-    }else{ pdf=N0*exp(-pow((d-d0),mean3)/(2*sigma3*sigma3))+base;
+    }else{ 
+        pdf=N0*exp(-pow((d-d0),mean3)/(2*sigma3*sigma3))+base;
     }
 
     //cout<<"d-d0: "<<d-d0<<endl;

@@ -1,76 +1,51 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-//
-// $Id: JadePixPhysicsList.hh,v 1.12 2008-09-22 16:41:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef JadePixPhysicsList_h
 #define JadePixPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4ParticleTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4VPhysicsConstructor;
+class JadePixPhysicsListMessenger;
 
-class JadePixPhysicsList: public G4VUserPhysicsList
+class JadePixPhysicsList: public G4VModularPhysicsList
 {
-  public:
+public:
     JadePixPhysicsList();
-   ~JadePixPhysicsList();
-
-  protected:
-    // Construct particle and physics
+    virtual ~JadePixPhysicsList();
+    
     void ConstructParticle();
-    void ConstructProcess();
- 
+    void SetVerbose(G4int verbose);
     void SetCuts();
-
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    void SetCutForProton(G4double);
    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+    void AddJadePixPhysicsList(const G4String& name); 
+    void ConstructProcess();
     void AddStepMax();
+    void List();
 
-  private:
-    G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+private:
+
+    void SetBuilderList0(G4bool flagHP = false);
+    void SetBuilderList1(G4bool flagHP = false);
+    void SetBuilderList2(G4bool addStopping = false);
+    void SetBuilderList3();
+    void SetBuilderList4();
+
+    G4double cutForGamma;
+    G4double cutForElectron;
+    G4double cutForPositron;
+    G4double cutForProton;
+
+    G4VPhysicsConstructor* emJadePixPhysicsList;
+    G4VPhysicsConstructor* particleList;
+    std::vector<G4VPhysicsConstructor*> hadronPhys;
+
+    JadePixPhysicsListMessenger* m_Messenger;
+    G4bool dump;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

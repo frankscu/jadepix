@@ -52,7 +52,7 @@ set(CMAKE_INSTALL_RPATG_USE_LINK_PATH TRUE)
 set(JADEPIX_LIBRARIES "")
 
 #ROOT is required for vector and persistency etc
-option(WITH_BUILD_ROOT "Build with ROOT" OFF)
+option(WITH_BUILD_ROOT "Build with ROOT" ON)
 if(WITH_BUILD_ROOT)
     find_package(ROOT REQUIRED)
     if(NOT ROOT_FOUND)

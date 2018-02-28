@@ -158,7 +158,8 @@ void JadePixGeoParameter::InitFromFile(){
     }
 
     fin.close();
-
+    cout<<"--------------"<<endl;
+    cout<<"Geometry file load finishied!"<<endl;
 }
 
 const JadePixLayer& JadePixGeoParameter::Layer(int layerId) const {

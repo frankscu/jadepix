@@ -81,26 +81,6 @@ void JadePixSD::Initialize(G4HCofThisEvent* HCE)
 
 }
 
-/*
-//for MC Truth
-void JadePixSD::BeginOfTruthEvent(const G4Event* evt)
-{  
-truthCollection = new JadePixHitsCollection
-(SensitiveDetectorName,collectionName[1]); 
-//  G4cout<<" begin event "<<evt->GetEventID()<<G4endl;
-}
-
-void JadePixSD::EndOfTruthEvent(const G4Event* evt)
-{
-static G4int HLID=-1;
-if(HLID<0){
-HLID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[1]); 
-}
-G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-HCE->AddHitsCollection(HLID,truthCollection);
-}
-*/
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
@@ -109,22 +89,15 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4Track* gTrack = aStep->GetTrack() ;
   G4double globalT=gTrack->GetGlobalTime();//Time since the event in which the track belongs is created
 
-  //if(globalT > 2000)return false; //JadePix T window is 2 microsecond 
-
-  //skip neutral tracks
-  //G4int charge = gTrack->GetDefinition()->GetPDGCharge();
-  //if (charge == 0) return false;
-
   G4double stepLength=aStep->GetStepLength();
   if(stepLength==0){
-    //    G4cout<<"step length equal 0!!"<<G4endl;
+    G4cerr<<"step length equal 0!!"<<G4endl;
     return false;
   }
 
   // energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false;
-
 
   // get position of the track at the beginning and at the end of step
   G4StepPoint* prePoint  = aStep->GetPreStepPoint() ;
@@ -161,9 +134,10 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   //layerID =  touchable->GetVolume(2)->GetCopyNo();
 
   G4String particleName=gTrack->GetDefinition()->GetParticleName();
+  G4int charge = gTrack->GetDefinition()->GetPDGCharge();
   G4int pdgCode = gTrack->GetDefinition()->GetPDGEncoding();
-  //G4cout<<"MyMessage::ParticleName: "<<particleName<<" PdgCode: "<<pdgCode<<" Charge: "<<charge<<" TrackID: "<<trackID<<" Edep: "<<edep/eV<<" eV"<<G4endl;
-
+  if(verboseLevel > 0) {G4cout<<"MyMessage::ParticleName: "<<particleName<<" PdgCode: "<<pdgCode<<" Charge: "<<charge<<" TrackID: "<<trackID<<" Edep: "<<edep/eV<<" eV"<<std::endl;
+  }
   //G4int nofCol=JadePixGeoPointer->Layer(layerID).ColNo();
 
   JadePixIdentifier JadePixId(layerID,ladderID,chipID,-1,-1);
@@ -174,27 +148,15 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int truthChip=chipID;
   G4int truthGlobalChip=JadePixId.GlobalChipID();
 
-  //G4cout<<"MyMessage:: HitLPos.X: "<<hitLPos.x()/cm<<" Y: "<<hitLPos.y()/cm<<" Z: "<<hitLPos.z()/cm<<G4endl;
-  //G4cout<<"MyMessage:: HitGPos.X: "<<hitPosition.x()/cm<<" Y: "<<hitPosition.y()/cm<<" Z: "<<hitPosition.z()/cm<<G4endl;
-  //G4cout<<"MyMessage:: MeasurePos.X: "<<measurePos.x()/cm<<" Y: "<<measurePos.y()/cm<<" Z: "<<measurePos.z()/cm<<G4endl;
-  //G4cout<<"MyMessage::postLPos.X: "<<postLPos.x()<<" Y: "<<postLPos.y()<<" Z: "<<postLPos.z()<<G4endl;
-  //  G4cout<<"MyMessage::HitPos.Rho: "<<hitPosition.rho()<<" Phi: "<<hitPosition.phi()/deg<<" Z: "<<hitPosition.z()<<G4endl;
-
-  //G4double theta=gTrack->GetMomentumDirection().theta()/deg;
-
   G4ThreeVector hitLine=pointOut-pointIn;
-  //G4double enterAngle=hitLine.phi()-pointIn.phi();
   G4double enterAngle=hitLine.theta();
   while(enterAngle<-pi/2.)enterAngle+=pi;
   while(enterAngle>pi/2.)enterAngle-=pi;
 
   G4ThreeVector hitLineLoc=postLPos-preLPos;
-  //G4double enterAngleLoc=(hitLineLoc.phi()-halfpi)/deg;
   G4double enterAngleLoc=hitLineLoc.theta();
   while(enterAngleLoc<-pi/2.)enterAngleLoc+=pi;
   while(enterAngleLoc>pi/2.)enterAngleLoc-=pi;
-  //  G4cout<<"MyMessage:: enterAngle: "<<enterAngleLoc<<" theta: "<<theta<<" stepLength: "<<stepLength<<G4endl;
-  //  G4cout<<""<<G4endl;
 
   key = JadePixId.GlobalChipID();
   JadePixHit* newHit = new JadePixHit();
@@ -204,7 +166,6 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   newHit->SetChipID(truthChip);
   newHit->SetGlobalChipID(truthGlobalChip);
   newHit->SetPrePos(preLPos);
-  //newHit->SetPos(hitPosition);
   newHit->SetPos(hitLPos);
   newHit->SetPostPos(postLPos);
   newHit->SetPDGCode(pdgCode);
@@ -218,7 +179,7 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   //for MC truth  
   if(truthCollection){
-    if(trackID==primaryTrackId){
+    //if(trackID==primaryTrackId){
       key = JadePixId.GlobalChipID();
       itTruthMap = truthMap.find(key);
       if(itTruthMap==truthMap.end()){
@@ -229,7 +190,6 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         truthHit->SetChipID(truthChip);
         truthHit->SetGlobalChipID(truthGlobalChip);
         truthHit->SetPrePos(pointIn);
-        //truthHit->SetPos(hitPosition);
         truthHit->SetPos(hitLPos);
         truthHit->SetPostPos(pointOut);
         truthHit->SetPDGCode(pdgCode);
@@ -256,7 +216,6 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
           truthHit->SetLadderID(truthLadder);
           truthHit->SetChipID(truthChip);
           truthHit->SetGlobalChipID(truthGlobalChip);
-          //truthHit->SetPos(hitPosition);
           truthHit->SetPos(hitLPos);
           truthHit->SetPDGCode(pdgCode);
           truthHit->SetEdep(edep);
@@ -267,7 +226,7 @@ G4bool JadePixSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
           truthMap[key]=truthCollection->entries()-1;  
         }
       }
-    }
+    //}
   }
 
 

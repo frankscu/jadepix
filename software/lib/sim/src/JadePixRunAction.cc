@@ -29,12 +29,6 @@
 /// \brief Implementation of the JadePixRunAction class
 
 #include "JadePixRunAction.hh"
-#include "JadePixAnalysis.hh"
-#include "JadePixWriter.hh"
-
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,8 +53,10 @@ void JadePixRunAction::BeginOfRunAction(const G4Run* run)
 
   // Create JadePix Writer
   JadePixWriter* mWriter = JadePixWriter::Instance();
-
-  mWriter->OpenFile(m_filename);
+  if(!mWriter->OpenFile(m_filename)){
+      std::cout<< "Can NOT open write file!!!" << std::endl;
+      return;
+  };
 
 }
 
@@ -69,14 +65,14 @@ void JadePixRunAction::BeginOfRunAction(const G4Run* run)
 void JadePixRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();
-  if ( nofEvents == 0 ) return;
+  if ( nofEvents == 0 ){
+      G4cout << "nofEvents = " << nofEvents << G4endl;
+      return;
+  }
   
   JadePixWriter* mWriter = JadePixWriter::Instance();
   mWriter->CloseFile();
 
-  //complete cleanup
-  
-  delete mWriter;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

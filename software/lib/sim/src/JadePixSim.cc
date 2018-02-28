@@ -1,27 +1,32 @@
 #include "JadePixSim.hh"
 
+JadePixSim::JadePixSim():m_macros("test2_Fe55.mac"),m_file("JadePix.rawdat")
+{
+}
+
+JadePixSim::~JadePixSim()
+{
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-JadePixSim::JadePixSim(int argc, char** argv)
+void JadePixSim::runSim(G4int &argc, char** &argv)
 {
     // Choose the Random engine
     //
-    //CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-    G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
     G4int seed = time(NULL);
     CLHEP::HepRandom::setTheSeed(seed);
 
     // Construct the default run manager
     //
-    runManager = new G4RunManager;
+    G4RunManager* runManager = new G4RunManager;
 
     // Set mandatory initialization classes
     //
     JadePixDetectorConstruction* detConstruction = new JadePixDetectorConstruction();
     runManager->SetUserInitialization(detConstruction);
 
-    G4VModularPhysicsList* physicsList = new QGSP_BERT;
-    //G4VModularPhysicsList* physicsList = new FTFP_BERT;
-    //  JadePixPhysicsList* physicsList = new JadePixPhysicsList;
+    JadePixPhysicsList* physicsList = new JadePixPhysicsList();
     runManager->SetUserInitialization(physicsList);
 
     // Set user action classes
@@ -30,15 +35,15 @@ JadePixSim::JadePixSim(int argc, char** argv)
     runManager->SetUserAction(new JadePixPrimaryGeneratorAction(st));
     //
     JadePixRunAction* jRun = new JadePixRunAction();
-    if(argc >= 2){
-        if( strcmp(argv[2],"-b")!=0){
-        jRun->SetOutFileName(argv[2]);
-        }else{
-            jRun->SetOutFileName(argv[3]);
-        }
+
+    if(argc > 2){
+        m_file = argv[2];
     }
+
+    jRun->SetOutFileName(m_file);
+
     runManager->SetUserAction(jRun);
-    //
+
     runManager->SetUserAction(new JadePixEventAction());
 
     // Initialize G4 kernel
@@ -47,29 +52,26 @@ JadePixSim::JadePixSim(int argc, char** argv)
 
 #ifdef G4VIS_USE
     // Initialize visualization
-    //  G4VisManager* visManager = new G4VisExecutive;
-    // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-    visManager = new G4VisExecutive("Quiet");
+    //
+    G4VisManager* visManager = new G4VisExecutive("Quiet");
     visManager->Initialize();
 #endif
 
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-    LoggedSession = new JadePixMySession();
+    JadePixMySession* LoggedSession = new JadePixMySession();
     UImanager->SetCoutDestination(LoggedSession);
     LoggedSession->SessionStart();
 
     UImanager->ApplyCommand("/control/macroPath /home/chenlj/jadepix/macros/geant4");
-
-    if (argc != 1)   // batch mode
-    {
+    
+    if(argc != 1){
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
-        UImanager->ApplyCommand(command+fileName);
-    }
-    else
-    {  // interactive mode : define UI session
+        UImanager->ApplyCommand(command + fileName);
+    }else{
+
 #ifdef G4UI_USE
         G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
@@ -84,14 +86,10 @@ JadePixSim::JadePixSim(int argc, char** argv)
 #endif
     }
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//
-JadePixSim::~JadePixSim(){;
 #ifdef G4VIS_USE
     delete visManager;
 #endif
     delete runManager;
-    delete LoggedSession;
+    delete LoggedSession;    
 }
+

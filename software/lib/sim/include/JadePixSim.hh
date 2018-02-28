@@ -5,16 +5,12 @@
 #include "JadePixPrimaryGeneratorAction.hh"
 #include "JadePixRunAction.hh"
 #include "JadePixEventAction.hh"
-
 #include "JadePixMySession.hh"
+#include "JadePixPhysicsList.hh"
 
 #include "G4SystemOfUnits.hh"
-
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "FTFP_BERT.hh"
-#include "QGSP_BERT.hh"
-
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -28,15 +24,17 @@
 class G4VisManager;
 class G4RunManager;
 class JadePixMySession;
+class JadePixPhysicsList;
 
 class JadePixSim{
     public:
-        JadePixSim(int argc, char** argv);
-        ~JadePixSim();
+        JadePixSim();
+        virtual ~JadePixSim();
+        void runSim(G4int &argc, char** &argv);
+
     private:
-        G4VisManager* visManager;
-        G4RunManager* runManager;
-        JadePixMySession* LoggedSession;
+        std::string m_macros;
+        std::string m_file;
 };
 
 #endif //JADEPIXSIM_H

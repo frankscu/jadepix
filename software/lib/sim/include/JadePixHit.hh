@@ -96,6 +96,10 @@ class JadePixHit: public G4VHit
         const JadePixHit& operator =(const JadePixHit& right);
 
         G4int operator ==(const JadePixHit& right) const;
+        
+        inline void * operator new(size_t);
+
+        inline void operator delete(void *aHit);
 
     private:
         G4int trackID;
@@ -115,5 +119,20 @@ class JadePixHit: public G4VHit
 };
 
 typedef G4THitsCollection<JadePixHit> JadePixHitsCollection;
+
+extern G4Allocator<JadePixHit> JadePixHitAllocator;
+
+inline void* JadePixHit::operator new(size_t)
+{
+      void *aHit;
+        aHit = (void *) JadePixHitAllocator.MallocSingle();
+          return aHit;
+}
+
+inline void JadePixHit::operator delete(void *aHit)
+{
+      JadePixHitAllocator.FreeSingle((JadePixHit*) aHit);
+}
+
 
 #endif

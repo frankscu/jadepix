@@ -7,6 +7,7 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "JadePixHit.hh"
+#include "JadePixEventAction.hh"
 #include "JadePixGeoParameter.hh"
 #include "JadePixIdentifier.hh"
 
@@ -15,6 +16,7 @@ class G4TouchableHistory;
 class G4HCofThisEvent;
 class JadePixGeoParameter;
 class JadePixIdentifier;
+class JadePixEventAction;
 
 class JadePixSD : public G4VSensitiveDetector
 {

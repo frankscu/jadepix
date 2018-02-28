@@ -14,31 +14,36 @@
 #ifndef JadePixWriter_H
 #define JadePixWriter_H 
 
-
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
+#include <cmath>
+
+#include <CLHEP/Units/PhysicalConstants.h>
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4ThreeVector.hh"
 
 #include "JadePixHit.hh"
 #include "JadePixDigi.hh"
 
 using namespace std;
 
-
 class JadePixWriter{
   public:
-    JadePixWriter():m_fout(NULL){
-      if(m_JadePixWriter){ G4cout<<"Warning::JadePixWriter is constructed twice."<<endl;; }
-      m_JadePixWriter=this;
-    };
-    ~JadePixWriter(){if(m_fout) delete m_fout;};
+    JadePixWriter();
+    ~JadePixWriter();
 
-    void OpenFile(string fileout);
+    int OpenFile(string fileout);
 
     void WriteEventTag(int id);
     void WriteMcTag(int n);
     void WriteDigiTag(int n);
 
-    void WriteMc(JadePixHit* truthHit);
+    void WriteMc(JadePixHit* truthHit, G4double totalEdep);
     void WriteDigi(JadePixDigi* digiHit);
 
     void CloseFile(){m_fout->close();};
@@ -47,10 +52,9 @@ class JadePixWriter{
 
   private:
     
-    fstream* m_fout;
+    ofstream* m_fout;
 
-    static  JadePixWriter * m_JadePixWriter;
-
+    static JadePixWriter* m_JadePixWriter;
 };
 
 #endif

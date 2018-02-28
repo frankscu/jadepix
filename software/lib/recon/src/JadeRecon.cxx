@@ -1,7 +1,14 @@
 #include "JadeRecon.hh"
 
-JadeRecon::JadeRecon(){;}
-JadeRecon::~JadeRecon(){;}
+JadeRecon::JadeRecon():m_evt(NULL),m_jadeIO(NULL)
+{
+}
+
+JadeRecon::~JadeRecon()
+{
+    if(m_evt) delete m_evt;
+    if(m_jadeIO) delete m_jadeIO;
+}
 
 void JadeRecon::runSup(std::string infile, std::string outfile, double thr){
 
@@ -44,38 +51,36 @@ void JadeRecon::runRecon(std::string infile, std::string outfile){
     time_t start,end;
     time(&start);
 
-    //string outfileCluster = outfile + "Cluster";
+    m_jadeIO = JadeIO::Instance();
 
-    JadeIO* jadeIO = new JadeIO();
-
-    int fdin = jadeIO->OpenInputFile(infile);
+    int fdin = m_jadeIO->OpenInputFile(infile);
     if(!fdin){
         std::cerr << "Please check the input raw data file!!!" << std::endl;
         return;
     }
 
-    jadeIO->OpenOutputFile(outfile);
-    //jadeIO->OpenOutputFileCluster(outfileCluster);
+    m_jadeIO->OpenOutputFile(outfile);
+
+    std::string rootfile = outfile.substr(0,outfile.find('.')) + ".root";
+    m_jadeIO->OpenROOTFile(rootfile);
 
     int nChip=1;
-    JadeEvent* evt = new JadeEvent(nChip);
+    m_evt = new JadeEvent(nChip);
 
     int nEvt=0;
-    while(jadeIO->ReadEvent(evt)>-1){
+    while(m_jadeIO->ReadEvent(m_evt)>-1){
 
-        evt->Reconstruct();
-        jadeIO->WriteEvent(evt);
-        //jadeIO->WriteCluster(evt);
+        m_evt->Reconstruct();
+        m_jadeIO->WriteEvent(m_evt);
+        m_jadeIO->WriteROOTFile(m_evt);
 
         nEvt++;
         if(nEvt%1000==0) cout<<nEvt<<" events are processed!"<<endl;
 
-        evt->Reset();
+        m_evt->Reset();
     }
-    jadeIO->CloseOutputFile();
-
-    delete evt;
-    delete jadeIO;
+    m_jadeIO->CloseOutputFile();
+    m_jadeIO->CloseROOTFile();
 
     time(&end);
     double t = difftime(end,start);
@@ -109,8 +114,6 @@ void JadeRecon::runBin(std::string infile, std::string outfile){
         evt->Reset();
     }
 
-    delete evt;
-    delete jadeIO;
 
     time(&end);
     double t = difftime(end,start);

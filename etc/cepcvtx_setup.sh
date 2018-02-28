@@ -11,3 +11,5 @@ source ${Geant4Make}/geant4make.sh
 source /opt/allpix/root/install/bin/thisroot.sh
 export PATH=$ROOTSYS/bin:$PATH
 
+export PATH=$PATH:/home/chenlj/jadepix/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/chenlj/jadepix/lib

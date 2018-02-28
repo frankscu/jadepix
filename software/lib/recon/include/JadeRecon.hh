@@ -35,6 +35,8 @@ class  JadeRecon {
         void runBin(std::string infile, std::string outfile);
 
     private:
+        JadeEvent* m_evt;
+        JadeIO* m_jadeIO;
 };
 
 #endif //JadeRecon_H
