@@ -40,7 +40,7 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-        allpix -c conf/jadepix1.conf -o output_directory="../output" 
+        allpix -c conf/jadepix1_main.conf -o output_directory="../output"
         ;;
    
    
