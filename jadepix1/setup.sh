@@ -6,4 +6,4 @@ source /opt/allpix/root/install/bin/thisroot.sh
 
 # Add allpix-squared v1.1.0 
 export PATH=$PATH:/opt/allpix/v1.1.0/bin
-
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/allpix/v1.1.0/lib

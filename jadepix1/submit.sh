@@ -44,7 +44,7 @@ case $option in
         allpix -c conf/jadepix1_main.conf -o output_directory="../output"
         ;;
     0.1.2) echo "Running genApx ..."
-        ./bin/genApx output/data.root output/test.root 
+        ./bin/genApx output/data.root output/data_genapx.root 
         ;; 
    
     # --------------------------------------------------------------------------
