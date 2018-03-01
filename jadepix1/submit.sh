@@ -14,6 +14,7 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
     printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
+    printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx " 
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Process Data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Process data by list"
@@ -42,7 +43,9 @@ case $option in
     0.1.1) echo "Running jadepix1 conf files..."
         allpix -c conf/jadepix1_main.conf -o output_directory="../output"
         ;;
-   
+    0.1.2) echo "Running genApx ..."
+        ./bin/genApx output/data.root output/test.root 
+        ;; 
    
     # --------------------------------------------------------------------------
     #  0.2 Analyze data 

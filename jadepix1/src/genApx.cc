@@ -194,18 +194,35 @@ std::shared_ptr<TTree> constructComparisonTree(TFile* file, std::string dut) {
 }
 
 
+void print_usage(){
+  printf("NAME\n\tgenApx - Gen Allpix root files\n");
+  printf("\nSYNOPSIS\n\tgenApx input output\n "); 
+
+}
+
 int main(int argc, char** argv) {
-//   if (argc < 2) {
-//     print_usage() ;  
-//     return -1; 
-//   }
+  if (argc < 2) {
+    print_usage() ;  
+    return -1; 
+  }
 
-    auto file = new TFile("output.root", "RECREATE");
-    //TTree *tree = std::shared_ptr<TTree> constructComparisonTree(file, "mydetector");
-  auto tree = constructComparisonTree(file, "mydetector");
 
-  tree->Write();
+TString inputFile = std::string(argv[1]);
+TString outputFile = std::string(argv[2]);
 
+
+printf("Input: %s\n", inputFile.Data()); 
+
+
+auto fin = new TFile(inputFile);
+
+auto fout = new TFile(outputFile, "RECREATE");
+
+auto tree = constructComparisonTree(fin, "mydetector");
+tree->Write();
+fout->Close(); 
+
+printf("File saved as: %s\n", outputFile.Data());
 
 }
 
