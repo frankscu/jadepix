@@ -21,6 +21,9 @@ usage() {
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
+    printf "\n"  
+    printf "\n\t%-9s  %-40s"  "0.4"      "[Simulate jadepix using jadepix]"
+    printf "\n\t%-9s  %-40s"  "0.4.1"    "Run jadepix"
 }
 
 
@@ -70,6 +73,17 @@ case $option in
 	   cd  ./src/
            make
            ./pixelana /publicfs/atlas/atlasnew/higgs/tth/hbb/raw_pixel/20180208/File20180208-A1_001 ./test.root 10000
+	   ;;
+
+    # --------------------------------------------------------------------------
+    #  0.4 JadePix simulate using jadepix
+    # --------------------------------------------------------------------------
+
+    0.4) echo "Run jadepix simulation..."
+         ;;
+    0.4.1) echo "Run one example data (10000 events)"
+      source ../etc/cepcvtx_setup.sh
+      ../bin/jadepix g4macros/Fe55.mac g4out/Jadepix_001.rawdat
 	   ;;
 
 esac

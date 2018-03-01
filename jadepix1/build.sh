@@ -13,6 +13,8 @@ usage() {
     printf "\n\t%-5s  %-40s\n"  "0.1"  "Build allpix-squared"
     printf "\n"
     printf "\n\t%-5s  %-40s\n"  "0.2"  "Build genApx"
+    printf "\n"
+    printf "\n\t%-5s  %-40s\n"  "0.3"  "Build jadepix"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -37,7 +39,16 @@ case $option in
         ;;
 
     0.2) echo  "Building genApx..."
-    make 
-    ;; 
+      make 
+      ;; 
+
+    0.3) echo  "Building jadepix..."
+      mkdir -p ../build
+      cd ../build
+      source ../etc/cepcvtx_setup.sh
+      cmake ..
+      make -j20
+      make install
+      ;; 
 
 esac
