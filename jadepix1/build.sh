@@ -10,7 +10,9 @@ usage() {
     printf "\nSYNOPSIS\n"
     printf "\n\t%-5s\n"  "./build.sh [OPTION]"
     printf "\nOPTIONS\n"
-    printf "\n\t%-5s  %-40s\n"  "0.1"  "[Build allpix-squared]"
+    printf "\n\t%-5s  %-40s\n"  "0.1"  "Build allpix-squared"
+    printf "\n"
+    printf "\n\t%-5s  %-40s\n"  "0.2"  "Build genApx"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -33,4 +35,9 @@ case $option in
         make -j20
         make install
         ;;
+
+    0.2) echo  "Building genApx..."
+    make 
+    ;; 
+
 esac
