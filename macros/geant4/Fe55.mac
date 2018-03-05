@@ -5,24 +5,21 @@
 
 /gps/particle gamma  
  
-#/gps/pos/type Plane	#Source shape
 /gps/pos/type Beam	#Source shape
 /gps/pos/shape Circle
-#/gps/pos/radius 3. mm
-/gps/pos/radius 0.5 mm
+/gps/pos/radius 0.3 mm
 /gps/pos/centre 0 0 0.1 mm 
 /gps/direction 0 0 -1
 /gps/ene/type User
-#/gps/ene/type Gauss
 /gps/hist/type energy
 
 # spectra
-/gps/hist/point  0.00588  8.2   	
-/gps/hist/point  0.00589  16.20   	
-/gps/hist/point  0.00649  1.89 	
-
-#/gps/hist/point  0.00590  24.40  	
+#/gps/hist/point  0.00588  8.2   	
+#/gps/hist/point  0.00589  16.20   	
 #/gps/hist/point  0.00649  1.89 	
+
+/gps/hist/point  0.00590  24.40  	
+/gps/hist/point  0.00649  1.89 	
 
 
 /gps/ang/type iso 	
@@ -36,10 +33,5 @@
 
 /gps/source/list
 
-#/jadepix/event/setPrintModulo 100
-#/jadepix/beam/type gauss 10 1
-#/jadepix/beam/frames 1
-#/jadepix/beam/on 
-
-/jadepix/event/setPrintModulo 100000
+/jadepix/event/setPrintModulo 10000
 /run/beamOn 200000

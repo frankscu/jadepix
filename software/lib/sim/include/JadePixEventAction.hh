@@ -31,10 +31,26 @@
 #ifndef JadePixEventAction_h
 #define JadePixEventAction_h 1
 
-#include "G4Event.hh"
-#include "G4UserEventAction.hh"
-#include "JadePixHit.hh"
+#include "JadePixEventAction.hh"
 #include "JadePixEventActionMessenger.hh"
+#include "JadePixSD.hh"
+#include "JadePixHit.hh"
+#include "JadePixAnalysis.hh"
+#include "JadePixDigi.hh"
+#include "JadePixDigitizer.hh"
+#include "JadePixWriter.hh"
+
+#include "G4RunManager.hh"
+#include "G4Event.hh"
+#include "G4SDManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4UnitsTable.hh"
+#include "G4UserEventAction.hh"
+#include "G4DigiManager.hh"
+#include "G4ios.hh"
+
+#include "Randomize.hh"
+#include <iomanip>
 
 class JadePixEventAction: public G4UserEventAction
 {
@@ -49,7 +65,11 @@ class JadePixEventAction: public G4UserEventAction
 
     private:
         JadePixEventActionMessenger *fMessenger;
+
+        G4DigiManager* fDM;
+        
         G4int fPrintModulo;
+       
 };
 
 #endif

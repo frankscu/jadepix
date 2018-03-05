@@ -8,9 +8,14 @@
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <cstdio>
+#include <exception>
+
 #include "JadeEvent.hh"
 #include "JadeHit.hh"
-#include <cstdio>
+
+#include "TFile.h"
+#include "TTree.h"    
 
 using namespace std;
 typedef unsigned char Byte;
@@ -23,30 +28,45 @@ class JadeIO{
         };
         ~JadeIO();
 
-        void OpenInputFile(string filein);
+        int OpenInputFile(string filein);
         void CloseInputFile(){m_fin->close();};
         int ReadEvent(JadeEvent* evt);
 
         void OpenOutputFile(string fileout);
+        void OpenROOTFile(string fileout);
         void OpenBinaryFile(string fileout);
-        void CloseOutputFile(){m_fout->close();};
-        void CloseBinaryFile(){m_bfout->close();};
+        void OpenOutputFileCluster(string fileout);
+        
+        void CloseOutputFile();
+        void CloseROOTFile();
+        void CloseBinaryFile();
+        void CloseOutputFileCluster();
+        
         int WriteEvent(JadeEvent* evt);
+        int WriteROOTFile(JadeEvent* evt);
         void WriteEmptyBinary(JadeEvent* evt);
         void WriteBinary(JadeEvent* evt);
-
-        void OpenOutputFileCluster(string fileout);
         int WriteCluster(JadeEvent* evt);
-
 
         static JadeIO* Instance();
 
     private:
 
-        fstream* m_fin;
-        fstream* m_fout;
+        ifstream* m_fin;
+        ofstream* m_fout;
         fstream* m_foutCluster;
         fstream* m_bfout;
+
+        TFile*     m_tfout;
+        TTree*     m_tree;
+        TTree*     m_ttree;
+        Hep3Vector m_tpos;
+        Hep3Vector m_trpos;       
+        Hep3Vector m_ttrpos;       
+        Int_t      m_tADC;
+        Double_t   m_eDep; 
+        Double_t   m_resX;
+        Double_t   m_resY;
 
         int m_evtId;
         int m_nTruth;

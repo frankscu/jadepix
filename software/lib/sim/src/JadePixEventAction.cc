@@ -29,26 +29,6 @@
 /// \brief Implementation of the JadePixEventAction class
 
 #include "JadePixEventAction.hh"
-#include "JadePixEventActionMessenger.hh"
-#include "JadePixSD.hh"
-#include "JadePixHit.hh"
-#include "JadePixAnalysis.hh"
-
-#include "G4RunManager.hh"
-#include "G4Event.hh"
-#include "G4SDManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4UnitsTable.hh"
-
-#include "JadePixDigi.hh"
-#include "JadePixDigitizer.hh"
-#include "G4DigiManager.hh"
-
-#include "JadePixWriter.hh"
-
-#include "Randomize.hh"
-#include "G4ios.hh"
-#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,8 +38,9 @@ JadePixEventAction::JadePixEventAction()
   fPrintModulo(1)
 {
   fMessenger = new JadePixEventActionMessenger(this);
-  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
-  JadePixDigitizer * JadePixDTZ = new JadePixDigitizer( "JadePixDigitizer" );
+  fDM = G4DigiManager::GetDMpointer();
+  JadePixDigitizer* JadePixDTZ = new JadePixDigitizer( "JadePixDigitizer" );
+
   fDM->AddNewModule(JadePixDTZ);
 }
 
@@ -67,6 +48,8 @@ JadePixEventAction::JadePixEventAction()
 
 JadePixEventAction::~JadePixEventAction()
 {
+    if(fMessenger) delete fMessenger;
+    if(fDM) delete fDM;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,8 +105,7 @@ void JadePixEventAction::BeginOfEventAction(const G4Event* event)
 void JadePixEventAction::EndOfEventAction(const G4Event* event)
 {
   //Digitize
-  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
-  JadePixDigitizer * JadePixDTZ = (JadePixDigitizer*)fDM->FindDigitizerModule( "JadePixDigitizer" );
+  JadePixDigitizer* JadePixDTZ = (JadePixDigitizer*)fDM->FindDigitizerModule( "JadePixDigitizer" );
   JadePixDTZ->Digitize();
   G4int myDigiCollID = fDM->GetDigiCollectionID("JadePixDigisCollection");
   JadePixDigisCollection* digiC = (JadePixDigisCollection*)fDM->GetDigiCollection( myDigiCollID );
@@ -136,7 +118,6 @@ void JadePixEventAction::EndOfEventAction(const G4Event* event)
     if ( event->GetEventID() % fPrintModulo == 0 )  {
       G4cerr << "JadePixEventAction :: There is no hits in JadePixHitsCollections!!! " << G4endl;
     }
-      //exit(1);
     return;
   }
 
@@ -146,10 +127,17 @@ void JadePixEventAction::EndOfEventAction(const G4Event* event)
 
   //Write McTruth
   G4int nofMc=truthC->entries();
+  G4double totalEdep = 0;
+  for(G4int iMc=0;iMc<nofMc;iMc++)
+  {
+      JadePixHit* truthHit = (*truthC)[iMc];
+      totalEdep += truthHit->GetEdep();
+  }
+
   mWriter->WriteMcTag(nofMc);
   for(G4int iMc=0;iMc<nofMc;iMc++){
     JadePixHit* truthHit = (*truthC)[iMc];
-    mWriter->WriteMc(truthHit);
+    mWriter->WriteMc(truthHit, totalEdep);
   }
 
   G4int nofDigi = digiC->entries();
