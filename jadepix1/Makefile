@@ -32,7 +32,7 @@ $(BIN):
 	mkdir -p $(BIN)
 
 $(BIN)/genApx: $(SRC)/genApx.cc 
-	$(CC) $< $(FLAGS) -L${HOME}/allpix-squared/lib -lAllpixObjects -o $@
+	$(CC) $< $(FLAGS) -L/opt/allpix/v1.1.0/lib -lAllpixObjects -o $@
 
 $(BIN)/convert: $(SRC)/convert.cc 
 	$(CC) $< $(FLAGS) -o $@

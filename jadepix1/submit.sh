@@ -26,7 +26,7 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.4"      "[Simulate jadepix using jadepix]"
     printf "\n\t%-9s  %-40s"  "0.4.1"    "Run jadepix"
     printf "\n"  
-    printf "\n\t%-9s  %-40s"  "0.5"      "Run convert" 
+    printf "\n\t%-9s  %-40s"  "0.5"      "Run Electric field convert" 
     printf "\n\t%-9s  %-40s"  "0.5.1"    "Run convert electric field using AllPix Squared" 
     printf "\n\t%-9s  %-40s"  "0.5.2"    "Run convert electric field from TCAD" 
     printf "\n\t%-9s  %-40s"  "0.5.3"    "Run display electric field" 
@@ -94,10 +94,10 @@ case $option in
 	   ;;
 
     # --------------------------------------------------------------------------
-    #  0.5  convert
+    #  0.5  Electric field convert
     # --------------------------------------------------------------------------
 
-    0.5) echo "Running convert..."
+    0.5) echo "Running electric field convert..."
          ;;
 
     0.5.1) echo "Run convert electric field using AllPix Squared" 
