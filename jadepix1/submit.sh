@@ -16,8 +16,9 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
     printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx " 
     printf "\n"  
-    printf "\n\t%-9s  %-40s"  "0.2"      "[Process Data]"
-    printf "\n\t%-9s  %-40s"  "0.2.1"    "Process data by list"
+    printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
+    printf "\n\t%-9s  %-40s"  "0.2.1"    "Draw histogram"
+    printf "\n\t%-9s  %-40s"  "0.2.2"    "Aanlyze CCE"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
@@ -51,16 +52,17 @@ case $option in
         ;; 
    
     # --------------------------------------------------------------------------
-    #  0.2 Analyze data 
+    #  0.2 Analyze jadepix data 
     # --------------------------------------------------------------------------
 
 
-    0.2) echo "Process Data..."
+    0.2) echo "Analyze jadepix sim data"
          ;;
-    0.2.1) echo "Process data by list..."
-	    ./python/ProcessEvent_List.py
+    0.2.1) echo "Draw histogram"
+	    ./python/cceanalysis.py
 	    ;;
-
+    0.2.2) echo "Aanlyze CCE"
+        ;;
 
     # --------------------------------------------------------------------------
     #  0.3 Analyze real data 
