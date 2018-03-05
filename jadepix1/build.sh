@@ -41,11 +41,12 @@ case $option in
         ;;
 
     0.2) echo  "Building user tools..."
+      ;;
     0.2.1) echo  "Building genApx..."
-      make 
+      make  bin/genApx
       ;; 
     0.2.2) echo  "Building convert..."
-      make 
+      make bin/convert
       ;; 
 
     0.3) echo  "Building jadepix..."
