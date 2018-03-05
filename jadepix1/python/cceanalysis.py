@@ -9,7 +9,7 @@ __copyright__ = "Copyright (c) yangtao"
 __created__ = "[2018-03-04 Tue 23:00]"
 
 
-import sys
+import sys,os
 import ROOT
 ROOT.gStyle.SetOptFit()
 import logging
@@ -166,6 +166,9 @@ def main():
 
     stats0,stats1,stats2,stats3 = get_stats(adc_canvas,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit,size_hit)
     move_stats(stats0,stats1,stats2,stats3)
+
+    if not os.path.exists('./fig/'):
+        os.makedirs('./fig/')
 
     adc_hit.Draw()
     adc_1_hit.Draw('same')
