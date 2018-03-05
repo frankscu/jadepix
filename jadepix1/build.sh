@@ -12,7 +12,7 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-5s  %-40s\n"  "0.1"  "Build allpix-squared"
     printf "\n"
-    printf "\n\t%-5s  %-40s\n"  "0.2"  "Build genApx"
+    printf "\n\t%-5s  %-40s\n"  "0.2"  "Build genApx and convert"
     printf "\n"
     printf "\n\t%-5s  %-40s\n"  "0.3"  "Build jadepix"
 }
@@ -38,7 +38,7 @@ case $option in
         make install
         ;;
 
-    0.2) echo  "Building genApx..."
+    0.2) echo  "Building genApx and convert..."
       make 
       ;; 
 
