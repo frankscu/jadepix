@@ -50,7 +50,7 @@ void JadeEvent::Reset(){
 void JadeEvent::Reconstruct(){
     for(m_itChip=m_chipVec.begin();m_itChip!=m_chipVec.end();++m_itChip){
         (*m_itChip)->FindHit(m_hitVec);
-        (*m_itChip)->FindCluster(m_clusterVec, 5);
+        (*m_itChip)->FindCluster(m_clusterVec, 2);
     }
 
     for(m_itHit=m_hitVec.begin();m_itHit!=m_hitVec.end();++m_itHit){
