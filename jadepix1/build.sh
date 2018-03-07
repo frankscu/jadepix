@@ -12,7 +12,11 @@ usage() {
     printf "\nOPTIONS\n"
     printf "\n\t%-5s  %-40s\n"  "0.1"  "Build allpix-squared"
     printf "\n"
-    printf "\n\t%-5s  %-40s\n"  "0.2"  "Build genApx"
+    printf "\n\t%-5s  %-40s\n"  "0.2"  "Build user tools"
+    printf "\n\t%-5s  %-40s\n"  "0.2.1"  "Build genApx"
+    printf "\n\t%-5s  %-40s\n"  "0.2.2"  "Build convert"
+    printf "\n"
+    printf "\n\t%-5s  %-40s\n"  "0.3"  "Build jadepix"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -36,8 +40,22 @@ case $option in
         make install
         ;;
 
-    0.2) echo  "Building genApx..."
-    make 
-    ;; 
+    0.2) echo  "Building user tools..."
+      ;;
+    0.2.1) echo  "Building genApx..."
+      make  bin/genApx
+      ;; 
+    0.2.2) echo  "Building convert..."
+      make bin/convert
+      ;; 
+
+    0.3) echo  "Building jadepix..."
+      mkdir -p ../build
+      cd ../build
+      source ../etc/cepcvtx_setup.sh
+      cmake ..
+      make -j20
+      make install
+      ;; 
 
 esac
