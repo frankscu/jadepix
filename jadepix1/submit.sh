@@ -13,8 +13,12 @@ usage() {
     printf "\n\t%-5s\n" "./run.sh [OPTION]"
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
-    printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
-    printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx " 
+    printf "\n\t%-9s  %-40s"  "0.1.1"    "<Run jadepix1 conf files>"
+    printf "\n\t%-9s  %-40s"  "0.1.1.1"  "Run jadepix1 conf files with electric field"
+    printf "\n\t%-9s  %-40s"  "0.1.1.2"  "Run jadepix1 conf files without electric field" 
+    printf "\n\t%-9s  %-40s"  "0.1.2"    "<Run genApx>" 
+    printf "\n\t%-9s  %-40s"  "0.1.2.1"  "Run genApx with electric field"
+    printf "\n\t%-9s  %-40s"  "0.1.2.2"  "Run genApx without electric field"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Draw histogram"
@@ -50,12 +54,22 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-        allpix -c conf/jadepix1_main.conf -o output_directory="../output"
         ;;
+    0.1.1.1) echo "Running jadepix1 conf files with electric field..."
+             allpix -c conf/jadepix1withelectricfield_main.conf -o output_directory="../output/"
+             ;;
+    0.1.1.2) echo "Running jadepix1 conf files without electric field..."
+             allpix -c conf/jadepix1withoutelectricfield_main.conf -o output_directory="../output/"
+             ;;
     0.1.2) echo "Running genApx ..."
-        ./bin/genApx output/data.root output/data_genapx.root 
-        ;; 
-   
+           ;; 
+    0.1.2.1) echo "Running genApx with electric field..."
+             ./bin/genApx output/data_withelectricfield.root output/data_withelectricfield_genapx.root
+             ;;
+    0.1.2.2) echo "Running genApx without electric field..."
+             ./bin/genApx output/data_withoutelectricfield.root output/data_withoutelectricfield_genapx.root
+             ;;
+
     # --------------------------------------------------------------------------
     #  0.2 Analyze jadepix data 
     # --------------------------------------------------------------------------
