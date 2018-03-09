@@ -78,9 +78,10 @@ case $option in
     0.2) echo "Analyze jadepix sim data"
          ;;
     0.2.1) echo "Draw histogram"
-	    ./python/cceanalysis.py
+	    ./python/draw_compare_hit.py
 	    ;;
     0.2.2) echo "Aanlyze CCE"
+        ./python/cceanalysis.py
         ;;
 
     # --------------------------------------------------------------------------
