@@ -8,7 +8,7 @@ __author__ = "YANG TAO <yangtao@ihep.ac.cn>"
 __copyright__ = "Copyright (c) yangtao"
 __created__ = "[2018-03-09 Fri 19:00]"
 
-import sys,os
+import sys,os,re
 import ROOT
 import logging
 
@@ -22,6 +22,8 @@ class cceanalysis():
         self.adc_threshold = 0.
         self.adc_slope = 3.8
 
+    def __del__(self):
+        pass
 
     def calculate_cce(self,receive_particle_number,practical_adc_deposition):
         ideal_adc_deposition = (receive_particle_number*self.gain*self.emit_particle_energy*1000/self.mean_ionization_energy)/self.adc_slope
@@ -33,12 +35,11 @@ class cceanalysis():
 
         if not os.path.exists('./ccelog/'):
             os.makedirs('./ccelog/')
+        logregex = re.compile('(./output/)(.*)(.root)')
+        logmo = logregex.match(fname)
+        logname = logmo.group(2)
 
-        logname = fname
-        logname.replace('output','ccelog')
-        logname.replace('.root','_cce.log')
-
-        logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s',filename=logname,filemode='w')
+        logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s',filename='./ccelog/'+logname+'.log',filemode='w')
         console = logging.StreamHandler()
         console.setLevel(logging.DEBUG)
         console.setFormatter(logging.Formatter(' %(asctime)s - %(levelname)s- %(message)s'))
@@ -81,4 +82,4 @@ class cceanalysis():
 if __name__ == '__main__':
     e = cceanalysis()
     e.analyze('./output/data_withelectricfield_genapx.root')
-    
+    sys.exit()
