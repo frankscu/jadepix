@@ -41,7 +41,7 @@ def adc_hit_fill(max_cluster_size,t1,t2,entries1,entries2,adc_hit_list1,adc_hit_
             if size2 == (jcluster+1):
                 adc2 = 0
                 for j in xrange(size2):
-                    adc2 = adc2+t2.signal.at(i)
+                    adc2 = adc2+t2.signal.at(j)
                 adc_hit_list2[jcluster].Fill(adc2)    
 
     
