@@ -34,6 +34,8 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.5.1"    "Run convert electric field using AllPix Squared" 
     printf "\n\t%-9s  %-40s"  "0.5.2"    "Run convert electric field from TCAD" 
     printf "\n\t%-9s  %-40s"  "0.5.3"    "Run display electric field" 
+    printf "\n"  
+    printf "\n\t%-9s  %-40s"  "0.6"      "[MoReWeb]"
   }
 
 
@@ -132,11 +134,11 @@ case $option in
         ;; 
 
     # --------------------------------------------------------------------------
-    #  0.6 MORE-Web
+    #  0.6 MoReWeb
     # --------------------------------------------------------------------------
 
 
-    0.6) echo "MORE-Web..."
+    0.6) echo "MoReWeb..."
          ;;
 
 
