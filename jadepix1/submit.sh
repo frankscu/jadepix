@@ -21,8 +21,9 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.1.2.2"  "Run genApx without electric field"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
-    printf "\n\t%-9s  %-40s"  "0.2.1"    "Draw histogram"
-    printf "\n\t%-9s  %-40s"  "0.2.2"    "Aanlyze CCE"
+    printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
+    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot compare histogram"
+    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot compare cce graph"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
@@ -79,11 +80,14 @@ case $option in
 
     0.2) echo "Analyze jadepix sim data"
          ;;
-    0.2.1) echo "Draw histogram"
-	    ./python/draw_compare_hit.py
+    0.2.1) echo "Aanlyze charge collection efficiency"
+	    ./python/cceanalysis.py
 	    ;;
-    0.2.2) echo "Aanlyze CCE"
-        ./python/cceanalysis.py
+    0.2.2) echo "plot compare histogram"
+        ./python/plot_compare_hit.py
+        ;;
+    0.2.3)echo "plot compare cce graph"
+        ./python/plot_cce_graph.py
         ;;
 
     # --------------------------------------------------------------------------
