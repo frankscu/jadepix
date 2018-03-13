@@ -35,6 +35,7 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.5.1"    "Run convert electric field using AllPix Squared" 
     printf "\n\t%-9s  %-40s"  "0.5.2"    "Run convert electric field from TCAD" 
     printf "\n\t%-9s  %-40s"  "0.5.3"    "Run display electric field" 
+    printf "\n\t%-9s  %-40s"  "0.5.4"    "Run display electric field using user tools[efield]" 
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.6"      "[MoReWeb]"
   }
@@ -135,6 +136,13 @@ case $option in
         cd field
         /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
         cd ..
+        ;; 
+
+    0.5.4) echo "Running display electric field using user tools[efield]..."
+        echo "Tips for displaying"
+        echo "Using style [COLZ/ARR] for TH2D"
+        echo "Using style [BOX2] for TH3D"
+        ./bin/efield -f field/jadepix1_electric_field.init -NX 25 -NY 17 -NZ 92 -cutX 10 -cutY 15 -cutZ 91 -o field/jadepix1_EFDisplay.root 
         ;; 
 
     # --------------------------------------------------------------------------
