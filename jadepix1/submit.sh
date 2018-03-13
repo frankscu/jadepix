@@ -15,9 +15,9 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
     printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files"
     printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx" 
-    printf "\n\t%-9s  %-40s"  "0.1.3"    "Display electric on zx plane"
-    printf "\n\t%-9s  %-40s"  "0.1.4"    "Display electric on yz plane"
-    printf "\n\t%-9s  %-40s"  "0.1.5"    "Display electric on xy plane"
+    printf "\n\t%-9s  %-40s"  "0.1.3"    "Display electric field on zx plane"
+    printf "\n\t%-9s  %-40s"  "0.1.4"    "Display electric field on yz plane"
+    printf "\n\t%-9s  %-40s"  "0.1.5"    "Display electric field on xy plane"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Draw histogram"
@@ -60,13 +60,13 @@ case $option in
            ./bin/genApx output/data_with_electric_field.root output/data_with_electric_field_genapx.root
            ./bin/genApx output/data_without_electric_field.root output/data_without_electric_field_genapx.root
            ;;
-    0.1.3) echo "Displaying electric on zx plane..."
+    0.1.3) echo "Displaying electric field on zx plane..."
            mesh_plotter -p zx -f field/jadepix1_electric_field.init -c 15 
            ;;
-    0.1.4) echo "Displaying electric on yz plane..."
+    0.1.4) echo "Displaying electric field on yz plane..."
            mesh_plotter -p yz -f field/jadepix1_electric_field.init -c 12  
            ;;
-    0.1.5) echo "Displaying electric on xy plane..."
+    0.1.5) echo "Displaying electric field on xy plane..."
            mesh_plotter -p xy -f field/jadepix1_electric_field.init -c 92  
            ;;
 
@@ -126,8 +126,7 @@ case $option in
 
     0.5.3) echo "Running display electric field..."
         cd field
-        # /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
-        /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f jadepix1_electric_field.init  -x 33 -y 33 -z 15
+        /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
         cd ..
         ;; 
 
