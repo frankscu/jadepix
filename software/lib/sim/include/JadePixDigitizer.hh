@@ -27,7 +27,7 @@ class JadePixDigitizer : public G4VDigitizerModule
         int GetTDC(double time);
         int InOrNot(int poly_sides, double *poly_x, double *poly_y, double x, double y);
 
-        G4int GetnAdjacentPix(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
+        G4int GetnAdjacentPix(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint, G4double eDep);
 
         void HitRealizitionEelectrode(JadePixHit* rawHit);
         double DiffuseGaussElectrodeDivided(JadePixIdentifier& JadePixId, G4ThreeVector hitPoint);
