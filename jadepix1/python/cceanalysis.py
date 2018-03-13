@@ -1,193 +1,126 @@
 #!/usr/bin/env python
 
 '''
-Draw jadepix sim data
+cce analysis module
 '''
 
 __author__ = "YANG TAO <yangtao@ihep.ac.cn>"
 __copyright__ = "Copyright (c) yangtao"
-__created__ = "[2018-03-04 Tue 23:00]"
+__created__ = "[2018-03-09 Fri 19:00]"
 
-
-import sys,os
+import sys,os,re
+import numpy as np
 import ROOT
-ROOT.gStyle.SetOptFit()
 import logging
-logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s- %(message)s')
-# console = logging.StreamHandler()
-# console.setLevel(logging.DEBUG)
-# console.setFormatter(logging.Formatter(' %(asctime)s - %(levelname)s- %(message)s'))
-# logging.getLogger('').addHandler(console)
 
-def hit_fill(t,entries,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit,size_hit):
+class cceanalysis():
 
-    maxsize = 0
+    def __init__(self):
+        self.emit_particle_energy =5.89 #keV
+        self.emit_particle_number = 10000
+        self.mean_ionization_energy = 3.6 #ev
+        self.gain = 8
+        self.adc_threshold = 0.
+        self.adc_slope = 3.8
+        self.max_cluster_size = 4
 
-    for ientry in xrange(entries):
-        t.GetEntry(ientry)
-        size = t.size
-        if size > maxsize:
-            maxsize = size
+        self.fname = None
+        self.logname = None
+        self.logger = None
+        self.practical_adc_deposition = None
+        self.receive_particle_number = None
+        self.cce = None
 
-        size_hit.Fill(size)
+    def __del__(self):
+        pass
 
-        for index in xrange(size):
-        
-            adc = t.signal.at(index)
-            adc_hit.Fill(adc)
-            if size == 1:
-                adc_1_hit.Fill(adc)
-            if size == 2:
-                adc_2_hit.Fill(adc)
-            if size == 3:
-                adc_3_hit.Fill(adc)
-    logging.info('maxsize:'+str(maxsize))
+    def calculate_cce(self,receive_particle_number,practical_adc_deposition):
+        ideal_adc_deposition = (receive_particle_number*self.gain*self.emit_particle_energy*1000/self.mean_ionization_energy)/self.adc_slope
+        cce = practical_adc_deposition/ideal_adc_deposition
+        return cce,ideal_adc_deposition
 
-
-def adc_hit_fit(adc_1_hit,adc_2_hit,adc_3_hit):
-    #
-    adc_1_fitf = ROOT.TF1('adc_1_fitf','gaus')
-    adc_1_fitf.SetLineColor(4)
-    adc_1_fitf.SetLineWidth(1)
-    adc_1_hit.Fit(adc_1_fitf)
-
-    # adc_2_fitf = ROOT.TF1('adc_2_fitf','gaus')
-    # adc_2_fitf.SetLineColor(2)
-    # adc_2_fitf.SetLineWidth(1)
-    # adc_2_hit.Fit(adc_2_fitf)
-    #
-
-def set_adc_hit_style(legend,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit):
-
-    adc_hit.GetXaxis().SetTitle('ADC')
-    adc_hit.GetXaxis().CenterTitle()
-    adc_hit.GetYaxis().SetTitle('Entries')
-    adc_hit.GetYaxis().CenterTitle()
-
-    adc_hit.SetFillStyle(4050)
-    adc_hit.SetLineColor(16)
-    adc_hit.SetFillColor(16)
-    legend.AddEntry(adc_hit,'adc')
-
-    adc_1_hit.SetFillStyle(4050)
-    adc_1_hit.SetLineColor(38)
-    adc_1_hit.SetFillColor(38)
-    legend.AddEntry(adc_1_hit,'cluster1')
-
-    adc_2_hit.SetFillStyle(4050)
-    adc_2_hit.SetLineColor(46)
-    adc_2_hit.SetFillColor(46)
-    legend.AddEntry(adc_2_hit,'cluster2')
-
-    adc_3_hit.SetFillStyle(4050)
-    adc_3_hit.SetLineColor(30)
-    adc_3_hit.SetFillColor(30)
-    legend.AddEntry(adc_3_hit,'cluster3')
+    def get_logger(self):
+        logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger(self.fname)
+        self.file_handler = logging.FileHandler('./ccelog/'+self.logname+'_cce.log')
+        self.file_handler.setLevel(logging.DEBUG)
+        self.file_handler.setFormatter(logging.Formatter(' %(asctime)s - %(levelname)s- %(message)s'))
+        logger.addHandler(self.file_handler)
+        return logger
 
 
-def get_stats(adc_canvas,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit,size_hit):
 
-    adc_canvas.cd()
-    adc_hit.Draw()
-    adc_canvas.Update()
-    stats0 = adc_hit.GetListOfFunctions().FindObject('stats')
+    def loginfo(self,logger):
+        logger.info('   file name = %s'%self.fname)
+        logger.info('   emit particle energy = %.2f keV'%self.emit_particle_energy)
+        logger.info('   mean ionization energy = %s eV'%str(self.mean_ionization_energy))
+        logger.info('   gain = %s'%str(self.gain))
+        logger.info('   adc threshold = %s'%str(self.adc_threshold))
+        logger.info('   adc slope = %s'%str(self.adc_slope)+ 'e')
+        logger.info('   emit particle number = %s'%str(self.emit_particle_number))
+        logger.info('   receive particle number = %s'%str(self.receive_particle_number[0]))
+        logger.info('   ideal adc deposition = %s'%str(int(self.ideal_adc_deposition[0])))
+        logger.info('   practical adc deposition = %s'%str(self.practical_adc_deposition[0]))
+        logger.info('   charge collection efficiency = %.2f\n'%self.cce[0])
 
-    adc_1_hit.Draw()
-    adc_canvas.Update()
-    stats1 = adc_1_hit.GetListOfFunctions().FindObject('stats')
+        for icluster in xrange(1,self.max_cluster_size+1):
+            logger.info('   cluster%d receive particle number = %s'%(icluster,str(self.receive_particle_number[icluster])))
+            logger.info('   cluster%d ideal adc deposition = %s'%(icluster,str(int(self.ideal_adc_deposition[icluster]))))
+            logger.info('   cluster%d practical adc deposition = %s'%(icluster,str(self.practical_adc_deposition[icluster])))
+            logger.info('   cluster%d charge collection efficiency = %.2f\n'%(icluster,self.cce[icluster]))
 
-    adc_2_hit.Draw()
-    adc_canvas.Update()
-    stats2 = adc_2_hit.GetListOfFunctions().FindObject('stats')
-
-    adc_3_hit.Draw()
-    adc_canvas.Update()
-    stats3 = adc_3_hit.GetListOfFunctions().FindObject('stats')
-
-    return stats0,stats1,stats2,stats3
-
-
-def move_stats(stats0,stats1,stats2,stats3):
-
-    stats0.SetX1NDC(0.8)
-    stats0.SetX2NDC(0.9)
-    stats0.SetY1NDC(0.8)
-    stats0.SetY2NDC(0.9)
-
-    stats1.SetX1NDC(0.8)
-    stats1.SetX2NDC(0.9)
-    stats1.SetY1NDC(0.6)
-    stats1.SetY2NDC(0.8)
-
-    stats2.SetX1NDC(0.8)
-    stats2.SetX2NDC(0.9)
-    stats2.SetY1NDC(0.5)
-    stats2.SetY2NDC(0.6)
-
-    stats3.SetX1NDC(0.8)
-    stats3.SetX2NDC(0.9)
-    stats3.SetY1NDC(0.4)
-    stats3.SetY2NDC(0.5)
+        logger.removeHandler(self.file_handler)
 
 
-def cce_analysis():
+    def analyze(self,fname):
 
-    return 0
+        self.fname = fname
 
+        if not os.path.exists('./ccelog/'):
+            os.makedirs('./ccelog/')
+        logregex = re.compile('(./output/)(.*)(.root)')
+        logmo = logregex.match(self.fname)
+        self.logname = logmo.group(2)
+        self.logger = self.get_logger()
 
-def main():
-    try:
-        fname = './output/data_genapx.root'
-        f = ROOT.TFile(fname)
-        t = f.Get('clusters')
-        entries = t.GetEntries()
-        logging.info('entries :'+str(entries))
+        self.practical_adc_deposition = np.zeros(self.max_cluster_size+1)
+        self.receive_particle_number = np.zeros(self.max_cluster_size+1,dtype=int)
 
-    except:
-        logging.error(fname+' is invalid!')
-        sys.exit()
+        try:
+            f = ROOT.TFile(self.fname)
+            t = f.Get('clusters')
+            entries = t.GetEntries()
+        except:
+            logger.error(self.fname+' is invalid!')
+            sys.exit()
 
-    size_canvas = ROOT.TCanvas('size','size',200,10,500,300)
-    adc_canvas = ROOT.TCanvas('adc','adc',200,10,500,300)
-    legend = ROOT.TLegend(0.2,0.7,0.3,0.9)
+        for ientry in xrange(entries):
+            t.GetEntry(ientry)
+            size = t.size
+            adc = 0
 
+            if size <= self.max_cluster_size:
+                for ipos in xrange(size):
+                    adc += t.signal.at(ipos)        
+                if adc>self.adc_threshold:
+                    self.receive_particle_number[0] += 1
+                    self.receive_particle_number[size] += 1
+                self.practical_adc_deposition[0] += adc
+                self.practical_adc_deposition[size] +=adc
 
-    size_hit = ROOT.TH1F('size_hit','size',5,0,5)
-    adc_hit = ROOT.TH1F('adc','adc',100,0,5000)
-    adc_1_hit = ROOT.TH1F('cluster1','cluster1',100,0,5000)
-    adc_2_hit = ROOT.TH1F('cluster2','cluster2',100,0,5000)
-    adc_3_hit = ROOT.TH1F('cluster3','cluster3',100,0,5000)
+            else:
+                continue
 
-    set_adc_hit_style(legend,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit)
+        self.cce,self.ideal_adc_deposition = self.calculate_cce(self.receive_particle_number,self.practical_adc_deposition)
 
-    hit_fill(t,entries,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit,size_hit)
+        print('\n********************%s*********************\n'%self.fname)
 
-    adc_hit_fit(adc_1_hit,adc_2_hit,adc_3_hit)
+        self.loginfo(self.logger)
 
-    stats0,stats1,stats2,stats3 = get_stats(adc_canvas,adc_hit,adc_1_hit,adc_2_hit,adc_3_hit,size_hit)
-    move_stats(stats0,stats1,stats2,stats3)
+        return self.cce,self.receive_particle_number
 
-    if not os.path.exists('./fig/'):
-        os.makedirs('./fig/')
-
-    adc_hit.Draw()
-    adc_1_hit.Draw('same')
-    adc_2_hit.Draw('same')
-    adc_3_hit.Draw('same')
-    legend.Draw()
-    #stats0.Draw()
-    #stats1.Draw()
-    #stats2.Draw()
-    #stats3.Draw()
-    adc_canvas.Update()
-    adc_canvas.SaveAs('./fig/adc_hit.pdf')
-
-    size_canvas.cd()
-    size_hit.Draw()
-    size_canvas.Update()
-    size_canvas.SaveAs('./fig/size_hit.pdf')
 
 if __name__ == '__main__':
-    main()
-
-
+    e = cceanalysis()
+    e.analyze('./output/data_withelectricfield_genapx.root')
+    e.analyze('./output/data_withoutelectricfield_genapx.root')

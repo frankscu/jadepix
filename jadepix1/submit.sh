@@ -13,12 +13,17 @@ usage() {
     printf "\n\t%-5s\n" "./run.sh [OPTION]"
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
-    printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files" 
-    printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx " 
+    printf "\n\t%-9s  %-40s"  "0.1.1"    "<Run jadepix1 conf files>"
+    printf "\n\t%-9s  %-40s"  "0.1.1.1"  "Run jadepix1 conf files with electric field"
+    printf "\n\t%-9s  %-40s"  "0.1.1.2"  "Run jadepix1 conf files without electric field" 
+    printf "\n\t%-9s  %-40s"  "0.1.2"    "<Run genApx>" 
+    printf "\n\t%-9s  %-40s"  "0.1.2.1"  "Run genApx with electric field"
+    printf "\n\t%-9s  %-40s"  "0.1.2.2"  "Run genApx without electric field"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
-    printf "\n\t%-9s  %-40s"  "0.2.1"    "Draw histogram"
-    printf "\n\t%-9s  %-40s"  "0.2.2"    "Aanlyze CCE"
+    printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
+    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot compare histogram"
+    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot compare cce graph"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
@@ -30,6 +35,8 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.5.1"    "Run convert electric field using AllPix Squared" 
     printf "\n\t%-9s  %-40s"  "0.5.2"    "Run convert electric field from TCAD" 
     printf "\n\t%-9s  %-40s"  "0.5.3"    "Run display electric field" 
+    printf "\n"  
+    printf "\n\t%-9s  %-40s"  "0.6"      "[MoReWeb]"
   }
 
 
@@ -50,12 +57,22 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-        allpix -c conf/jadepix1_main.conf -o output_directory="../output"
         ;;
+    0.1.1.1) echo "Running jadepix1 conf files with electric field..."
+             allpix -c conf/jadepix1withelectricfield_main.conf -o output_directory="../output/"
+             ;;
+    0.1.1.2) echo "Running jadepix1 conf files without electric field..."
+             allpix -c conf/jadepix1withoutelectricfield_main.conf -o output_directory="../output/"
+             ;;
     0.1.2) echo "Running genApx ..."
-        ./bin/genApx output/data.root output/data_genapx.root 
-        ;; 
-   
+           ;; 
+    0.1.2.1) echo "Running genApx with electric field..."
+             ./bin/genApx output/data_withelectricfield.root output/data_withelectricfield_genapx.root
+             ;;
+    0.1.2.2) echo "Running genApx without electric field..."
+             ./bin/genApx output/data_withoutelectricfield.root output/data_withoutelectricfield_genapx.root
+             ;;
+
     # --------------------------------------------------------------------------
     #  0.2 Analyze jadepix data 
     # --------------------------------------------------------------------------
@@ -63,10 +80,14 @@ case $option in
 
     0.2) echo "Analyze jadepix sim data"
          ;;
-    0.2.1) echo "Draw histogram"
+    0.2.1) echo "Aanlyze charge collection efficiency"
 	    ./python/cceanalysis.py
 	    ;;
-    0.2.2) echo "Aanlyze CCE"
+    0.2.2) echo "plot compare histogram"
+        ./python/plot_compare_hit.py
+        ;;
+    0.2.3)echo "plot compare cce graph"
+        ./python/plot_cce_graph.py
         ;;
 
     # --------------------------------------------------------------------------
@@ -115,6 +136,14 @@ case $option in
         /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
         cd ..
         ;; 
+
+    # --------------------------------------------------------------------------
+    #  0.6 MoReWeb
+    # --------------------------------------------------------------------------
+
+
+    0.6) echo "MoReWeb..."
+         ;;
 
 
 esac
