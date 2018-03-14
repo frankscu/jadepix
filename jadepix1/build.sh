@@ -15,6 +15,7 @@ usage() {
     printf "\n\t%-5s  %-40s\n"  "0.2"  "Build user tools"
     printf "\n\t%-5s  %-40s\n"  "0.2.1"  "Build genApx"
     printf "\n\t%-5s  %-40s\n"  "0.2.2"  "Build convert"
+    printf "\n\t%-5s  %-40s\n"  "0.2.3"  "Build efield"
     printf "\n"
     printf "\n\t%-5s  %-40s\n"  "0.3"  "Build jadepix"
 }
@@ -47,6 +48,14 @@ case $option in
       ;; 
     0.2.2) echo  "Building convert..."
       make bin/convert
+      ;; 
+    0.2.3) echo  "Building efield..."
+      mkdir -p build
+      cd build
+      source ../etc/cepcvtx_setup.sh
+      cmake ..
+      make -j20
+      make install
       ;; 
 
     0.3) echo  "Building jadepix..."
