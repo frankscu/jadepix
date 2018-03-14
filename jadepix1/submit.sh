@@ -13,12 +13,11 @@ usage() {
     printf "\n\t%-5s\n" "./run.sh [OPTION]"
     printf "\nOPTIONS\n"
     printf "\n\t%-9s  %-40s"  "0.1"      "[Simulate jadepix1]" 
-    printf "\n\t%-9s  %-40s"  "0.1.1"    "<Run jadepix1 conf files>"
-    printf "\n\t%-9s  %-40s"  "0.1.1.1"  "Run jadepix1 conf files with electric field"
-    printf "\n\t%-9s  %-40s"  "0.1.1.2"  "Run jadepix1 conf files without electric field" 
-    printf "\n\t%-9s  %-40s"  "0.1.2"    "<Run genApx>" 
-    printf "\n\t%-9s  %-40s"  "0.1.2.1"  "Run genApx with electric field"
-    printf "\n\t%-9s  %-40s"  "0.1.2.2"  "Run genApx without electric field"
+    printf "\n\t%-9s  %-40s"  "0.1.1"    "Run jadepix1 conf files"
+    printf "\n\t%-9s  %-40s"  "0.1.2"    "Run genApx" 
+    printf "\n\t%-9s  %-40s"  "0.1.3"    "Display electric field on zx plane"
+    printf "\n\t%-9s  %-40s"  "0.1.4"    "Display electric field on yz plane"
+    printf "\n\t%-9s  %-40s"  "0.1.5"    "Display electric field on xy plane"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
@@ -57,21 +56,22 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-        ;;
-    0.1.1.1) echo "Running jadepix1 conf files with electric field..."
-             allpix -c conf/jadepix1withelectricfield_main.conf -o output_directory="../output/"
-             ;;
-    0.1.1.2) echo "Running jadepix1 conf files without electric field..."
-             allpix -c conf/jadepix1withoutelectricfield_main.conf -o output_directory="../output/"
-             ;;
+           allpix -c conf/jadepix1_with_electric_field_main.conf -o output_directory="../output/"
+           allpix -c conf/jadepix1_without_electric_field_main.conf -o output_directory="../output/"
+           ;;
     0.1.2) echo "Running genApx ..."
-           ;; 
-    0.1.2.1) echo "Running genApx with electric field..."
-             ./bin/genApx output/data_withelectricfield.root output/data_withelectricfield_genapx.root
-             ;;
-    0.1.2.2) echo "Running genApx without electric field..."
-             ./bin/genApx output/data_withoutelectricfield.root output/data_withoutelectricfield_genapx.root
-             ;;
+           ./bin/genApx output/data_with_electric_field.root output/data_with_electric_field_genapx.root
+           ./bin/genApx output/data_without_electric_field.root output/data_without_electric_field_genapx.root
+           ;;
+    0.1.3) echo "Displaying electric field on zx plane..."
+           mesh_plotter -p zx -f field/jadepix1_electric_field.init -c 15 
+           ;;
+    0.1.4) echo "Displaying electric field on yz plane..."
+           mesh_plotter -p yz -f field/jadepix1_electric_field.init -c 12  
+           ;;
+    0.1.5) echo "Displaying electric field on xy plane..."
+           mesh_plotter -p xy -f field/jadepix1_electric_field.init -c 92  
+           ;;
 
     # --------------------------------------------------------------------------
     #  0.2 Analyze jadepix data 
