@@ -24,6 +24,7 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
     printf "\n\t%-9s  %-40s"  "0.2.2"    "plot compare histogram"
     printf "\n\t%-9s  %-40s"  "0.2.3"    "plot compare cce graph"
+    printf "\n\t%-9s  %-40s"  "0.2.4"    "plot seed and cluster scat"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
@@ -86,6 +87,9 @@ case $option in
         ;;
     0.2.3)echo "plot compare cce graph"
         ./python/plot_cce_graph.py
+        ;;
+    0.2.4)echo "plot seed and cluster scat"
+        ./python/plot_seed_and_cluster.py
         ;;
 
     # --------------------------------------------------------------------------

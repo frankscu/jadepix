@@ -109,4 +109,4 @@ def main(fname1,fname2):
     adc_canvas.SaveAs('./fig/adc_compare_hit.pdf')
 
 if __name__ == '__main__':
-    main('./output/data_withelectricfield_genapx.root','./output/data_withoutelectricfield_genapx.root')
+    main('./output/data_with_electric_field_genapx.root','./output/data_without_electric_field_genapx.root')

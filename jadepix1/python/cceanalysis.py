@@ -122,5 +122,5 @@ class cceanalysis():
 
 if __name__ == '__main__':
     e = cceanalysis()
-    e.analyze('./output/data_withelectricfield_genapx.root')
-    e.analyze('./output/data_withoutelectricfield_genapx.root')
+    e.analyze('./output/data_with_electricfield_genapx.root')
+    e.analyze('./output/data_without_electricfield_genapx.root')
