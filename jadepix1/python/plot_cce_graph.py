@@ -18,8 +18,8 @@ import ROOT
 def plot():
 
     e = cceanalysis.cceanalysis()
-    cce1,rn1 = e.analyze('./output/data_withelectricfield_genapx.root')
-    cce2,rn2 = e.analyze('./output/data_withoutelectricfield_genapx.root')
+    cce1,rn1 = e.analyze('./output/data_with_electric_field_genapx.root')
+    cce2,rn2 = e.analyze('./output/data_without_electric_field_genapx.root')
 
     cce_canvas = ROOT.TCanvas('cce','cce',600,500)
     cce_canvas.SetGrid()
