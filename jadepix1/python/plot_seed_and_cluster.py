@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 
 '''
-plot cce graph
+plot seed and cluster scat
 '''
 
 __author__ = "YANG TAO <yangtao@ihep.ac.cn>"
 __copyright__ = "Copyright (c) yangtao"
 __created__ = "[2018-03-09 Fri 19:00]"
-    
-    
-    
+       
 import cceanalysis  
 import sys,os
 import numpy as np
@@ -31,10 +29,10 @@ def main(fname):
         sys.exit()
 
     canvas = ROOT.TCanvas('canvas','',200,10,1200,1000)
-    legend = ROOT.TLegend(0.2,0.8,0.4,0.9)
+    legend = ROOT.TLegend(0.15,0.8,0.35,0.9)
     legend.SetTextSize(0.03)
 
-    seed_scat = ROOT.TH2F('seed_scat','seed_scat',100,0,MAX_SIZE,100,0,5000)
+    seed_scat = ROOT.TH2F('signal_distribution','signal distribution',100,0,MAX_SIZE,100,0,5000)
     seed_scat.GetXaxis().SetTitle('cluster')
     seed_scat.GetXaxis().CenterTitle()
     seed_scat.GetYaxis().SetTitle('ADC')
@@ -56,7 +54,6 @@ def main(fname):
     for ientry in xrange(entries):
         t.GetEntry(ientry)
         size = t.size
-
         seed_adc = 0
         cluster_adc = 0
 
