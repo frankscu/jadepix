@@ -21,8 +21,8 @@ usage() {
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
-    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot compare histogram"
-    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot compare cce graph"
+    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot adc histogram"
+    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot cce graph"
     printf "\n\t%-9s  %-40s"  "0.2.4"    "plot seed and cluster scat"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
@@ -86,7 +86,7 @@ case $option in
 	    ./python/cceanalysis.py
 	    ;;
     0.2.2) echo "plot compare histogram"
-        ./python/plot_compare_hit.py
+        ./python/plot_hit.py
         ;;
     0.2.3)echo "plot compare cce graph"
         ./python/plot_cce_graph.py
