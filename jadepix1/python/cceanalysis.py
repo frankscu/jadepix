@@ -23,6 +23,7 @@ class cceanalysis():
         self.fname = None
         self.conf_name = None
 
+        #set parameter
         self.mean_ionization_energy = 3.6 #ev
         self.max_cluster_size = 4
 
@@ -34,6 +35,8 @@ class cceanalysis():
         self.adc_threshold = None
         self.adc_slope = None
         self.electrics_noise = None
+        self.bias_voltage = None
+        self.depletion_depth = None
 
         #output 
         self.practical_adc_deposition = None
@@ -54,11 +57,13 @@ class cceanalysis():
         self.adc_threshold = self.get_conf_value(conf.get('DefaultDigitizer','threshold'))
         self.adc_slope = self.get_conf_value(conf.get('DefaultDigitizer','adc_slope'))
         self.electrics_noise = self.get_conf_value(conf.get('DefaultDigitizer','electrics_noise'))
+        self.bias_voltage = self.get_conf_value(conf.get('ElectricFieldReader','bias_voltage'))
+        self.depletion_depth = self.get_conf_value(conf.get('ElectricFieldReader','depletion_depth'))
 
     def get_conf_value(self,str):
-        regex = re.compile(r'(\d+)(.\d+)*')
+        regex = re.compile(r'(-)?(\d+)(.\d+)?')
         match = regex.match(str)
-        if match.group(2):
+        if match.group(3):
             value = string.atof(match.group())
         else:
             value = int(match.group())
@@ -87,6 +92,8 @@ class cceanalysis():
         logger.info('   adc threshold = %s e'%str(self.adc_threshold))
         logger.info('   adc slope = %s'%str(self.adc_slope)+ 'e')
         logger.info('   electrics_noise = %s'%str(self.electrics_noise)+ 'e')
+        logger.info('   bias_voltage = %s'%str(self.bias_voltage)+ 'V')
+        logger.info('   depletion_depth = %s'%str(self.depletion_depth)+ 'um\n')
 
         logger.info('   emit particle number = %s'%str(self.emit_events_number))
         logger.info('   receive particle number = %s'%str(self.receive_events_number[0]))

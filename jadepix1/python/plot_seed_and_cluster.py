@@ -35,6 +35,8 @@ def main(fname):
     seed_scat = ROOT.TH2F('signal_distribution','signal distribution',100,0,MAX_SIZE,100,0,5000)
     seed_scat.GetXaxis().SetTitle('cluster')
     seed_scat.GetXaxis().CenterTitle()
+    seed_scat.GetXaxis().SetRangeUser(0,5)
+    seed_scat.GetXaxis().SetNdivisions(5)
     seed_scat.GetYaxis().SetTitle('ADC')
     seed_scat.GetYaxis().CenterTitle()
     seed_scat.SetMarkerColor(46)
