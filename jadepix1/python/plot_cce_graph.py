@@ -16,7 +16,7 @@ import ROOT
 
 def plot():
 
-    e = cceanalysis.cceanalysis()
+    e = cceanalysis.CCEAnalysis()
     cce,rn = e.analyze('./output/data_with_electric_field_genapx.root','./conf/jadepix1_with_electric_field_main.conf')
     
     cce_canvas = ROOT.TCanvas('cce','cce',600,500)

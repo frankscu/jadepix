@@ -16,7 +16,7 @@ import ROOT
 import logging
 import ConfigParser
 
-class cceanalysis():
+class CCEAnalysis():
 
     def __init__(self):
 
@@ -164,5 +164,5 @@ class cceanalysis():
 
 
 if __name__ == '__main__':
-    e = cceanalysis()
+    e = CCEAnalysis()
     e.analyze('./output/data_with_electric_field_genapx.root','./conf/jadepix1_with_electric_field_main.conf')
