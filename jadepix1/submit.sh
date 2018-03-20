@@ -58,12 +58,10 @@ case $option in
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-           allpix -c conf/jadepix1_with_electric_field_main.conf -o output_directory="../output/"
-           allpix -c conf/jadepix1_without_electric_field_main.conf -o output_directory="../output/"
+           allpix -c conf/jadepix1_main.conf -o output_directory="../output/"
            ;;
     0.1.2) echo "Running genApx ..."
-           ./bin/genApx output/data_with_electric_field.root output/data_with_electric_field_genapx.root
-           ./bin/genApx output/data_without_electric_field.root output/data_without_electric_field_genapx.root
+           ./bin/genApx output/data.root output/data_genapx.root
            ;;
     0.1.3) echo "Displaying electric field on zx plane..."
            mesh_plotter -p zx -f field/jadepix1_electric_field.init -c 15 
