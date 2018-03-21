@@ -13,6 +13,8 @@ ROOTCFLAGS    = $(shell $(ROOTSYS)/bin/root-config --cflags)
 ROOTLIBS      = $(shell $(ROOTSYS)/bin/root-config --libs)
 ROOTGLIBS     = $(shell $(ROOTSYS)/bin/root-config --glibs)
 GLIBS         = $(filter-out -lz, $(ROOTGLIBS))
+ALLPIXLIBS=$(ALLPIX)/lib
+
 
 
 FLAGS=$(GCCFLAGS) $(ROOTCFLAGS) $(ROOTLIBS) 
@@ -32,7 +34,7 @@ $(BIN):
 	mkdir -p $(BIN)
 
 $(BIN)/genApx: $(SRC)/genApx.cc 
-	$(CC) $< $(FLAGS) -L/opt/allpix/v1.1.0/lib -lAllpixObjects -o $@
+	$(CC) $< $(FLAGS) -L$(ALLPIXLIBS) -lAllpixObjects -o $@
 
 $(BIN)/convert: $(SRC)/convert.cc 
 	$(CC) $< $(FLAGS) -o $@

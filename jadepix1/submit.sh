@@ -52,18 +52,16 @@ fi
 case $option in
 
     # --------------------------------------------------------------------------
-    #  0.1 allpix-squared (v1.1.0)
+    #  0.1 allpix-squared ($ALLPIX version)
     # --------------------------------------------------------------------------
 
     0.1) echo "Simulating jadepix1..."
          ;;
     0.1.1) echo "Running jadepix1 conf files..."
-           allpix -c conf/jadepix1_with_electric_field_main.conf -o output_directory="../output/"
-           allpix -c conf/jadepix1_without_electric_field_main.conf -o output_directory="../output/"
+           allpix -c conf/jadepix1_main.conf -o output_directory="../output/"
            ;;
     0.1.2) echo "Running genApx ..."
-           ./bin/genApx output/data_with_electric_field.root output/data_with_electric_field_genapx.root
-           ./bin/genApx output/data_without_electric_field.root output/data_without_electric_field_genapx.root
+           ./bin/genApx output/data.root output/data_genapx.root
            ;;
     0.1.3) echo "Displaying electric field on zx plane..."
            mesh_plotter -p zx -f field/jadepix1_electric_field.init -c 15 
@@ -128,7 +126,7 @@ case $option in
 
     0.5.1) echo "Run convert electric field using AllPix Squared" 
         cd field
-        /opt/allpix/v1.1.0/bin/tcad_dfise_converter/dfise_converter -f n2_dfise -R 'Epi' -r 5 -x 33 -y 15 -z 33
+        dfise_converter -f n2_dfise -R 'Epi' -r 5 -x 33 -y 15 -z 33
         cd ..
         ;;
 
@@ -138,7 +136,7 @@ case $option in
 
     0.5.3) echo "Running display electric field..."
         cd field
-        /opt/allpix/v1.1.0/bin/tcad_dfise_converter/mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
+        mesh_plotter -f n2_dfise_ElectricField_rotation.init -x 33 -y 33 -z 15
         cd ..
         ;; 
 
