@@ -9,8 +9,8 @@ void make_histogram(TObjArray *hlist)
          hist_title_adc_dcs     << "h_adc_dcs_ch" << (ch+1) << "_row" << (row+1) ;
          hist_title_adc_mean     << "h_adc_mean_ch" << (ch+1) << "_row" << (row+1) ;
 
-         TH1F* htmp_adc_dcs        = new TH1F(hist_title_adc_dcs.str().c_str(), "ADC distribution", 4000, -2000, 2000);           
-         TH1F* htmp_adc_mean        = new TH1F(hist_title_adc_mean.str().c_str(), "ADC distribution", 4000, -2000, 2000);          
+         TH1F* htmp_adc_dcs        = new TH1F(hist_title_adc_dcs.str().c_str(), "ADC distribution", 10000, -5000, 5000);           
+         TH1F* htmp_adc_mean        = new TH1F(hist_title_adc_mean.str().c_str(), "ADC distribution", 10000, -5000, 5000);          
 
          hlist->Add(htmp_adc_dcs);
          hlist->Add(htmp_adc_mean);
