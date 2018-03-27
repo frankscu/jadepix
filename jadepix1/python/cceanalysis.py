@@ -165,4 +165,4 @@ class CCEAnalysis():
 
 if __name__ == '__main__':
     e = CCEAnalysis()
-    e.analyze('./output/data_with_electric_field_genapx.root','./conf/jadepix1_with_electric_field_main.conf')
+    e.analyze('./output/data_genapx.root','./conf/jadepix1_main.conf')

@@ -76,4 +76,4 @@ def main(fname):
     canvas.SaveAs('./fig/seed_scat.pdf')
 
 if __name__ == '__main__':
-    main('./output/data_with_electric_field_genapx.root')
+    main('./output/data_genapx.root')

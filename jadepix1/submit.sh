@@ -21,9 +21,9 @@ usage() {
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.2"      "[Analyze jadepix sim data]"
     printf "\n\t%-9s  %-40s"  "0.2.1"    "Aanlyze charge collection efficiency"
-    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot adc histogram"
-    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot cce graph"
-    printf "\n\t%-9s  %-40s"  "0.2.4"    "plot seed and cluster scat"
+    printf "\n\t%-9s  %-40s"  "0.2.2"    "plot adc histogram(sum and isolate)"
+    printf "\n\t%-9s  %-40s"  "0.2.3"    "plot cce and entries proportion profile for cluster"
+    printf "\n\t%-9s  %-40s"  "0.2.4"    "plot seed and cluster scatter"
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.3"      "[Analyze Data]"
     printf "\n\t%-9s  %-40s"  "0.3.1"    "Analyze data"
@@ -83,13 +83,13 @@ case $option in
     0.2.1) echo "Aanlyze charge collection efficiency"
 	    ./python/cceanalysis.py
 	    ;;
-    0.2.2) echo "plot compare histogram"
-        ./python/plot_hit.py
+    0.2.2) echo "plot adc histogram(sum and isolate)"
+        ./python/plot_adc_hit.py
         ;;
-    0.2.3)echo "plot compare cce graph"
-        ./python/plot_cce_graph.py
+    0.2.3)echo "plot cce and entries proportion profile for cluster"
+        ./python/plot_cce_profile.py
         ;;
-    0.2.4)echo "plot seed and cluster scat"
+    0.2.4)echo "plot seed and cluster scatter"
         ./python/plot_seed_and_cluster.py
         ;;
 
