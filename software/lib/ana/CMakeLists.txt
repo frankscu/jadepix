@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.6)
 
 # Make a name for the project
-project(jadepix)
+project(jadepixana)
 
-option(BUILD_SWIG_LIBS "Build swig library" ON)
+option(BUILD_SWIG_LIBS "Build swig library" OFF)
 
 # Include all the header files in the directory of the CMakeLists.txt 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
