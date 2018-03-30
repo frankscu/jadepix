@@ -19,13 +19,11 @@ class DLLEXPORT JadeRead {
   virtual void Reset();
   virtual std::vector<JadeDataFrameSP> Read(size_t nframe,
       const std::chrono::milliseconds& timeout);
-  void SplitString(const std::string& s, std::vector<std::string>& v, const std::string& c);
 
   private:
   JadeOption m_opt;
   int m_fd;
   std::string m_buf;
-  std::vector<std::string> m_path_vec;
 };
 
 using JadeReadSP = std::shared_ptr<JadeRead>;

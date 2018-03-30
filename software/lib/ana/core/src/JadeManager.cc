@@ -37,9 +37,9 @@ uint64_t JadeManager::AsyncReading()
   uint64_t n_df = 0;
   while (m_is_running) {
     size_t nframe_per_read = 10;
-    auto v_df = m_rd->Read(nframe_per_read, 100ms);
+    auto v_df = m_rd->Read(nframe_per_read, 300ms);
     size_t nframe_per_read_r = v_df.size();
-    if (!n_df && !v_df.empty()) {
+    //if (!n_df && !v_df.empty()) {
       std::unique_lock<std::mutex> lk_out(m_mx_ev_to_flt);
       for (auto&& df : v_df) {
         m_qu_ev_to_flt.push(df);
@@ -47,7 +47,7 @@ uint64_t JadeManager::AsyncReading()
       }
       lk_out.unlock();
       m_cv_valid_ev_to_flt.notify_all();
-    }
+    //}
     if (n_df >= ndf_print_next) {
       auto tp_now = std::chrono::system_clock::now();
       auto dur = tp_now - tp_start;
@@ -62,7 +62,6 @@ uint64_t JadeManager::AsyncReading()
       tp_print_prev = tp_now;
     }
     if (nframe_per_read_r < nframe_per_read) {
-      std::cerr << "JadeManager:: read size is smaller than expectation" << std::endl;
       break;
     }
   }

@@ -19,11 +19,7 @@ JadeCluster::JadeCluster()
 }
 
 JadeCluster::JadeCluster(JadeDataFrameSP df)
-    : m_offset_x(0)
-    , m_offset_y(0)
-    , m_n_x(0)
-    , m_n_y(0)
-    , m_frame_adc({ 0 })
+    : m_offset_y(0)
     , m_pixel_can_be_used({ true })
     , m_seed_thr(0)
     , m_cluster_thr(0)

@@ -16,7 +16,6 @@ JadeRead::JadeRead(const JadeOption& opt)
     : m_opt(opt)
     , m_fd(0)
 {
-  SplitString(m_opt.GetStringValue("PATH"), m_path_vec, ";");
 }
 
 JadeRead::~JadeRead()
@@ -36,16 +35,7 @@ void JadeRead::Open()
     m_fd = 0;
   }
 
-  std::string path;
-
-  if (!m_path_vec.empty()) {
-    path = m_path_vec.back();
-    std::cout << "JadeRead: file: " << path << std::endl;
-    m_path_vec.pop_back();
-  } else {
-    std::cerr << "JadeRead: have readout all raw data files" << std::endl;
-    throw;
-  }
+  std::string path = m_opt.GetStringValue("PATH");
 
 #ifdef _WIN32
   m_fd = _open(path.c_str(), _O_RDONLY | _O_BINARY);
@@ -111,8 +101,18 @@ JadeRead::Read(size_t nframe,
     }
 
     if (read_r == 0) {
-      std::cout << "read_r==0" << std::endl;
+      //std::cout << "read_r==0" << std::endl;
       return v_df;
+      //if (!can_time_out) {
+      //  can_time_out = true;
+      //  tp_timeout = std::chrono::system_clock::now() + timeout;
+      //} else {
+      //  if (std::chrono::system_clock::now() > tp_timeout) {
+      //    std::cerr << "JadeRead: reading timeout\n";
+      //    //TODO: keep remain data, nothrow
+      //    throw;
+      //  }
+      //}
     }
     size_filled += read_r;
     can_time_out = false;
@@ -123,19 +123,4 @@ JadeRead::Read(size_t nframe,
     sub_beg += FRAME_SIZE;
   }
   return v_df;
-}
-
-void JadeRead::SplitString(const std::string& s, std::vector<std::string>& v, const std::string& c)
-{
-  std::string::size_type pos1, pos2;
-  pos2 = s.find(c);
-  pos1 = 0;
-  while (std::string::npos != pos2) {
-    v.push_back(s.substr(pos1, pos2 - pos1));
-
-    pos1 = pos2 + c.size();
-    pos2 = s.find(c, pos1);
-  }
-  if (pos1 != s.length())
-    v.push_back(s.substr(pos1));
 }
