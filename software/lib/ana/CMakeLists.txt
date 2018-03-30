@@ -39,5 +39,11 @@ else()
   list(APPEND CMAKE_SHARED_LINKER_FLAGS " -Wl,--no-undefined")
 endif()
 
+find_package(ROOT REQUIRED)
+if(NOT ROOT_FOUND)
+  message(FATAL_ERROR "Could not find ROOT, make sure to source the ROOT environment\n")
+endif()
+include_directories(${ROOT_INCLUDE_DIRS})
+
 add_subdirectory(core)
 add_subdirectory(exe)

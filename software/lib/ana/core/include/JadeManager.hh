@@ -6,8 +6,7 @@
 #include "JadeDataFrame.hh"
 #include "JadeRead.hh"
 #include "JadeFilter.hh"
-#include "JadeWrite.hh"
-#include "JadeMonitor.hh"
+#include "JadeAnalysis.hh"
 
 #include <string>
 #include <queue>
@@ -22,43 +21,36 @@ class DLLEXPORT JadeManager{
   void Reset();
 
   void SetReader(JadeReadSP rd);
-  void SetWriter(JadeWriteSP wrt);
   void SetFilter(JadeFilterSP flt);
-  void SetMonitor(JadeMonitorSP mnt);
+  void SetAnalysis(JadeAnalysisSP ana);
   
-  void StartDataTaking();
-  void StopDataTaking();
+  void StartDataAnalysing();
+  void StopDataAnalysing();
   void DeviceConnect();
   void DeviceDisconnect();
  
  private:
   uint64_t AsyncReading();
   uint64_t AsyncFiltering();
-  uint64_t AsyncWriting();
-  uint64_t AsyncMonitoring();
+  uint64_t AsyncAnalysising();
   
  private:
   JadeOption m_opt;
   
   JadeReadSP m_rd;
   JadeFilterSP m_flt;
-  JadeWriteSP m_wrt;
-  JadeMonitorSP m_mnt;
+  JadeAnalysisSP m_ana;
   
   bool m_is_running;
   std::future<uint64_t> m_fut_async_rd;
   std::future<uint64_t> m_fut_async_flt;
-  std::future<uint64_t> m_fut_async_wrt;
-  std::future<uint64_t> m_fut_async_mnt;
+  std::future<uint64_t> m_fut_async_ana;
   std::mutex m_mx_ev_to_flt;
-  std::mutex m_mx_ev_to_wrt;
-  std::mutex m_mx_ev_to_mnt;
+  std::mutex m_mx_ev_to_ana;
   std::queue<JadeDataFrameSP> m_qu_ev_to_flt;
-  std::queue<JadeDataFrameSP> m_qu_ev_to_wrt;
-  std::queue<JadeDataFrameSP> m_qu_ev_to_mnt;
+  std::queue<JadeDataFrameSP> m_qu_ev_to_ana;
   std::condition_variable m_cv_valid_ev_to_flt;
-  std::condition_variable m_cv_valid_ev_to_wrt;
-  std::condition_variable m_cv_valid_ev_to_mnt;    
+  std::condition_variable m_cv_valid_ev_to_ana;    
 };
 
 #endif

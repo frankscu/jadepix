@@ -58,21 +58,17 @@ int main(int argc, char **argv){
   JadeOption conf_read_para = conf_read.GetSubOption("parameter");
   JadeOption conf_flt = conf_core.GetSubOption("JadeFilter");
   JadeOption conf_flt_para = conf_flt.GetSubOption("parameter");
-  JadeOption conf_wrt = conf_core.GetSubOption("JadeWrite");
-  JadeOption conf_wrt_para = conf_wrt.GetSubOption("parameter");
-  JadeOption conf_mnt = conf_core.GetSubOption("JadeMonitor");
-  JadeOption conf_mnt_para = conf_mnt.GetSubOption("parameter");
+  JadeOption conf_ana = conf_core.GetSubOption("JadeAnalysis");
+  JadeOption conf_ana_para = conf_ana.GetSubOption("parameter");
 
   std::cout<<conf_man_para.DumpString()<<std::endl;
   std::cout<<conf_read_para.DumpString()<<std::endl;
   std::cout<<conf_flt_para.DumpString()<<std::endl;
-  std::cout<<conf_wrt_para.DumpString()<<std::endl;
-  std::cout<<conf_mnt_para.DumpString()<<std::endl;
+  std::cout<<conf_ana_para.DumpString()<<std::endl;
   JadeManager pman(conf_man_para);
   JadeReadSP pread = std::make_shared<JadeRead>(conf_read_para);
   JadeFilterSP pflt = std::make_shared<JadeFilter>(conf_flt_para);
-  JadeWriteSP pwrt = std::make_shared<JadeWrite>(conf_wrt_para);
-  JadeMonitorSP pmnt = std::make_shared<JadeMonitor>(conf_mnt_para);
+  JadeAnalysisSP pana = std::make_shared<JadeAnalysis>(conf_ana_para);
 
   size_t nsec = conf_man_para.GetIntValue("SecPerLoop");
   size_t nloop = conf_man_para.GetIntValue("N_Loops");
@@ -80,21 +76,20 @@ int main(int argc, char **argv){
 
   pman.SetReader(pread);
   pman.SetFilter(pflt);
-  pman.SetWriter(pwrt);
-  pman.SetMonitor(pmnt);
+  pman.SetAnalysis(pana);
 
   for(size_t i=0; i< nloop; i++){
     pman.DeviceConnect();  
     std::cout<<"=========start at "<<get_now_str()<<"======="<< std::endl;
-    pman.StartDataTaking();
+    pman.StartDataAnalysing();
     std::cout<<"========="<<std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(nsec));
     std::cout<<"========="<<std::endl;
-    pman.StopDataTaking();
+    pman.StopDataAnalysing();
+    std::this_thread::sleep_for(std::chrono::seconds(1s));
     std::cout<<"========="<<std::endl;
     std::cout<<"=========exit at "<<get_now_str()<<"======="<< std::endl;
     pman.DeviceDisconnect();
   }
   return 0;
-
 }
