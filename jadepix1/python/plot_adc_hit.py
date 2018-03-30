@@ -95,5 +95,5 @@ def plot(fname,model):
     adc_canvas.SaveAs('./fig/adc_hit_%s.pdf'%model)
 
 if __name__ == '__main__':
-    plot('./output/data_with_electric_field_genapx.root','sum')
-    plot('./output/data_with_electric_field_genapx.root','isolate')
+    plot('./output/data_genapx.root','sum')
+    plot('./output/data_genapx.root','isolate')
