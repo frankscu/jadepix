@@ -17,9 +17,9 @@ import ROOT
 
 def plot():
 
-    e = cceanalysis.cceanalysis()
-    cce1,rn1 = e.analyze('./output/data_withelectricfield_genapx.root')
-    cce2,rn2 = e.analyze('./output/data_withoutelectricfield_genapx.root')
+    e = cceanalysis.CCEAnalysis()
+    cce1,rn1 = e.analyze('./output/data_with_electric_field_genapx.root','./conf/jadepix1_with_electric_field_main.conf')
+    cce2,rn2 = e.analyze('./output/data_without_electric_field_genapx.root','./conf/jadepix1_without_electric_field_main.conf')
 
     cce_canvas = ROOT.TCanvas('cce','cce',600,500)
     cce_canvas.SetGrid()
@@ -45,7 +45,7 @@ def plot():
     cce_multigraph.GetYaxis().SetTitle('cce')
     cce_legend.Draw()
     cce_canvas.Update()
-    cce_canvas.SaveAs('./fig/cce_graph.pdf')
+    cce_canvas.SaveAs('./fig/cce_compare_graph.pdf')
 
     rn_canvas = ROOT.TCanvas('rn','rn',600,500)
     rn_canvas.SetGrid()
@@ -71,7 +71,7 @@ def plot():
     rn_multigraph.GetYaxis().SetTitle('entries proportion')
     rn_legend.Draw()
     rn_canvas.Update()
-    rn_canvas.SaveAs('./fig/rn_graph.pdf') 
+    rn_canvas.SaveAs('./fig/rn_compare_graph.pdf') 
     sys.exit()
 
 if __name__ == '__main__':
