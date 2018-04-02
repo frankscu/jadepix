@@ -38,9 +38,9 @@ void JadeAnalysis::Open()
   m_tree_adc = std::make_shared<TTree>("clusters", "information for jadepix");
   m_tree_adc->Branch("seed_adc", &m_output_seed_adc);
   m_tree_adc->Branch("cluster_adc", &m_output_clus_adc);
-  m_tree_adc->Branch("hit_map", &m_hit);
-  m_tree_adc->Branch("cds_adc", &m_cds_adc);
-  m_tree_adc->Branch("raw_adc", &m_raw_adc);
+  //m_tree_adc->Branch("hit_map", &m_hit);
+  //m_tree_adc->Branch("cds_adc", &m_cds_adc);
+  //m_tree_adc->Branch("raw_adc", &m_raw_adc);
 }
 
 void JadeAnalysis::Reset()
@@ -75,14 +75,16 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
     return;
   }
 
-  m_cds_adc = df->GetFrameCDS();
-  m_raw_adc = df->GetFrameData();
+  //m_cds_adc = df->GetFrameCDS();
+  //m_raw_adc = df->GetFrameData();
 
   m_clus = std::make_shared<JadeCluster>(df);
   m_clus->SetSeedTHR(m_seed_cut);
   m_clus->SetNeighbourTHR(m_neigh_cut);
   m_clus->SetClusterTHR(m_clus_cut);
   m_clus->SetClusterSize(m_clus_size);
+  m_clus->FindSeed();
+  m_clus->FindCluster();
 
   auto seed_adc = m_clus->GetSeedADC();
   //std::cout << "seed ADC: " << std::endl;
@@ -104,14 +106,15 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
   }
   //std::cout << '\n';
 
-  auto center = m_clus->GetCenterOfGravity();
-  //std::cout << "center with size: " << center.size() << std::endl;
-  m_hit.clear();
-  for (auto& pos : center) {
-    //std::cout << "\t(" << pos.first << ", " << pos.second << ")\t";
-    m_hit.push_back(pos);
-  }
-  //std::cout << '\n';
+  //auto center = m_clus->GetCenterOfGravity();
+  ////std::cout << "center with size: " << center.size() << std::endl;
+  //m_hit.clear();
+  //for (auto& pos : center) {
+  //  //std::cout << "\t(" << pos.first << ", " << pos.second << ")\t";
+  //  m_hit.push_back(pos);
+  //}
+  ////std::cout << '\n';
+  
   m_tree_adc->Fill();
 
   m_ev_n++;
