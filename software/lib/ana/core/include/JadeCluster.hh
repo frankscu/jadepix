@@ -9,6 +9,7 @@
 #include <map>
 #include <stdexcept>
 #include <vector>
+#include <cmath>
 
 class DLLEXPORT JadeCluster {
   public:
@@ -22,6 +23,7 @@ class DLLEXPORT JadeCluster {
   bool IsInEdge(size_t x, size_t y) const;
   bool IsInMatrix(size_t x, size_t y) const;
   bool IsInMask(size_t x, size_t y) const;
+  bool IsMax(size_t x, size_t y);
   void SetPixelMask(size_t x, size_t y);
   int16_t GetPixelADC(size_t x, size_t y);
   int16_t GetPixelADC(std::pair<size_t, size_t> coord);
