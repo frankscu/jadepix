@@ -76,6 +76,20 @@ bool JadeCluster::IsInMatrix(size_t x, size_t y) const
     return false;
 }
 
+bool JadeCluster::IsMax(size_t x, size_t y)
+{
+  auto adc_value = GetPixelADC(x, y);
+  for (size_t ix = x - 1; ix <= x + 1; ix++)
+    for (size_t iy = y - 1; iy <= y + 1; iy++)
+      if (!IsInMatrix(ix, iy)) {
+        continue;
+      } else if (GetPixelADC(ix, iy) > adc_value) {
+        return false;
+      };
+
+  return true;
+}
+
 bool JadeCluster::IsInMask(size_t x, size_t y) const
 {
   size_t pos = (x - m_offset_x) + m_n_x * (y - m_offset_y);
@@ -105,7 +119,7 @@ void JadeCluster::FindSeed()
       // mask pixels that cannot pass neighbour threshold
       if (adc_value < m_neigh_thr) {
         SetPixelMask(ix, iy);
-      } else if (adc_value > m_seed_thr) {
+      } else if ((adc_value > m_seed_thr) && (IsMax(ix, iy))) {
         seed _seed;
         _seed.coord = std::make_pair(ix, iy);
         _seed.adc = adc_value;
@@ -115,7 +129,7 @@ void JadeCluster::FindSeed()
 
   // Sort seed pixels according to their ADC, hightest comes first
   std::sort(m_seed.begin(), m_seed.end(),
-      [](auto& s1, auto& s2) { return s1.adc > s2.adc;});
+      [](auto& s1, auto& s2) { return s1.adc > s2.adc; });
 
   m_is_seed_find = true;
 }
@@ -138,14 +152,14 @@ int16_t JadeCluster::GetPixelADC(std::pair<size_t, size_t> coord)
 {
   auto pos = (coord.first - m_offset_x) + m_n_x * (coord.second - m_offset_y);
   int16_t val = m_frame_adc.at(pos);
-  return val;
+  return std::abs(val);
 }
 
 int16_t JadeCluster::GetPixelADC(size_t x, size_t y)
 {
   auto pos = (x - m_offset_x) + m_n_x * (y - m_offset_y);
   int16_t val = m_frame_adc.at(pos);
-  return val;
+  return std::abs(val);
 }
 
 std::vector<int16_t> JadeCluster::GetSeedADC()
@@ -188,7 +202,7 @@ void JadeCluster::FindCluster()
         if (IsInMask(ix, iy))
           continue;
 
-        _cluster.adc.push_back(GetPixelADC(ix,iy));
+        _cluster.adc.push_back(GetPixelADC(ix, iy));
         _cluster.xCoord.push_back(ix);
         _cluster.yCoord.push_back(iy);
         _cluster.total_adc += GetPixelADC(ix, iy);
