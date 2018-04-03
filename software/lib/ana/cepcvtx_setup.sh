@@ -12,5 +12,7 @@ source /opt/allpix/root/install/bin/thisroot.sh
 export PATH=$ROOTSYS/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTSYS/lib
 
+export PATH=$PATH:${HOME}/jadepix/software/lib/ana/bin
+
 export PATH=$PATH:${HOME}/jadepix/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/jadepix/lib
