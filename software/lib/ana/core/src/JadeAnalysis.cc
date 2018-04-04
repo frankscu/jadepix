@@ -4,12 +4,18 @@ JadeAnalysis::JadeAnalysis(const JadeOption& opt)
     : m_opt(opt)
     , m_ev_n(0)
     , m_ev_print(0)
+    , m_base_count(0)
+    , m_base_numbers(1000)
 {
   m_ev_print = m_opt.GetIntValue("PRINT_EVENT_N");
   m_seed_cut = m_opt.GetIntValue("SEED_CUT");
   m_neigh_cut = m_opt.GetIntValue("NEIGHGBOR_CUT");
   m_clus_cut = m_opt.GetIntValue("CLUSTER_CUT");
   m_clus_size = m_opt.GetIntValue("CLUSTER_SIZE");
+  m_base_cut = m_opt.GetIntValue("BASE_CUT");
+  m_base_numbers = m_opt.GetIntValue("BASE_NUMBERS");
+  m_enable_raw_data_write = m_opt.GetBoolValue("ENABLE_RAW_DATA_WRITE");
+  m_enable_hit_map_write = m_opt.GetBoolValue("ENABLE_HIT_MAP_WRITE");
 }
 
 JadeAnalysis::~JadeAnalysis()
@@ -38,9 +44,14 @@ void JadeAnalysis::Open()
   m_tree_adc = std::make_shared<TTree>("clusters", "information for jadepix");
   m_tree_adc->Branch("seed_adc", &m_output_seed_adc);
   m_tree_adc->Branch("cluster_adc", &m_output_clus_adc);
-  //m_tree_adc->Branch("hit_map", &m_hit);
-  //m_tree_adc->Branch("cds_adc", &m_cds_adc);
-  //m_tree_adc->Branch("raw_adc", &m_raw_adc);
+  m_tree_adc->Branch("base_adc", &m_output_base_adc);
+  if (m_enable_raw_data_write) {
+    m_tree_adc->Branch("cds_adc", &m_cds_adc);
+    m_tree_adc->Branch("raw_adc", &m_raw_adc);
+  }
+  if (m_enable_hit_map_write) {
+    m_tree_adc->Branch("hit_map", &m_hit);
+  }
 }
 
 void JadeAnalysis::Reset()
@@ -75,8 +86,18 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
     return;
   }
 
-  //m_cds_adc = df->GetFrameCDS();
-  //m_raw_adc = df->GetFrameData();
+  if (m_enable_raw_data_write) {
+    m_cds_adc = df->GetFrameCDS();
+    m_raw_adc = df->GetFrameData();
+  }
+
+  if (m_base_cut < m_base_numbers) {
+    auto cds_adc = df->GetFrameCDS();
+    if (std::none_of(cds_adc.begin(), cds_adc.end(), [=](auto& cds) { return cds > m_base_cut; })) {
+      m_output_base_adc = cds_adc;
+      m_base_count++;
+    }
+  }
 
   m_clus = std::make_shared<JadeCluster>(df);
   m_clus->SetSeedTHR(m_seed_cut);
@@ -106,15 +127,17 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
   }
   //std::cout << '\n';
 
-  //auto center = m_clus->GetCenterOfGravity();
-  ////std::cout << "center with size: " << center.size() << std::endl;
-  //m_hit.clear();
-  //for (auto& pos : center) {
-  //  //std::cout << "\t(" << pos.first << ", " << pos.second << ")\t";
-  //  m_hit.push_back(pos);
-  //}
-  ////std::cout << '\n';
-  
+  if (m_enable_hit_map_write) {
+    auto center = m_clus->GetCenterOfGravity();
+    //std::cout << "center with size: " << center.size() << std::endl;
+    m_hit.clear();
+    for (auto& pos : center) {
+      //std::cout << "\t(" << pos.first << ", " << pos.second << ")\t";
+      m_hit.push_back(pos);
+    }
+    //std::cout << '\n';
+  }
+
   m_tree_adc->Fill();
 
   m_ev_n++;
