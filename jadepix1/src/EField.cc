@@ -2,16 +2,23 @@
 
 EField::EField():m_pixelsize_x(33),
                  m_pixelsize_y(33),
-                 m_thickness(15)
+                 m_thickness(15),
+                 m_pixeldiv_x(33),
+                 m_pixeldiv_y(33),
+                 m_pixeldiv_z(15)
 {
   m_depletion_depth = m_thickness;
-  m_sensorCenterZ = m_thickness/2.0;
+  m_sensorCenter_z = m_thickness/2.0;
 }
 
 EField::~EField(){
 }
 
 EField::FieldData EField::caculateEField(std::string file_name){
+  caculateEField(file_name, true);
+}
+
+EField::FieldData EField::caculateEField(std::string file_name, bool isRot){
   std::ifstream file(file_name);
 
   if(file.fail()) {
@@ -25,6 +32,7 @@ EField::FieldData EField::caculateEField(std::string file_name){
   std::cout << "Header of file " << file_name << " is " << header << std::endl;
 
   std::string tmp;
+  if(!isRot) file >> tmp >> tmp;
   file >> tmp >> tmp;
   file >> tmp >> tmp >> tmp;
   file >> tmp >> tmp >> tmp;
@@ -33,9 +41,17 @@ EField::FieldData EField::caculateEField(std::string file_name){
   file >> thickness >> xpixsz >> ypixsz;
   file >> tmp >> tmp >> tmp >> tmp;
 
+  setPixelPitch(xpixsz, ypixsz, thickness);
+  setPixelCenter(xpixsz/2, ypixsz/2, thickness/2);
+
   size_t xsize, ysize, zsize;
   file >> xsize >> ysize >> zsize;
   file >> tmp;
+
+  std::cout << "Input XYZ size: " 
+            << "( " << xsize << ", " << ysize << ", " << zsize << " )" 
+            << std::endl;
+  setPixelDiv(xsize, ysize, zsize);
 
   auto field = std::make_shared<std::vector<double>>(); 
   field->resize(xsize * ysize * zsize *3);
@@ -67,7 +83,7 @@ EField::FieldData EField::caculateEField(std::string file_name){
 }
 
 void EField::setElectricField(FieldData fieldData){
-  m_electric_field = std::move(fieldData.first);
+  m_electric_field = fieldData.first;
   m_electric_field_sizes = fieldData.second; 
 
   std::cout << "Set electric field with " 
@@ -86,30 +102,30 @@ ROOT::Math::XYZVector EField::getElectricField(const ROOT::Math::XYZPoint& pos) 
             << "( " << x << ", " << y << ", " << z << " )" 
             << std::endl;
 
-  auto sensor_max_z = m_sensorCenterZ + m_thickness/2.0;
+  auto sensor_max_z = m_sensorCenter_z + m_thickness/2.0;
   auto electric_field_thickness_domain = std::make_pair(sensor_max_z - m_depletion_depth, sensor_max_z); 
 
-  auto pixel_x = static_cast<int>(std::round(x / m_pixelsize_x));
-  auto pixel_y = static_cast<int>(std::round(y / m_pixelsize_y));
+  std::cout << "Local XYPoint: " 
+            << "( " << x << ", " << y << ")" 
+            << "\nSensor Max Z: "
+            << sensor_max_z
+            << "\nElectric filed thickness domain: "
+            << "( " << electric_field_thickness_domain.first << ", " << electric_field_thickness_domain.second << ")" 
+            << std::endl;
 
-  x -= pixel_x * m_pixelsize_x;
-  y -= pixel_y * m_pixelsize_y;
-
-  if((pixel_x % 2) == 1){
-    x *= -1;
-  }
-
-  if((pixel_y % 2) == 1){
-    y *= -1;
-  }
+  std::cout << "Electric field sizes: (" 
+            << m_electric_field_sizes[0] << ", " 
+            << m_electric_field_sizes[1] << ", "
+            << m_electric_field_sizes[2] << ")" 
+            << std::endl;
 
   ROOT::Math::XYZVector ret_val;
 
   auto x_ind = static_cast<int>(std::floor(static_cast<double>(m_electric_field_sizes[0]) *
-              (x + m_pixelsize_x / 2.0) / m_pixelsize_x));
+              x / m_pixelsize_x));
   
   auto y_ind = static_cast<int>(std::floor(static_cast<double>(m_electric_field_sizes[1]) *
-              (y + m_pixelsize_y / 2.0) / m_pixelsize_y));
+              y / m_pixelsize_y));
   
   auto z_ind = static_cast<int>(std::floor(static_cast<double>(m_electric_field_sizes[2]) * (z - electric_field_thickness_domain.first) /
       (electric_field_thickness_domain.second - electric_field_thickness_domain.first)));
@@ -135,14 +151,6 @@ ROOT::Math::XYZVector EField::getElectricField(const ROOT::Math::XYZPoint& pos) 
   ret_val = ROOT::Math::XYZVector(
       (*m_electric_field)[tot_ind], (*m_electric_field)[tot_ind + 1], (*m_electric_field)[tot_ind + 2]);
 
-  if((pixel_x % 2) == 1 ){
-    ret_val.SetX(-ret_val.x());
-  }
-
-  if((pixel_y % 2) == 1 ){
-    ret_val.SetY(-ret_val.y());
-  }
-
   return ret_val;
 }
 
@@ -151,42 +159,42 @@ void EField::drawEFieldXY(std::vector<ROOT::Math::XYZPoint>& posVec,ROOT::Math::
   auto tf = new TFile(outfile.c_str(), "RECREATE");
   auto exyfield_map = new TH2D("xy_efMap", 
                                "xy_efMap", 
-                               m_pixelsize_x, 
+                               m_pixeldiv_x, 
                                0, 
-                               m_pixelsize_x,
-                               m_pixelsize_y,
+                               m_pixeldiv_x,
+                               m_pixeldiv_y,
                                0,
-                               m_pixelsize_y);
+                               m_pixeldiv_y);
 
   auto exzfield_map = new TH2D("xz_efMap", 
                                "xz_efMap", 
-                               m_pixelsize_x, 
+                               m_pixeldiv_x, 
                                0, 
-                               m_pixelsize_x,
-                               m_thickness,
+                               m_pixeldiv_x,
+                               m_pixeldiv_z,
                                0,
-                               m_thickness);
+                               m_pixeldiv_z);
 
   auto eyzfield_map = new TH2D("yz_efMap", 
                                "yz_efMap", 
-                               m_pixelsize_y, 
+                               m_pixeldiv_y, 
                                0, 
-                               m_pixelsize_y,
-                               m_thickness,
+                               m_pixeldiv_y,
+                               m_pixeldiv_z,
                                0,
-                               m_thickness);
+                               m_pixeldiv_z);
 
   auto exyzfield_map = new TH3D("xyz_efMap", 
                                "xyz_efMap", 
-                               m_pixelsize_x, 
+                               m_pixeldiv_x, 
                                0, 
-                               m_pixelsize_x,
-                               m_pixelsize_y, 
+                               m_pixeldiv_x,
+                               m_pixeldiv_y, 
                                0, 
-                               m_pixelsize_y,
-                               m_thickness,
+                               m_pixeldiv_y,
+                               m_pixeldiv_z,
                                0,
-                               m_thickness);
+                               m_pixeldiv_z);
 
   std::vector<ROOT::Math::XYZPoint>::iterator itpos;
   ROOT::Math::XYZVector efVec;
@@ -211,4 +219,26 @@ void EField::drawEFieldXY(std::vector<ROOT::Math::XYZPoint>& posVec,ROOT::Math::
   //TH3D BOX2 
   //TH2D COLZ/ARR 
   tf->Write(); 
+}
+
+void EField::setDepletionDepth(double depletion){
+  m_depletion_depth = depletion;
+}
+
+void EField::setPixelPitch(double x, double y, double z){
+  m_pixelsize_x = x;
+  m_pixelsize_y = y;
+  m_thickness = z;
+}
+
+void EField::setPixelDiv(size_t x, size_t y, size_t z){
+  m_pixeldiv_x = x;
+  m_pixeldiv_y = y;
+  m_pixeldiv_z = z;
+}
+
+void EField::setPixelCenter(double x, double y, double z){
+  m_sensorCenter_x = x;
+  m_sensorCenter_y = y;
+  m_sensorCenter_z = z;
 }
