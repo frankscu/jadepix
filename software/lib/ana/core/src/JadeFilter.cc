@@ -5,7 +5,7 @@ using namespace std::chrono_literals;
 JadeFilter::JadeFilter(const JadeOption& opt)
     : m_opt(opt)
     , m_ev_n(0)
-    , m_last_df({0})
+    , m_last_df({ 0 })
 {
 }
 
@@ -23,10 +23,11 @@ JadeDataFrameSP JadeFilter::Filter(JadeDataFrameSP df)
 
   JadeDataFrameSP cds_df;
 
-  if (m_ev_n % 2 == 1)
+  if (m_ev_n == 1) {
     m_last_df = df;
-  if (m_ev_n % 2 == 0) {
+  } else {
     cds_df = std::make_shared<JadeDataFrame>(*df - *m_last_df);
+    m_last_df = df;
   }
 
   return cds_df;

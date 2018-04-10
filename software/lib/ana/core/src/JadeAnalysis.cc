@@ -81,7 +81,7 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
     return;
 
   //Process odd frame
-  if ((m_ev_n) == 0 || (m_ev_n % 2 == 0)) {
+  if ((m_ev_n) == 0) {
     m_ev_n++;
     return;
   }
