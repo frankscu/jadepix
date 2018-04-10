@@ -34,13 +34,19 @@ class DLLEXPORT JadeAnalysis{
   int m_neigh_cut;
   int m_clus_cut;
   int m_clus_size;
+  int m_base_cut;
+  int m_base_numbers;
+  int m_base_count;
   std::shared_ptr<TTree>m_tree_adc; 
   std::vector<int> m_output_seed_adc;
   std::vector<int> m_output_clus_adc;
+  std::vector<int16_t> m_output_base_adc;
   std::vector<std::pair<int, int>> m_hit;
   std::vector<int16_t> m_cds_adc;
   std::vector<int16_t> m_raw_adc;
   bool m_disable_file_write;
+  bool m_enable_raw_data_write;
+  bool m_enable_hit_map_write;
   JadeClusterSP m_clus;
 };
 

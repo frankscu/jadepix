@@ -36,6 +36,7 @@ usage() {
     printf "\n\t%-9s  %-40s"  "0.5.2"    "Run convert electric field from TCAD" 
     printf "\n\t%-9s  %-40s"  "0.5.3"    "Run display electric field" 
     printf "\n\t%-9s  %-40s"  "0.5.4"    "Run display electric field using user tools[efield]" 
+    printf "\n\t%-9s  %-40s"  "0.5.5"    "Run convert electric field from TCAD using user tools[efgen]" 
     printf "\n"  
     printf "\n\t%-9s  %-40s"  "0.6"      "[MoReWeb]"
   }
@@ -146,6 +147,12 @@ case $option in
         echo "Using style [COLZ/ARR] for TH2D"
         echo "Using style [BOX2] for TH3D"
         ./bin/efield -f field/jadepix1_electric_field.init -NX 25 -NY 17 -NZ 92 -cutX 10 -cutY 15 -cutZ 91 -o field/jadepix1_EFDisplay.root 
+        ;; 
+
+    0.5.5) echo "Run convert electric field from TCAD using user tools[efgen]" 
+        cd field
+        ../bin/efgen -f n2_dfise -R "Epi+Footprint+nWell1+pWell1" -NX 33 -NY 33 -NZ 18 -r 5 -o field/n2_dfise_Epi_Well 
+        cd ..
         ;; 
 
     # --------------------------------------------------------------------------

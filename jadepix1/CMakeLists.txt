@@ -19,7 +19,7 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 find_package(ROOT REQUIRED)
-include_directories(src)
+include_directories(include)
 include_directories(${ROOT_INCLUDE_DIRS})
 set(USEROOT true)
 if(USEROOT)
@@ -29,11 +29,16 @@ if(USEROOT)
   set(CMAKE_EXE_LINKER_FLAGS "${ROOT_LD_FLAGS}")
 endif(USEROOT)
 
+FIND_PACKAGE(Eigen3 REQUIRED)
+INCLUDE_DIRECTORIES(SYSTEM ${EIGEN3_INCLUDE_DIR})
+
 set(EFIELD_SRC src/EField.cc src/EFieldTest.cc)
-
 add_executable(efield ${EFIELD_SRC})
-
 target_link_libraries(efield ${ROOT_LIBRIRIES})
 
-install(TARGETS efield
+set(EFGen_SRC src/EFReadDFISE.cc src/EFGen.cc)
+add_executable(efgen ${EFGen_SRC})
+target_link_libraries(efgen ${ROOT_LIBRIRIES})
+
+install(TARGETS efield efgen
     DESTINATION bin)
