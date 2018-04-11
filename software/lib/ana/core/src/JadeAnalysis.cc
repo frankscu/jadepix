@@ -87,14 +87,18 @@ void JadeAnalysis::Analysis(JadeDataFrameSP df)
   }
 
   if (m_enable_raw_data_write) {
+    m_cds_adc.clear();
+    m_raw_adc.clear();
     m_cds_adc = df->GetFrameCDS();
     m_raw_adc = df->GetFrameData();
   }
 
-  if (m_base_cut < m_base_numbers) {
+  m_output_base_adc.clear();
+  if (m_base_count < m_base_numbers) {
     auto cds_adc = df->GetFrameCDS();
-    if (std::none_of(cds_adc.begin(), cds_adc.end(), [=](auto& cds) { return cds > m_base_cut; })) {
-      m_output_base_adc = cds_adc;
+    if (std::none_of(cds_adc.begin(), cds_adc.end(),
+            [=](auto& cds) { return cds > m_base_cut ? true : false; })) {
+      m_output_base_adc.swap(cds_adc);
       m_base_count++;
     }
   }
